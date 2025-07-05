@@ -16,11 +16,10 @@ const port = applicationVariables.port;
 
 // ==== schema creation ===
 function generateSchema() { //todo
-
+    //todo use npm install @apidevtools/json-schema-ref-parser to de ref api spec schemas then import as a schema file for reference?
 }
 
-// ==== server configuration ====
-
+// ==== logger configuration ====
 // pino automatically logs on startup, on incoming request, on request completion, on error
 // set custom serializers to overwrite fastify default
 const serializers = {
@@ -35,14 +34,12 @@ const serializers = {
     }),
     // err: pino.stdSerializers.err
 }
-
 // set up log redaction paths
 const redactions = {
     paths: [
         "*.headers.authorization"
     ]
 }
-
 // set up logging based on environment
 const envToLogger = {
     local: {
@@ -69,9 +66,7 @@ const envToLogger = {
     test: false,
 }
 
-
 // ==== create server instance ====
-
 const fastify = Fastify({
     logger: envToLogger[process.env.ENVIRONMENT] ?? envToLogger["production"], // default to production if no value
     exposeHeadRoutes: false,
@@ -80,8 +75,13 @@ const fastify = Fastify({
 })
 
 // ==== registrations ====
-
 // error handler
+function registerErrorHandler() {
+    const log = fastify.log.child({ module: "Error handler"})
+    log.info("Registered error handler")
+}
+registerErrorHandler()
+
 // decorators
 function registerDecorators() {
     const log = fastify.log.child({ module: "Decorators" })
@@ -90,23 +90,30 @@ function registerDecorators() {
             return applicationVariables;
         }
     });
+    log.info("Registered decorators");
 }
 registerDecorators()
 
 // hooks
-fastify.addHook('onSend', async (request, reply, payload) => {
-    request.log.debug({response: payload}, 'response payload');
-});
-fastify.addHook('preValidation', async (request, reply) => {
-    if (request.body) {
-        request.log.debug({ body: request.body }, 'incoming request body');
-    } else {
-        request.log.debug('no request body present');
-    }
-});
-fastify.addHook("onReady", async () => {
-    onReadyHook(fastify);
-})
+function registerHooks() {
+    const log = fastify.log.child({ module: "Hooks" })
+    fastify.addHook('onSend', async (request, reply, payload) => {
+        request.log.debug({response: payload}, 'response payload');
+    });
+    fastify.addHook('preValidation', async (request, reply) => {
+        if (request.body) {
+            request.log.debug({ body: request.body }, 'incoming request body');
+        } else {
+            request.log.debug('no request body present');
+        }
+    });
+    fastify.addHook("onReady", async () => {
+        onReadyHook(fastify);
+    })
+    log.info("Registered hooks");
+}
+registerHooks();
+
 
 // plugin
 function registerPlugins() {
@@ -115,17 +122,21 @@ function registerPlugins() {
         logLevel: "warn",
         healthcheckUrl: `/${prefix}/health/check`,
     });
-    log.info("Registering health/check");
+    log.info("Registered plugins");
 }
 registerPlugins();
 
 // routes
-fastify.register(ingredientsRoutes.routes, { prefix: prefix })
+function registerRoutes() {
+    const log = fastify.log.child({ module: "Routes" })
+    fastify.register(ingredientsRoutes.routes, { prefix: prefix })
+    log.info("Registered routes");
+}
+registerRoutes();
 
 //validation
 function registerValidation() {
     const log = fastify.log.child({ module: "Validation" })
-
     const ajv = new Ajv({
         removeAdditional: false,
         useDefaults: true,
@@ -133,21 +144,12 @@ function registerValidation() {
         allErrors: true,
         nullable: true
     })
-
     fastify.setValidatorCompiler( ({ schema }) => ajv.compile(schema));
-    log.info("Registering validation");
+    log.info("Registered validation");
 }
-
 registerValidation();
 
-
-
-
-
-
-
 // ==== start server ====
-
 const start = async () => {
     try {
         await fastify.listen({port: port})
