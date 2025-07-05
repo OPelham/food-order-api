@@ -65,7 +65,7 @@ paths:
 #            - write:ingredients
 #            - read:ingredients
           
-  /ingredient/findByAvailability:
+  /ingredients/findByAvailability:
     get:
       tags:
         - ingredients
@@ -105,7 +105,7 @@ paths:
 #        - food_orders_auth:
 #            - read:ingredients
   
-  /ingredient/{ingredientId}:
+  /ingredients/{ingredientId}:
     get:
       tags:
         - ingredients
