@@ -1,3 +1,3 @@
 export default function onSendHook(request, reply, payload) {
-    request.log.debug({response: JSON.parse(payload)}, 'response payload');
+    request.log.debug({responseBody: JSON.parse(payload)}, 'response payload');
 }

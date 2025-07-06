@@ -14,40 +14,34 @@ const applicationVariables = JSON.parse(
     )
 );
 const prefix = `${applicationVariables.applicationName}/${applicationVariables.version}`;
-const port = applicationVariables.port;
+
 
 // ==== schema creation ===
 function generateSchema() { //todo
     //todo use npm install @apidevtools/json-schema-ref-parser to de ref api spec schemas then import as a schema file for reference?
 }
 
+
 // ==== create server instance ====
-const fastify = Fastify({
-    logger: configureLogger(),
-    exposeHeadRoutes: false,
-    requestIdHeader: 'correlation-id', // take this header as reqId
-    requestIdLogLabel: 'correlation-id' // rename reqId in logs to this value
-})
-const log = fastify.log.child({ module: "app.js"})
+export default function buildServer() {
+    const fastify = Fastify({
+        logger: configureLogger(),
+        exposeHeadRoutes: false,
+        requestIdHeader: 'correlation-id', // take this header as reqId
+        requestIdLogLabel: 'correlation-id' // rename reqId in logs to this value
+    })
+    const log = fastify.log.child({ module: "app.js"})
 
-// ==== configure server ====
-registerErrorHandler()
-registerDecorators()
-registerHooks();
-registerPlugins();
-registerRoutes();
-registerValidation();
+    // ==== configure server ====
+    registerErrorHandler( fastify, log )
+    registerDecorators( fastify, log )
+    registerHooks( fastify, log );
+    registerPlugins( fastify, log );
+    registerRoutes( fastify, log );
+    registerValidation( fastify, log );
 
-// ==== start server ====
-const start = async () => {
-    try {
-        await fastify.listen({port: port})
-    } catch (err) {
-        fastify.log.error(err)
-        process.exit(1)
-    }
+    return fastify;
 }
-start()
 
 // ==== helper functions ====
 /**
@@ -118,7 +112,7 @@ function configureLogger() {
 }
 
 // todo add error handler and docstring
-function registerErrorHandler() {
+function registerErrorHandler( fastify, log ) {
 
     log.info("Registered error handler")
 }
@@ -130,7 +124,7 @@ function registerErrorHandler() {
 * allowing structured access to application configuration across hooks,
 * controllers, and plugins.
 */
-function registerDecorators() {
+function registerDecorators( fastify, log ) {
     fastify.decorate("applicationVariables", {
         getter() {
             return applicationVariables;
@@ -146,7 +140,7 @@ function registerDecorators() {
  * - `preValidation`: Runs before schema validation, useful for input cleanup or auth.
  * - `onReady`: Executes after all routes and plugins have been registered.
  */
-function registerHooks() {
+function registerHooks( fastify, log ) {
     fastify.addHook("onSend", async (request, reply, payload) => {
         onSendHook(request, reply, payload);
     })
@@ -165,7 +159,7 @@ function registerHooks() {
  * Includes:
  * - `fastify-healthcheck`: Adds a health check route for readiness/liveness probes.
  */
-function registerPlugins() {
+function registerPlugins( fastify, log ) {
     fastify.register(import("fastify-healthcheck"), {
         logLevel: "warn",
         healthcheckUrl: `/${prefix}/health/check`,
@@ -179,7 +173,7 @@ function registerPlugins() {
  * Includes:
  * - `ingredientRoutes`: All ingredient-related API endpoints, mounted with the specified prefix.
  */
-function registerRoutes() {
+function registerRoutes( fastify, log ) {
     fastify.register(ingredientRoutes, { prefix: prefix })
     log.info("Registered routes");
 }
@@ -194,7 +188,7 @@ function registerRoutes() {
  *
  * Binds the AJV compiler to Fastify’s schema validation mechanism.
  */
-function registerValidation() {
+function registerValidation( fastify, log ) {
     const ajv = new Ajv({
         removeAdditional: false,
         useDefaults: true,
