@@ -1,9 +1,9 @@
 import Fastify from 'fastify'
 import Ajv from 'ajv-oai'
 import pino from 'pino'
-import * as ingredientsRoutes from "./routes/ingredients-routes.js";
 import * as fs from "node:fs";
-import onReadyHook from "./hooks/server_hooks.js";
+import onReadyHook from "./hooks/on-ready-hook.js";
+import {ingredientRoutes} from "./routes/ingredients-routes.js";
 
 const applicationVariables = JSON.parse(
     fs.readFileSync(
@@ -32,7 +32,7 @@ const serializers = {
     res: (reply) => ({
         statusCode: reply.statusCode
     }),
-    // err: pino.stdSerializers.err
+    err: pino.stdSerializers.err
 }
 // set up log redaction paths
 const redactions = {
@@ -51,7 +51,7 @@ const envToLogger = {
                 levelFirst: true,
             },
         },
-        level: 'debug',
+        level: process.env.LOG_LEVEL ?? 'debug',
         serializers: serializers
     },
     production: {
@@ -129,7 +129,7 @@ registerPlugins();
 // routes
 function registerRoutes() {
     const log = fastify.log.child({ module: "Routes" })
-    fastify.register(ingredientsRoutes.routes, { prefix: prefix })
+    fastify.register(ingredientRoutes, { prefix: prefix })
     log.info("Registered routes");
 }
 registerRoutes();

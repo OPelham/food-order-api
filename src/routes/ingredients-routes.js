@@ -1,16 +1,22 @@
 import * as controller from "../controllers/ingredients-controller.js";
 
 /**
- * Encapsulates the ingredients routes
- * @param {FastifyInstance} fastify  Encapsulated Fastify Instance
- * @param {Object} options plugin options, refer to https://fastify.dev/docs/latest/Reference/Plugins/#plugin-options
+ * Registers ingredient-related routes for the Fastify application.
+ *
+ * Currently includes:
+ * - `GET /ingredients/:ingredientId`: Fetch a single ingredient by its ID.
+ *
+ * Schema validation is provided for query string and response.
+ *
+ * @async
+ * @param {FastifyInstance} fastify - The Fastify instance to which routes are registered.
+ * @param {Object} options - Plugin options (see Fastify plugin API for details).
  */
-export async function routes (fastify) {
-    // fastify.get('/ingredients/{ingredientId}', controller.getIngredientById())
+export async function ingredientRoutes (fastify) {
     fastify.route({
         method: 'GET',
         url: '/ingredients/:ingredientId',
-        schema: {
+        schema: { //todo sort schema
             querystring: {
                 name: { type: 'string' },
                 excitement: { type: 'integer' }
@@ -19,11 +25,34 @@ export async function routes (fastify) {
                 200: {
                     type: 'object',
                     properties: {
-                        hello: { type: 'string' }
+                        ingredientId: {
+                            type: 'string',
+                        },
                     }
                 }
             }
         },
         handler: await controller.getIngredientById
     })
+    // fastify.route({
+    //     method: 'GET',
+    //     url: '/ingredients/findByAvailability',
+    //     schema: { //todo sort schema
+    //         querystring: {
+    //             name: { type: 'string' },
+    //             excitement: { type: 'integer' }
+    //         },
+    //         response: {
+    //             200: {
+    //                 type: 'object',
+    //                 properties: {
+    //                     ingredientId: {
+    //                         type: 'string',
+    //                     },
+    //                 }
+    //             }
+    //         }
+    //     },
+    //     handler: await controller.getIngredientByAvailability
+    // })
 }

@@ -5,7 +5,8 @@
   "main": "index.js",
   "scripts": {
     "test": "tap \"test/**/*.test.js\"",
-    "start:dev": "ENVIRONMENT=local node src/app.js",
+    "start:dev": "ENVIRONMENT=local nodemon src/app.js",
+    "start:trace": "LOG_LEVEL=trace ENVIRONMENT=local nodemon src/app.js",
     "start": "node src/app.js"
   },
   "directories": {
@@ -22,9 +23,11 @@
     "fastify-healthcheck": "^5.1.0",
     "fastify-plugin": "^4.0.0",
     "figlet": "^1.8.1",
+    "pg": "^8.16.3",
     "pino": "^9.7.0"
   },
   "devDependencies": {
+    "nodemon": "^3.1.10",
     "pino-pretty": "^13.0.0",
     "tap": "^16.1.0"
   }
