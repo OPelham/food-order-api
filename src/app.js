@@ -3,7 +3,7 @@ import Ajv from 'ajv-oai'
 import pino from 'pino'
 import * as fs from "node:fs";
 import onReadyHook from "./hooks/on-ready-hook.js";
-import {ingredientRoutes} from "./routes/ingredients-routes.js";
+import { ingredientRoutes } from "./routes/ingredients-routes.js";
 
 const applicationVariables = JSON.parse(
     fs.readFileSync(

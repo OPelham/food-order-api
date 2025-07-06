@@ -3,7 +3,7 @@ import * as controller from "../controllers/ingredients-controller.js";
 /**
  * Registers ingredient-related routes for the Fastify application.
  *
- * Currently includes:
+ * Includes:
  * - `GET /ingredients/:ingredientId`: Fetch a single ingredient by its ID.
  *
  * Schema validation is provided for query string and response.
