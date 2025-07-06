@@ -6,7 +6,7 @@
   "scripts": {
     "test": "tap \"test/**/*.test.js\"",
     "start:dev": "ENVIRONMENT=local nodemon src/app.js",
-    "start:trace": "LOG_LEVEL=trace ENVIRONMENT=local nodemon src/app.js",
+    "start:dev-trace": "LOG_LEVEL=trace ENVIRONMENT=local nodemon src/app.js",
     "start": "node src/app.js"
   },
   "directories": {

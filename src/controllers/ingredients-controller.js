@@ -16,17 +16,18 @@ import * as service from "../services/ingredients-service.js";
  * @returns {Promise<void>}
  */
 export async function getIngredientById(request, reply) {
+    const log = request.log.child({ model: "ingredients-controller.js" });
     try {
         const { ingredientId } = request.params;
-        request.log.trace(`calling ingredient-controller with ingredientId: ${ingredientId}`);
+        log.trace(`calling ingredient-controller with ingredientId: ${ingredientId}`);
         const ingredient = await service.getById(ingredientId);
-        request.log.trace(`sending reply of: ${ingredient}`);
+        log.trace(`sending reply of: ${ingredient}`);
         reply.send(ingredient);
     } catch (err) {
         if (err.message === 'Ingredient not found') {
             reply.code(404).send({ error: err.message });
         } else {
-            request.log.error(err);
+            log.error(err);
             reply.code(500).send({ error: 'Internal Server Error' });
         }
     }
