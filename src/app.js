@@ -13,8 +13,7 @@ const applicationVariables = JSON.parse(
         "utf8"
     )
 );
-const prefix = `${applicationVariables.applicationName}/${applicationVariables.version}`;
-
+const prefix = `${applicationVariables.applicationName}/api/${applicationVariables.version}`;
 
 // ==== schema creation ===
 function generateSchema() { //todo

@@ -10,7 +10,6 @@
     "start:dev": "ENVIRONMENT=local nodemon src/server.js",
     "start:dev-trace": "LOG_LEVEL=trace ENVIRONMENT=local nodemon src/server.js",
     "start": "node src/server.js"
-
   },
   "directories": {
     "test": "test"
@@ -32,6 +31,7 @@
   "devDependencies": {
     "nodemon": "^3.1.10",
     "pino-pretty": "^13.0.0",
+    "sinon": "^21.0.0",
     "tap": "^16.1.0"
   },
   "c8": {
