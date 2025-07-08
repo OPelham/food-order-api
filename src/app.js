@@ -1,25 +1,20 @@
 import Fastify from 'fastify'
 import Ajv from 'ajv-oai'
-import pino from 'pino'
-import * as fs from "node:fs";
+import {applicationVariables} from "./config/index.js";
+import {schemas} from "./schemas/index.js";
+import {configureLogger} from "./infrastructure/logger.js";
+
 import onReadyHook from "./hooks/on-ready-hook.js";
-import { ingredientRoutes } from "./routes/ingredients-routes.js";
 import onSendHook from "./hooks/on-send-hook.js";
 import preValidationHook from "./hooks/pre-validation-hook.js";
 
-const applicationVariables = JSON.parse(
-    fs.readFileSync(
-        './src/config/application-variables.json',
-        "utf8"
-    )
-);
+import { ingredientRoutes } from './routes/ingredients-routes.js';
+import { createIngredientRepository } from './repositories/ingredient-repository.js';
+import { createIngredientService } from './services/ingredients-service.js';
+import { createIngredientController } from './controllers/ingredients-controller.js';
+import database  from './infrastructure/database.js';
+
 const prefix = `${applicationVariables.applicationName}/api/${applicationVariables.version}`;
-
-// ==== schema creation ===
-function generateSchema() { //todo
-    //todo use npm install @apidevtools/json-schema-ref-parser to de ref api spec schemas then import as a schema file for reference?
-}
-
 
 // ==== create server instance ====
 export default function buildServer() {
@@ -29,91 +24,33 @@ export default function buildServer() {
         requestIdHeader: 'correlation-id', // take this header as reqId
         requestIdLogLabel: 'correlation-id' // rename reqId in logs to this value
     })
-    const log = fastify.log.child({ module: "app.js"})
+    const log = fastify.log.child({ module: "app"})
+
+    // === Setup DB and services ===
+    const ingredientRepository = createIngredientRepository(database);
+    const ingredientService = createIngredientService(ingredientRepository);
+    const ingredientController = createIngredientController(ingredientService);
 
     // ==== configure server ====
     registerErrorHandler( fastify, log )
     registerDecorators( fastify, log )
     registerHooks( fastify, log );
     registerPlugins( fastify, log );
-    registerRoutes( fastify, log );
+    registerRoutes(fastify, log, schemas, { ingredient: ingredientController });
     registerValidation( fastify, log );
 
     return fastify;
 }
 
 // ==== helper functions ====
-/**
- * Configures and returns Pino logger settings based on the current environment.
- *
- * This function sets up:
- * - Custom serializers for requests, responses, and errors to control logged output.
- * - Log redaction to prevent sensitive information (e.g., Authorization headers) from being logged.
- * - Pretty-printing in local development using `pino-pretty`.
- * - ISO timestamp formatting and uppercase levels in production.
- *
- * The environment is determined from `process.env.ENVIRONMENT` and can be:
- * - `"local"` for local development (pretty logs, debug level).
- * - `"production"` for structured logs (info level, redactions, ISO timestamps).
- * - `"test"` disables logging (returns `false`).
- *
- * If `process.env.ENVIRONMENT` is not set, defaults to production settings.
- *
- * @returns {Object|false} The Pino-compatible logger configuration for Fastify or `false` to disable logging (e.g., in tests).
- */
-function configureLogger() {
-    // pino automatically logs on startup, on incoming request, on request completion, on error
-    // set custom serializers to overwrite fastify default
-    const serializers = {
-        req: (request) => ({
-            method: request.method,
-            url: request.url,
-            headers: request.headers,  // extra
-            ip: request.ip
-        }),
-        res: (reply) => ({
-            statusCode: reply.statusCode
-        }),
-        err: pino.stdSerializers.err
-    }
-    // set up log redaction paths
-    const redactions = {
-        paths: [
-            "*.headers.authorization"
-        ]
-    }
-    // set up logging based on environment
-    const envToLogger = {
-        local: {
-            transport: {
-                target: 'pino-pretty',
-                options: {
-                    translateTime: 'HH:MM:ss Z',
-                    ignore: 'pid,hostname',
-                    levelFirst: true,
-                },
-            },
-            level: process.env.LOG_LEVEL ?? 'debug',
-            serializers: serializers
-        },
-        production: {
-            timestamp: pino.stdTimeFunctions.isoTime,
-            formatters: {
-                level: (label) => ({level: label.toUpperCase()}),
-            },
-            level: process.env.LOG_LEVEL ?? 'info',
-            redact: redactions,
-            serializers: serializers,
-        },
-        test: false,
-    }
-    return envToLogger[process.env.ENVIRONMENT] ?? envToLogger["production"] // default to production if no value
-}
+// todo add error handler and docstring and refactor below
+function registerErrorHandler(fastify, log) {
+    fastify.setErrorHandler((err, request, reply) => {
+        request.log.error(err, 'Unhandled error');
+        reply.code(500).send({ error: 'Internal Server Error' });
+    });
 
-// todo add error handler and docstring
-function registerErrorHandler( fastify, log ) {
-
-    log.info("Registered error handler")
+    log.info("Registered error handler");
 }
 
 /**
@@ -172,8 +109,12 @@ function registerPlugins( fastify, log ) {
  * Includes:
  * - `ingredientRoutes`: All ingredient-related API endpoints, mounted with the specified prefix.
  */
-function registerRoutes( fastify, log ) {
-    fastify.register(ingredientRoutes, { prefix: prefix })
+function registerRoutes( fastify, log, schemas, controllers ) { //todo refactor to allow more controllers?
+    fastify.register(ingredientRoutes, {
+        prefix: prefix,
+        schemas: schemas,
+        controller: controllers.ingredient // injected dependency
+    });
     log.info("Registered routes");
 }
 

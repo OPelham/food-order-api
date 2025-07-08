@@ -1,0 +1,1517 @@
+{
+  "openapi": "3.1.0",
+  "info": {
+    "title": "Food Orders API",
+    "description": "Food Orders API for managing ingredients, menu items, and orders.",
+    "version": "1.0.0",
+    "contact": {
+      "email": "oliverpelhamdev@gmail.com"
+    },
+    "license": {
+      "name": "Apache 2.0",
+      "url": "https://www.apache.org/licenses/LICENSE-2.0.html"
+    }
+  },
+  "servers": [
+    {
+      "url": "https://oliverpelham.dev/food-orders/api/v1"
+    }
+  ],
+  "tags": [
+    {
+      "name": "ingredients",
+      "description": "Manage ingredient items"
+    },
+    {
+      "name": "menu-items",
+      "description": "Manage menu items"
+    },
+    {
+      "name": "orders",
+      "description": "Manage orders"
+    }
+  ],
+  "paths": {
+    "/ingredients": {
+      "post": {
+        "tags": [
+          "ingredients"
+        ],
+        "summary": "Add a New Ingredient.",
+        "description": "Add a new ingredient type to inventory.",
+        "operationId": "addIngredients",
+        "parameters": [
+          {
+            "name": "correlation-id",
+            "in": "header",
+            "required": true,
+            "description": "A UUID used for request tracing.",
+            "example": "a58bdc-555a-4980-b779-355fc7e27cb5",
+            "schema": {
+              "type": "string",
+              "format": "uuid"
+            }
+          }
+        ],
+        "requestBody": {
+          "description": "Create a new ingredient in the store",
+          "content": {
+            "application/json": {
+              "schema": {
+                "required": [
+                  "name",
+                  "quantity",
+                  "category"
+                ],
+                "type": "object",
+                "properties": {
+                  "ingredientId": {
+                    "type": "string",
+                    "description": "Unique identifier of this ingredient.",
+                    "readOnly": true,
+                    "format": "uuid",
+                    "example": "07a58bdc-555a-4980-b779-355fc7e27cb5"
+                  },
+                  "name": {
+                    "type": "string",
+                    "example": "tomato"
+                  },
+                  "quantity": {
+                    "type": "integer",
+                    "example": 28
+                  },
+                  "category": {
+                    "type": "string",
+                    "description": "Storage Category of this ingredient",
+                    "enum": [
+                      "FROZEN",
+                      "CHILLED",
+                      "DRY_GOOD"
+                    ]
+                  },
+                  "availability": {
+                    "type": "string",
+                    "description": "System generated availability status.",
+                    "readOnly": true,
+                    "enum": [
+                      "AVAILABLE",
+                      "UNAVAILABLE"
+                    ]
+                  }
+                }
+              }
+            }
+          },
+          "required": true
+        },
+        "responses": {
+          "200": {
+            "description": "Successful operation",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "required": [
+                    "name",
+                    "quantity",
+                    "category"
+                  ],
+                  "type": "object",
+                  "properties": {
+                    "ingredientId": {
+                      "type": "string",
+                      "description": "Unique identifier of this ingredient.",
+                      "readOnly": true,
+                      "format": "uuid",
+                      "example": "07a58bdc-555a-4980-b779-355fc7e27cb5"
+                    },
+                    "name": {
+                      "type": "string",
+                      "example": "tomato"
+                    },
+                    "quantity": {
+                      "type": "integer",
+                      "example": 28
+                    },
+                    "category": {
+                      "type": "string",
+                      "description": "Storage Category of this ingredient",
+                      "enum": [
+                        "FROZEN",
+                        "CHILLED",
+                        "DRY_GOOD"
+                      ]
+                    },
+                    "availability": {
+                      "type": "string",
+                      "description": "System generated availability status.",
+                      "readOnly": true,
+                      "enum": [
+                        "AVAILABLE",
+                        "UNAVAILABLE"
+                      ]
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Invalid input",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "message": {
+                      "type": "string"
+                    },
+                    "error": {
+                      "type": "string"
+                    },
+                    "statusCode": {
+                      "type": "number"
+                    }
+                  },
+                  "required": [
+                    "message",
+                    "error",
+                    "statusCode"
+                  ]
+                },
+                "example": {
+                  "message": "tbc",
+                  "error": "tbc",
+                  "statusCode": 400
+                }
+              }
+            }
+          },
+          "401": {
+            "description": "Unauthorised",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "message": {
+                      "type": "string"
+                    },
+                    "error": {
+                      "type": "string"
+                    },
+                    "statusCode": {
+                      "type": "number"
+                    }
+                  },
+                  "required": [
+                    "message",
+                    "error",
+                    "statusCode"
+                  ]
+                },
+                "example": {
+                  "message": "tbc",
+                  "error": "tbc",
+                  "statusCode": 401
+                }
+              }
+            }
+          },
+          "404": {
+            "description": "Resource not found",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "message": {
+                      "type": "string"
+                    },
+                    "error": {
+                      "type": "string"
+                    },
+                    "statusCode": {
+                      "type": "number"
+                    }
+                  },
+                  "required": [
+                    "message",
+                    "error",
+                    "statusCode"
+                  ]
+                },
+                "example": {
+                  "message": "Route GET:/example not founder",
+                  "error": "Not Found",
+                  "statusCode": 404
+                }
+              }
+            }
+          },
+          "422": {
+            "description": "Validation exception",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "message": {
+                      "type": "string"
+                    },
+                    "error": {
+                      "type": "string"
+                    },
+                    "statusCode": {
+                      "type": "number"
+                    }
+                  },
+                  "required": [
+                    "message",
+                    "error",
+                    "statusCode"
+                  ]
+                },
+                "example": {
+                  "message": "tbc",
+                  "error": "tbc",
+                  "statusCode": 422
+                }
+              }
+            }
+          },
+          "500": {
+            "description": "General error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "message": {
+                      "type": "string"
+                    },
+                    "error": {
+                      "type": "string"
+                    },
+                    "statusCode": {
+                      "type": "number"
+                    }
+                  },
+                  "required": [
+                    "message",
+                    "error",
+                    "statusCode"
+                  ]
+                },
+                "example": {
+                  "message": "tbc",
+                  "error": "tbc",
+                  "statusCode": 500
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/ingredients/findByAvailability": {
+      "get": {
+        "tags": [
+          "ingredients"
+        ],
+        "summary": "Find Ingredients by Availability Status.",
+        "description": "Multiple tags can be provided with comma separated strings. Use \"?availability=UNAVAILABLE,AVAILABLE\".",
+        "operationId": "findIngredientsByAvailability",
+        "parameters": [
+          {
+            "name": "correlation-id",
+            "in": "header",
+            "required": true,
+            "description": "A UUID used for request tracing.",
+            "example": "a58bdc-555a-4980-b779-355fc7e27cb5",
+            "schema": {
+              "type": "string",
+              "format": "uuid"
+            }
+          },
+          {
+            "name": "availability",
+            "in": "query",
+            "description": "Status values that need to be considered for filter",
+            "required": false,
+            "explode": false,
+            "schema": {
+              "type": "string",
+              "default": "AVAILABLE",
+              "enum": [
+                "AVAILABLE",
+                "UNAVAILABLE"
+              ]
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Successful operation",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "required": [
+                    "name",
+                    "quantity",
+                    "category"
+                  ],
+                  "type": "object",
+                  "properties": {
+                    "ingredientId": {
+                      "type": "string",
+                      "description": "Unique identifier of this ingredient.",
+                      "readOnly": true,
+                      "format": "uuid",
+                      "example": "07a58bdc-555a-4980-b779-355fc7e27cb5"
+                    },
+                    "name": {
+                      "type": "string",
+                      "example": "tomato"
+                    },
+                    "quantity": {
+                      "type": "integer",
+                      "example": 28
+                    },
+                    "category": {
+                      "type": "string",
+                      "description": "Storage Category of this ingredient",
+                      "enum": [
+                        "FROZEN",
+                        "CHILLED",
+                        "DRY_GOOD"
+                      ]
+                    },
+                    "availability": {
+                      "type": "string",
+                      "description": "System generated availability status.",
+                      "readOnly": true,
+                      "enum": [
+                        "AVAILABLE",
+                        "UNAVAILABLE"
+                      ]
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Invalid input",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "message": {
+                      "type": "string"
+                    },
+                    "error": {
+                      "type": "string"
+                    },
+                    "statusCode": {
+                      "type": "number"
+                    }
+                  },
+                  "required": [
+                    "message",
+                    "error",
+                    "statusCode"
+                  ]
+                },
+                "example": {
+                  "message": "tbc",
+                  "error": "tbc",
+                  "statusCode": 400
+                }
+              }
+            }
+          },
+          "401": {
+            "description": "Unauthorised",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "message": {
+                      "type": "string"
+                    },
+                    "error": {
+                      "type": "string"
+                    },
+                    "statusCode": {
+                      "type": "number"
+                    }
+                  },
+                  "required": [
+                    "message",
+                    "error",
+                    "statusCode"
+                  ]
+                },
+                "example": {
+                  "message": "tbc",
+                  "error": "tbc",
+                  "statusCode": 401
+                }
+              }
+            }
+          },
+          "404": {
+            "description": "Resource not found",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "message": {
+                      "type": "string"
+                    },
+                    "error": {
+                      "type": "string"
+                    },
+                    "statusCode": {
+                      "type": "number"
+                    }
+                  },
+                  "required": [
+                    "message",
+                    "error",
+                    "statusCode"
+                  ]
+                },
+                "example": {
+                  "message": "Route GET:/example not founder",
+                  "error": "Not Found",
+                  "statusCode": 404
+                }
+              }
+            }
+          },
+          "500": {
+            "description": "General error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "message": {
+                      "type": "string"
+                    },
+                    "error": {
+                      "type": "string"
+                    },
+                    "statusCode": {
+                      "type": "number"
+                    }
+                  },
+                  "required": [
+                    "message",
+                    "error",
+                    "statusCode"
+                  ]
+                },
+                "example": {
+                  "message": "tbc",
+                  "error": "tbc",
+                  "statusCode": 500
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/ingredients/{ingredientId}": {
+      "get": {
+        "tags": [
+          "ingredients"
+        ],
+        "summary": "Get an Ingredient by ID.",
+        "description": "Returns a single ingredient.",
+        "operationId": "getIngredientById",
+        "parameters": [
+          {
+            "name": "correlation-id",
+            "in": "header",
+            "required": true,
+            "description": "A UUID used for request tracing.",
+            "example": "a58bdc-555a-4980-b779-355fc7e27cb5",
+            "schema": {
+              "type": "string",
+              "format": "uuid"
+            }
+          },
+          {
+            "name": "ingredientId",
+            "in": "path",
+            "description": "Ingredient id to delete",
+            "required": true,
+            "example": "a58bdc-555a-4980-b779-355fc7e27cb5",
+            "schema": {
+              "type": "string",
+              "format": "uuid"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Successful operation",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "required": [
+                    "name",
+                    "quantity",
+                    "category"
+                  ],
+                  "type": "object",
+                  "properties": {
+                    "ingredientId": {
+                      "type": "string",
+                      "description": "Unique identifier of this ingredient.",
+                      "readOnly": true,
+                      "format": "uuid",
+                      "example": "07a58bdc-555a-4980-b779-355fc7e27cb5"
+                    },
+                    "name": {
+                      "type": "string",
+                      "example": "tomato"
+                    },
+                    "quantity": {
+                      "type": "integer",
+                      "example": 28
+                    },
+                    "category": {
+                      "type": "string",
+                      "description": "Storage Category of this ingredient",
+                      "enum": [
+                        "FROZEN",
+                        "CHILLED",
+                        "DRY_GOOD"
+                      ]
+                    },
+                    "availability": {
+                      "type": "string",
+                      "description": "System generated availability status.",
+                      "readOnly": true,
+                      "enum": [
+                        "AVAILABLE",
+                        "UNAVAILABLE"
+                      ]
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Invalid input",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "message": {
+                      "type": "string"
+                    },
+                    "error": {
+                      "type": "string"
+                    },
+                    "statusCode": {
+                      "type": "number"
+                    }
+                  },
+                  "required": [
+                    "message",
+                    "error",
+                    "statusCode"
+                  ]
+                },
+                "example": {
+                  "message": "tbc",
+                  "error": "tbc",
+                  "statusCode": 400
+                }
+              }
+            }
+          },
+          "401": {
+            "description": "Unauthorised",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "message": {
+                      "type": "string"
+                    },
+                    "error": {
+                      "type": "string"
+                    },
+                    "statusCode": {
+                      "type": "number"
+                    }
+                  },
+                  "required": [
+                    "message",
+                    "error",
+                    "statusCode"
+                  ]
+                },
+                "example": {
+                  "message": "tbc",
+                  "error": "tbc",
+                  "statusCode": 401
+                }
+              }
+            }
+          },
+          "404": {
+            "description": "Resource not found",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "message": {
+                      "type": "string"
+                    },
+                    "error": {
+                      "type": "string"
+                    },
+                    "statusCode": {
+                      "type": "number"
+                    }
+                  },
+                  "required": [
+                    "message",
+                    "error",
+                    "statusCode"
+                  ]
+                },
+                "example": {
+                  "message": "Route GET:/example not founder",
+                  "error": "Not Found",
+                  "statusCode": 404
+                }
+              }
+            }
+          },
+          "500": {
+            "description": "General error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "message": {
+                      "type": "string"
+                    },
+                    "error": {
+                      "type": "string"
+                    },
+                    "statusCode": {
+                      "type": "number"
+                    }
+                  },
+                  "required": [
+                    "message",
+                    "error",
+                    "statusCode"
+                  ]
+                },
+                "example": {
+                  "message": "tbc",
+                  "error": "tbc",
+                  "statusCode": 500
+                }
+              }
+            }
+          }
+        }
+      },
+      "put": {
+        "tags": [
+          "ingredients"
+        ],
+        "summary": "Update Ingredient by ID.",
+        "description": "Edit an ingredient type.",
+        "operationId": "updateIngredient",
+        "parameters": [
+          {
+            "name": "correlation-id",
+            "in": "header",
+            "required": true,
+            "description": "A UUID used for request tracing.",
+            "example": "a58bdc-555a-4980-b779-355fc7e27cb5",
+            "schema": {
+              "type": "string",
+              "format": "uuid"
+            }
+          },
+          {
+            "name": "ingredientId",
+            "in": "path",
+            "description": "Ingredient id to delete",
+            "required": true,
+            "example": "a58bdc-555a-4980-b779-355fc7e27cb5",
+            "schema": {
+              "type": "string",
+              "format": "uuid"
+            }
+          }
+        ],
+        "requestBody": {
+          "description": "Update an existing ingredient",
+          "content": {
+            "application/json": {
+              "schema": {
+                "required": [
+                  "name",
+                  "quantity",
+                  "category"
+                ],
+                "type": "object",
+                "properties": {
+                  "ingredientId": {
+                    "type": "string",
+                    "description": "Unique identifier of this ingredient.",
+                    "readOnly": true,
+                    "format": "uuid",
+                    "example": "07a58bdc-555a-4980-b779-355fc7e27cb5"
+                  },
+                  "name": {
+                    "type": "string",
+                    "example": "tomato"
+                  },
+                  "quantity": {
+                    "type": "integer",
+                    "example": 28
+                  },
+                  "category": {
+                    "type": "string",
+                    "description": "Storage Category of this ingredient",
+                    "enum": [
+                      "FROZEN",
+                      "CHILLED",
+                      "DRY_GOOD"
+                    ]
+                  },
+                  "availability": {
+                    "type": "string",
+                    "description": "System generated availability status.",
+                    "readOnly": true,
+                    "enum": [
+                      "AVAILABLE",
+                      "UNAVAILABLE"
+                    ]
+                  }
+                }
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "Successful operation",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "required": [
+                    "name",
+                    "quantity",
+                    "category"
+                  ],
+                  "type": "object",
+                  "properties": {
+                    "ingredientId": {
+                      "type": "string",
+                      "description": "Unique identifier of this ingredient.",
+                      "readOnly": true,
+                      "format": "uuid",
+                      "example": "07a58bdc-555a-4980-b779-355fc7e27cb5"
+                    },
+                    "name": {
+                      "type": "string",
+                      "example": "tomato"
+                    },
+                    "quantity": {
+                      "type": "integer",
+                      "example": 28
+                    },
+                    "category": {
+                      "type": "string",
+                      "description": "Storage Category of this ingredient",
+                      "enum": [
+                        "FROZEN",
+                        "CHILLED",
+                        "DRY_GOOD"
+                      ]
+                    },
+                    "availability": {
+                      "type": "string",
+                      "description": "System generated availability status.",
+                      "readOnly": true,
+                      "enum": [
+                        "AVAILABLE",
+                        "UNAVAILABLE"
+                      ]
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Invalid input",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "message": {
+                      "type": "string"
+                    },
+                    "error": {
+                      "type": "string"
+                    },
+                    "statusCode": {
+                      "type": "number"
+                    }
+                  },
+                  "required": [
+                    "message",
+                    "error",
+                    "statusCode"
+                  ]
+                },
+                "example": {
+                  "message": "tbc",
+                  "error": "tbc",
+                  "statusCode": 400
+                }
+              }
+            }
+          },
+          "401": {
+            "description": "Unauthorised",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "message": {
+                      "type": "string"
+                    },
+                    "error": {
+                      "type": "string"
+                    },
+                    "statusCode": {
+                      "type": "number"
+                    }
+                  },
+                  "required": [
+                    "message",
+                    "error",
+                    "statusCode"
+                  ]
+                },
+                "example": {
+                  "message": "tbc",
+                  "error": "tbc",
+                  "statusCode": 401
+                }
+              }
+            }
+          },
+          "404": {
+            "description": "Resource not found",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "message": {
+                      "type": "string"
+                    },
+                    "error": {
+                      "type": "string"
+                    },
+                    "statusCode": {
+                      "type": "number"
+                    }
+                  },
+                  "required": [
+                    "message",
+                    "error",
+                    "statusCode"
+                  ]
+                },
+                "example": {
+                  "message": "Route GET:/example not founder",
+                  "error": "Not Found",
+                  "statusCode": 404
+                }
+              }
+            }
+          },
+          "422": {
+            "description": "Validation exception",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "message": {
+                      "type": "string"
+                    },
+                    "error": {
+                      "type": "string"
+                    },
+                    "statusCode": {
+                      "type": "number"
+                    }
+                  },
+                  "required": [
+                    "message",
+                    "error",
+                    "statusCode"
+                  ]
+                },
+                "example": {
+                  "message": "tbc",
+                  "error": "tbc",
+                  "statusCode": 422
+                }
+              }
+            }
+          },
+          "500": {
+            "description": "General error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "message": {
+                      "type": "string"
+                    },
+                    "error": {
+                      "type": "string"
+                    },
+                    "statusCode": {
+                      "type": "number"
+                    }
+                  },
+                  "required": [
+                    "message",
+                    "error",
+                    "statusCode"
+                  ]
+                },
+                "example": {
+                  "message": "tbc",
+                  "error": "tbc",
+                  "statusCode": 500
+                }
+              }
+            }
+          }
+        }
+      },
+      "delete": {
+        "tags": [
+          "ingredients"
+        ],
+        "summary": "Deletes an Ingredient by ID.",
+        "description": "Delete an ingredient.",
+        "operationId": "deleteIngredient",
+        "parameters": [
+          {
+            "name": "correlation-id",
+            "in": "header",
+            "required": true,
+            "description": "A UUID used for request tracing.",
+            "example": "a58bdc-555a-4980-b779-355fc7e27cb5",
+            "schema": {
+              "type": "string",
+              "format": "uuid"
+            }
+          },
+          {
+            "name": "ingredientId",
+            "in": "path",
+            "description": "Ingredient id to delete",
+            "required": true,
+            "example": "a58bdc-555a-4980-b779-355fc7e27cb5",
+            "schema": {
+              "type": "string",
+              "format": "uuid"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Successful operation",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "required": [
+                    "name",
+                    "quantity",
+                    "category"
+                  ],
+                  "type": "object",
+                  "properties": {
+                    "ingredientId": {
+                      "type": "string",
+                      "description": "Unique identifier of this ingredient.",
+                      "readOnly": true,
+                      "format": "uuid",
+                      "example": "07a58bdc-555a-4980-b779-355fc7e27cb5"
+                    },
+                    "name": {
+                      "type": "string",
+                      "example": "tomato"
+                    },
+                    "quantity": {
+                      "type": "integer",
+                      "example": 28
+                    },
+                    "category": {
+                      "type": "string",
+                      "description": "Storage Category of this ingredient",
+                      "enum": [
+                        "FROZEN",
+                        "CHILLED",
+                        "DRY_GOOD"
+                      ]
+                    },
+                    "availability": {
+                      "type": "string",
+                      "description": "System generated availability status.",
+                      "readOnly": true,
+                      "enum": [
+                        "AVAILABLE",
+                        "UNAVAILABLE"
+                      ]
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Invalid input",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "message": {
+                      "type": "string"
+                    },
+                    "error": {
+                      "type": "string"
+                    },
+                    "statusCode": {
+                      "type": "number"
+                    }
+                  },
+                  "required": [
+                    "message",
+                    "error",
+                    "statusCode"
+                  ]
+                },
+                "example": {
+                  "message": "tbc",
+                  "error": "tbc",
+                  "statusCode": 400
+                }
+              }
+            }
+          },
+          "401": {
+            "description": "Unauthorised",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "message": {
+                      "type": "string"
+                    },
+                    "error": {
+                      "type": "string"
+                    },
+                    "statusCode": {
+                      "type": "number"
+                    }
+                  },
+                  "required": [
+                    "message",
+                    "error",
+                    "statusCode"
+                  ]
+                },
+                "example": {
+                  "message": "tbc",
+                  "error": "tbc",
+                  "statusCode": 401
+                }
+              }
+            }
+          },
+          "404": {
+            "description": "Resource not found",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "message": {
+                      "type": "string"
+                    },
+                    "error": {
+                      "type": "string"
+                    },
+                    "statusCode": {
+                      "type": "number"
+                    }
+                  },
+                  "required": [
+                    "message",
+                    "error",
+                    "statusCode"
+                  ]
+                },
+                "example": {
+                  "message": "Route GET:/example not founder",
+                  "error": "Not Found",
+                  "statusCode": 404
+                }
+              }
+            }
+          },
+          "500": {
+            "description": "General error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "message": {
+                      "type": "string"
+                    },
+                    "error": {
+                      "type": "string"
+                    },
+                    "statusCode": {
+                      "type": "number"
+                    }
+                  },
+                  "required": [
+                    "message",
+                    "error",
+                    "statusCode"
+                  ]
+                },
+                "example": {
+                  "message": "tbc",
+                  "error": "tbc",
+                  "statusCode": 500
+                }
+              }
+            }
+          }
+        }
+      }
+    }
+  },
+  "components": {
+    "schemas": {
+      "Ingredient": {
+        "required": [
+          "name",
+          "quantity",
+          "category"
+        ],
+        "type": "object",
+        "properties": {
+          "ingredientId": {
+            "type": "string",
+            "description": "Unique identifier of this ingredient.",
+            "readOnly": true,
+            "format": "uuid",
+            "example": "07a58bdc-555a-4980-b779-355fc7e27cb5"
+          },
+          "name": {
+            "type": "string",
+            "example": "tomato"
+          },
+          "quantity": {
+            "type": "integer",
+            "example": 28
+          },
+          "category": {
+            "type": "string",
+            "description": "Storage Category of this ingredient",
+            "enum": [
+              "FROZEN",
+              "CHILLED",
+              "DRY_GOOD"
+            ]
+          },
+          "availability": {
+            "type": "string",
+            "description": "System generated availability status.",
+            "readOnly": true,
+            "enum": [
+              "AVAILABLE",
+              "UNAVAILABLE"
+            ]
+          }
+        }
+      },
+      "Error": {
+        "type": "object",
+        "properties": {
+          "message": {
+            "type": "string"
+          },
+          "error": {
+            "type": "string"
+          },
+          "statusCode": {
+            "type": "number"
+          }
+        },
+        "required": [
+          "message",
+          "error",
+          "statusCode"
+        ]
+      },
+      "Error400": {
+        "description": "Invalid input",
+        "content": {
+          "application/json": {
+            "schema": {
+              "type": "object",
+              "properties": {
+                "message": {
+                  "type": "string"
+                },
+                "error": {
+                  "type": "string"
+                },
+                "statusCode": {
+                  "type": "number"
+                }
+              },
+              "required": [
+                "message",
+                "error",
+                "statusCode"
+              ]
+            },
+            "example": {
+              "message": "tbc",
+              "error": "tbc",
+              "statusCode": 400
+            }
+          }
+        }
+      },
+      "Error401": {
+        "description": "Unauthorised",
+        "content": {
+          "application/json": {
+            "schema": {
+              "type": "object",
+              "properties": {
+                "message": {
+                  "type": "string"
+                },
+                "error": {
+                  "type": "string"
+                },
+                "statusCode": {
+                  "type": "number"
+                }
+              },
+              "required": [
+                "message",
+                "error",
+                "statusCode"
+              ]
+            },
+            "example": {
+              "message": "tbc",
+              "error": "tbc",
+              "statusCode": 401
+            }
+          }
+        }
+      },
+      "Error404": {
+        "description": "Resource not found",
+        "content": {
+          "application/json": {
+            "schema": {
+              "type": "object",
+              "properties": {
+                "message": {
+                  "type": "string"
+                },
+                "error": {
+                  "type": "string"
+                },
+                "statusCode": {
+                  "type": "number"
+                }
+              },
+              "required": [
+                "message",
+                "error",
+                "statusCode"
+              ]
+            },
+            "example": {
+              "message": "Route GET:/example not founder",
+              "error": "Not Found",
+              "statusCode": 404
+            }
+          }
+        }
+      },
+      "Error422": {
+        "description": "Validation exception",
+        "content": {
+          "application/json": {
+            "schema": {
+              "type": "object",
+              "properties": {
+                "message": {
+                  "type": "string"
+                },
+                "error": {
+                  "type": "string"
+                },
+                "statusCode": {
+                  "type": "number"
+                }
+              },
+              "required": [
+                "message",
+                "error",
+                "statusCode"
+              ]
+            },
+            "example": {
+              "message": "tbc",
+              "error": "tbc",
+              "statusCode": 422
+            }
+          }
+        }
+      },
+      "Error500": {
+        "description": "General error",
+        "content": {
+          "application/json": {
+            "schema": {
+              "type": "object",
+              "properties": {
+                "message": {
+                  "type": "string"
+                },
+                "error": {
+                  "type": "string"
+                },
+                "statusCode": {
+                  "type": "number"
+                }
+              },
+              "required": [
+                "message",
+                "error",
+                "statusCode"
+              ]
+            },
+            "example": {
+              "message": "tbc",
+              "error": "tbc",
+              "statusCode": 500
+            }
+          }
+        }
+      }
+    },
+    "examples": {
+      "Error400": {
+        "summary": "A 400 error",
+        "value": {
+          "message": "tbc",
+          "error": "tbc",
+          "statusCode": 400
+        }
+      },
+      "Error401": {
+        "summary": "A 401 error",
+        "value": {
+          "message": "tbc",
+          "error": "tbc",
+          "statusCode": 401
+        }
+      },
+      "Error404": {
+        "summary": "A 404 error",
+        "value": {
+          "message": "Route GET:/example not founder",
+          "error": "Not Found",
+          "statusCode": 404
+        }
+      },
+      "Error500": {
+        "summary": "A 500 error",
+        "value": {
+          "message": "tbc",
+          "error": "tbc",
+          "statusCode": 500
+        }
+      }
+    },
+    "parameters": {
+      "CorrelationIdHeader": {
+        "name": "correlation-id",
+        "in": "header",
+        "required": true,
+        "description": "A UUID used for request tracing.",
+        "example": "a58bdc-555a-4980-b779-355fc7e27cb5",
+        "schema": {
+          "type": "string",
+          "format": "uuid"
+        }
+      },
+      "IngredientId": {
+        "name": "ingredientId",
+        "in": "path",
+        "description": "Ingredient id to delete",
+        "required": true,
+        "example": "a58bdc-555a-4980-b779-355fc7e27cb5",
+        "schema": {
+          "type": "string",
+          "format": "uuid"
+        }
+      }
+    }
+  }
+}

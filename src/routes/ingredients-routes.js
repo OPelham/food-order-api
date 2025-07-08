@@ -1,58 +1,19 @@
-import * as controller from "../controllers/ingredients-controller.js";
 
 /**
- * Registers ingredient-related routes for the Fastify application.
+ * Registers ingredient-related routes.
  *
- * Includes:
- * - `GET /ingredients/:ingredientId`: Fetch a single ingredient by its ID.
- *
- * Schema validation is provided for query string and response.
- *
- * @async
- * @param {FastifyInstance} fastify - The Fastify instance to which routes are registered.
- * @param {Object} options - Plugin options (see Fastify plugin API for details).
+ * @param {FastifyInstance} fastify - Fastify server instance
+ * @param {Object} options - Route options including controller
+ * @param {Object} options.controller - Ingredient controller with route handlers
  */
-export async function ingredientRoutes (fastify) {
+export async function ingredientRoutes(fastify, options) {
+    const { controller, schemas } = options;
+    console.log(schemas.paths["/ingredients/{ingredientId"])
+
     fastify.route({
         method: 'GET',
         url: '/ingredients/:ingredientId',
-        schema: { //todo sort schema
-            querystring: {
-                name: { type: 'string' },
-                excitement: { type: 'integer' }
-            },
-            response: {
-                200: {
-                    type: 'object',
-                    properties: {
-                        ingredientId: {
-                            type: 'string',
-                        },
-                    }
-                }
-            }
-        },
-        handler: await controller.getIngredientById
-    })
-    // fastify.route({
-    //     method: 'GET',
-    //     url: '/ingredients/findByAvailability',
-    //     schema: { //todo sort schema
-    //         querystring: {
-    //             name: { type: 'string' },
-    //             excitement: { type: 'integer' }
-    //         },
-    //         response: {
-    //             200: {
-    //                 type: 'object',
-    //                 properties: {
-    //                     ingredientId: {
-    //                         type: 'string',
-    //                     },
-    //                 }
-    //             }
-    //         }
-    //     },
-    //     handler: await controller.getIngredientByAvailability
-    // })
+        schema: schemas.paths["/ingredients/{ingredientId}"], //todo test this gets the schema we want
+        handler: controller.getIngredientById
+    });
 }

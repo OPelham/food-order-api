@@ -4,6 +4,7 @@
   "type": "module",
   "main": "index.js",
   "scripts": {
+    "generate:schema": "node scripts/generate-schema.js",
     "test": "ENVIRONMENT=test tap \"test/**/*.test.js\"",
     "test:coverage": "ENVIRONMENT=test tap \"test/**/*.test.js\" --coverage",
     "test:watch": "ENVIRONMENT=test tap \"test/**/*.test.js\" --watch",
@@ -20,6 +21,8 @@
   "description": "",
   "dependencies": {
     "@fastify/sensible": "^5.0.0",
+    "ajv": "^6.12.6",
+    "ajv-formats": "^3.0.1",
     "ajv-oai": "^1.2.1",
     "fastify": "^5.4.0",
     "fastify-healthcheck": "^5.1.0",
@@ -29,6 +32,7 @@
     "pino": "^9.7.0"
   },
   "devDependencies": {
+    "@apidevtools/json-schema-ref-parser": "^14.1.0",
     "nodemon": "^3.1.10",
     "pino-pretty": "^13.0.0",
     "sinon": "^21.0.0",

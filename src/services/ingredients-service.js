@@ -1,31 +1,28 @@
-import ingredientRepository from '../repositories/ingredient-repository.js';
 import { Ingredient } from '../domain/ingredient.js';
 
 /**
- * Retrieves a single ingredient by its ID from the repository.
+ * Creates the ingredient service that uses the repository and domain model.
  *
- * - Delegates fetching to the ingredient repository.
- * - Converts the raw database record into a domain `Ingredient` entity.
- * - Returns a plain DTO suitable for response serialization.
- * - Throws an error if the ingredient is not found.
- *
- * @async
- * @param {string} ingredientId - The ID of the ingredient to retrieve.
- * @returns {Promise<Object>} The ingredient DTO.
- * @throws {Error} If the ingredient does not exist.
+ * @param {Object} repository - Ingredient repository with data access methods
+ * @returns {Object} Ingredient service API
  */
-export async function getById(ingredientId) {
-    const record = await ingredientRepository.findById(ingredientId);
-    if (!record) throw new Error('Ingredient not found');
-    return Ingredient.fromRecord(record).toDTO();
-}
+export function createIngredientService(repository) {
+    return {
+        /**
+         * Gets an ingredient by its ID and returns it as a DTO.
+         *
+         * @param {string} id - Ingredient ID
+         * @throws {Error} If ingredient is not found
+         * @returns {Promise<Object>} Ingredient DTO
+         */
+        async getById(id, log) {
+            const serviceLog = log.child({module: 'ingredient-service'});
+            serviceLog.debug("test log");
+            const record = await repository.findById(id, log);
+            if (!record) throw new Error('Ingredient not found');
 
-export async function updateQuantity(ingredientId, newQuantity) {
-    const record = await ingredientRepository.findById(ingredientId);
-    if (!record) throw new Error('Ingredient not found');
-
-    const ingredient = Ingredient.fromRecord(record);
-    ingredient.setQuantity(newQuantity);
-    await ingredientRepository.update(ingredient);
-    return ingredient.toDTO();
+            const ingredient = Ingredient.fromRecord(record);
+            return ingredient.toDTO();
+        }
+    };
 }
