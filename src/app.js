@@ -2,7 +2,7 @@ import Fastify from 'fastify'
 import Ajv from 'ajv-oai'
 import {applicationVariables} from "./config/index.js";
 import {schemas} from "./schemas/index.js";
-import {configureLogger} from "./infrastructure/logger.js";
+import {configureLogger} from "./lib/logger.js";
 
 import onReadyHook from "./hooks/on-ready-hook.js";
 import onSendHook from "./hooks/on-send-hook.js";
