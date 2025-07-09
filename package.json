@@ -6,7 +6,6 @@
   "scripts": {
     "generate:schema": "node scripts/generate-schema.js",
     "test": "ENVIRONMENT=test tap \"test/**/*.test.js\"",
-    "test:coverage": "ENVIRONMENT=test tap \"test/**/*.test.js\" --coverage",
     "test:watch": "ENVIRONMENT=test tap \"test/**/*.test.js\" --watch",
     "start:dev": "ENVIRONMENT=local nodemon src/server.js",
     "start:dev-trace": "LOG_LEVEL=trace ENVIRONMENT=local nodemon src/server.js",
