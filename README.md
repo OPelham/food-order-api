@@ -60,7 +60,7 @@ LOG_LEVEL=debug
 
 ### Run unit tests
 
-``` bash
+```bash
 npm test
 ```
 
