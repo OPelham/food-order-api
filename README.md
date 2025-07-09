@@ -104,6 +104,11 @@ This project uses Husky for Git hooks.
 - This is triggered automatically when pushing
 - See .husky/pre-commit
 
+To skip verification use the "--no-verify" flag
+```bash
+git push --no-verify
+```
+
 ### Setup (if needed)
 ```bash
 npx husky init
