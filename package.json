@@ -10,7 +10,10 @@
     "test:watch": "ENVIRONMENT=test tap \"test/**/*.test.js\" --watch",
     "start:dev": "ENVIRONMENT=local nodemon src/server.js",
     "start:dev-trace": "LOG_LEVEL=trace ENVIRONMENT=local nodemon src/server.js",
-    "start": "node src/server.js"
+    "start": "node src/server.js",
+    "lint": "eslint .",
+    "lint:fix": "eslint . --fix",
+    "prepare": "husky"
   },
   "directories": {
     "test": "test"
@@ -33,8 +36,19 @@
   },
   "devDependencies": {
     "@apidevtools/json-schema-ref-parser": "^14.1.0",
+    "eslint": "^8.57.1",
+    "eslint-config-airbnb-base": "^15.0.0",
+    "eslint-config-prettier": "^10.1.5",
+    "eslint-plugin-import": "^2.32.0",
+    "eslint-plugin-node": "^11.1.0",
+    "eslint-plugin-prettier": "^5.5.1",
+    "eslint-plugin-security": "^3.0.1",
+    "globals": "^16.3.0",
+    "husky": "^9.1.7",
+    "lint-staged": "^16.1.2",
     "nodemon": "^3.1.10",
     "pino-pretty": "^13.0.0",
+    "prettier": "^3.6.2",
     "sinon": "^21.0.0",
     "tap": "^16.1.0"
   },
@@ -43,5 +57,8 @@
     "functions": 80,
     "lines": 85,
     "statements": 85
+  },
+  "lint-staged": {
+    "*.js": "eslint --fix"
   }
 }

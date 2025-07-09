@@ -19,50 +19,48 @@ import pino from "pino";
  * @returns {Object|false} The Pino-compatible logger configuration for Fastify or `false` to disable logging (e.g., in tests).
  */
 export function configureLogger() {
-    // pino automatically logs on startup, on incoming request, on request completion, on error
-    // set custom serializers to overwrite fastify default
-    const serializers = {
-        req: (request) => ({
-            method: request.method,
-            url: request.url,
-            headers: request.headers,  // extra
-            ip: request.ip
-        }),
-        res: (reply) => ({
-            statusCode: reply.statusCode
-        }),
-        err: pino.stdSerializers.err
-    }
-    // set up log redaction paths
-    const redactions = {
-        paths: [
-            "*.headers.authorization"
-        ]
-    }
-    // set up logging based on environment
-    const envToLogger = {
-        local: {
-            transport: {
-                target: 'pino-pretty',
-                options: {
-                    translateTime: 'HH:MM:ss Z',
-                    ignore: 'pid,hostname',
-                    levelFirst: true,
-                },
-            },
-            level: process.env.LOG_LEVEL ?? 'debug',
-            serializers: serializers
+  // pino automatically logs on startup, on incoming request, on request completion, on error
+  // set custom serializers to overwrite fastify default
+  const serializers = {
+    req: (request) => ({
+      method: request.method,
+      url: request.url,
+      headers: request.headers, // extra
+      ip: request.ip,
+    }),
+    res: (reply) => ({
+      statusCode: reply.statusCode,
+    }),
+    err: pino.stdSerializers.err,
+  };
+  // set up log redaction paths
+  const redactions = {
+    paths: ["*.headers.authorization"],
+  };
+  // set up logging based on environment
+  const envToLogger = {
+    local: {
+      transport: {
+        target: "pino-pretty",
+        options: {
+          translateTime: "HH:MM:ss Z",
+          ignore: "pid,hostname",
+          levelFirst: true,
         },
-        production: {
-            timestamp: pino.stdTimeFunctions.isoTime,
-            formatters: {
-                level: (label) => ({level: label.toUpperCase()}),
-            },
-            level: process.env.LOG_LEVEL ?? 'info',
-            redact: redactions,
-            serializers: serializers,
-        },
-        test: false,
-    }
-    return envToLogger[process.env.ENVIRONMENT] ?? envToLogger["production"] // default to production if no value
+      },
+      level: process.env.LOG_LEVEL ?? "debug",
+      serializers: serializers,
+    },
+    production: {
+      timestamp: pino.stdTimeFunctions.isoTime,
+      formatters: {
+        level: (label) => ({ level: label.toUpperCase() }),
+      },
+      level: process.env.LOG_LEVEL ?? "info",
+      redact: redactions,
+      serializers: serializers,
+    },
+    test: false,
+  };
+  return envToLogger[process.env.ENVIRONMENT] ?? envToLogger["production"]; // default to production if no value
 }
