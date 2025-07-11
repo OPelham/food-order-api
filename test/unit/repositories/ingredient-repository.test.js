@@ -16,7 +16,7 @@ t.test("Ingredient Repository", async (t) => {
 
   t.test("findById: returns result when found", async (t) => {
     const fakeRecord = { id: "123", name: "Pepper", quantity: 7 };
-    mockDb.query.resolves({ rows: [fakeRecord] });
+    mockDb.query.resolves(fakeRecord);
 
     const result = await repository.findById("123", mockLog);
 
@@ -35,7 +35,7 @@ t.test("Ingredient Repository", async (t) => {
   });
 
   t.test("findById: returns null when not found", async (t) => {
-    mockDb.query.resolves({ rows: [] });
+    mockDb.query.resolves(null);
 
     const result = await repository.findById("not-found", mockLog);
 
