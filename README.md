@@ -5,7 +5,7 @@ Includes strong type-safe schema validation, centralized logging, health checks,
 
 ---
 
-## 🚀 Features
+## ✨ Features
 
 - 🔥 Fastify v5 with modular plugin structure
 - ✅ JSON Schema-based validation via `ajv-oai`
@@ -38,8 +38,6 @@ Includes strong type-safe schema validation, centralized logging, health checks,
 npm install
 ```
 
-
-
 ### 2. Set Environment Variables
 
 Create a .env file or export variables manually: 
@@ -52,23 +50,48 @@ ENVIRONMENT=local
 LOG_LEVEL=debug
 ```
 
-### 3. Create Schema
+### 3. Run Prepare Script
+
+Runs "husky" command to ensure git hooks are active
+
+```bash
+npm run prepare
+```
 
 ---
 
 ## 🧪 Running Tests
 
-### Run unit tests
+### Run all tests
 
 ```bash
 npm test
 ```
 
-### Report mode
+### Run unit tests
+
+```bash
+npm run test:unit
+```
+
+### Report mode 
+
+Applies to unit tests
 
 ```bash
 npm run test:report
 ```
+
+### Run integration tests
+
+```bash
+npm run test:integration
+```
+
+### Running an individual test
+
+### Setting log level for tests
+
 Coverage thresholds are defined under c8 in package.json.
 
 ---
@@ -89,7 +112,7 @@ npm run lint:fix
 
 ---
 
-## Git hooks
+## 🪝 Git hooks
 This project uses Husky for Git hooks.
 
 ### Pre-commit checks
@@ -125,6 +148,27 @@ npm run generate:schema
 ```
 
 The logic for this is in scripts/generate-schema.js.
+
+---
+
+## 🚀 Run Server
+
+### Start server in production mode
+- log level info
+- log redaction active
+- structured logs
+
+```bash
+npm run start
+```
+### Start server in local mode
+- log level debug
+- log redaction off
+- pino-pretty logs
+
+```bash
+npm run start:dev
+```
 
 ---
 
