@@ -113,12 +113,7 @@
           "statusCode": {
             "type": "number"
           }
-        },
-        "required": [
-          "message",
-          "error",
-          "statusCode"
-        ]
+        }
       },
       "401": {
         "type": "object",
@@ -132,12 +127,7 @@
           "statusCode": {
             "type": "number"
           }
-        },
-        "required": [
-          "message",
-          "error",
-          "statusCode"
-        ]
+        }
       },
       "404": {
         "type": "object",
@@ -151,12 +141,7 @@
           "statusCode": {
             "type": "number"
           }
-        },
-        "required": [
-          "message",
-          "error",
-          "statusCode"
-        ]
+        }
       },
       "422": {
         "type": "object",
@@ -170,12 +155,7 @@
           "statusCode": {
             "type": "number"
           }
-        },
-        "required": [
-          "message",
-          "error",
-          "statusCode"
-        ]
+        }
       },
       "500": {
         "type": "object",
@@ -189,12 +169,7 @@
           "statusCode": {
             "type": "number"
           }
-        },
-        "required": [
-          "message",
-          "error",
-          "statusCode"
-        ]
+        }
       }
     }
   },
@@ -281,12 +256,7 @@
           "statusCode": {
             "type": "number"
           }
-        },
-        "required": [
-          "message",
-          "error",
-          "statusCode"
-        ]
+        }
       },
       "401": {
         "type": "object",
@@ -300,12 +270,7 @@
           "statusCode": {
             "type": "number"
           }
-        },
-        "required": [
-          "message",
-          "error",
-          "statusCode"
-        ]
+        }
       },
       "404": {
         "type": "object",
@@ -319,12 +284,7 @@
           "statusCode": {
             "type": "number"
           }
-        },
-        "required": [
-          "message",
-          "error",
-          "statusCode"
-        ]
+        }
       },
       "500": {
         "type": "object",
@@ -338,12 +298,7 @@
           "statusCode": {
             "type": "number"
           }
-        },
-        "required": [
-          "message",
-          "error",
-          "statusCode"
-        ]
+        }
       }
     }
   },
@@ -429,12 +384,7 @@
           "statusCode": {
             "type": "number"
           }
-        },
-        "required": [
-          "message",
-          "error",
-          "statusCode"
-        ]
+        }
       },
       "401": {
         "type": "object",
@@ -448,12 +398,7 @@
           "statusCode": {
             "type": "number"
           }
-        },
-        "required": [
-          "message",
-          "error",
-          "statusCode"
-        ]
+        }
       },
       "404": {
         "type": "object",
@@ -467,12 +412,7 @@
           "statusCode": {
             "type": "number"
           }
-        },
-        "required": [
-          "message",
-          "error",
-          "statusCode"
-        ]
+        }
       },
       "500": {
         "type": "object",
@@ -486,12 +426,7 @@
           "statusCode": {
             "type": "number"
           }
-        },
-        "required": [
-          "message",
-          "error",
-          "statusCode"
-        ]
+        }
       }
     }
   },
@@ -621,12 +556,7 @@
           "statusCode": {
             "type": "number"
           }
-        },
-        "required": [
-          "message",
-          "error",
-          "statusCode"
-        ]
+        }
       },
       "401": {
         "type": "object",
@@ -640,12 +570,7 @@
           "statusCode": {
             "type": "number"
           }
-        },
-        "required": [
-          "message",
-          "error",
-          "statusCode"
-        ]
+        }
       },
       "404": {
         "type": "object",
@@ -659,12 +584,7 @@
           "statusCode": {
             "type": "number"
           }
-        },
-        "required": [
-          "message",
-          "error",
-          "statusCode"
-        ]
+        }
       },
       "422": {
         "type": "object",
@@ -678,12 +598,7 @@
           "statusCode": {
             "type": "number"
           }
-        },
-        "required": [
-          "message",
-          "error",
-          "statusCode"
-        ]
+        }
       },
       "500": {
         "type": "object",
@@ -697,12 +612,7 @@
           "statusCode": {
             "type": "number"
           }
-        },
-        "required": [
-          "message",
-          "error",
-          "statusCode"
-        ]
+        }
       }
     }
   },
@@ -788,12 +698,7 @@
           "statusCode": {
             "type": "number"
           }
-        },
-        "required": [
-          "message",
-          "error",
-          "statusCode"
-        ]
+        }
       },
       "401": {
         "type": "object",
@@ -807,12 +712,7 @@
           "statusCode": {
             "type": "number"
           }
-        },
-        "required": [
-          "message",
-          "error",
-          "statusCode"
-        ]
+        }
       },
       "404": {
         "type": "object",
@@ -826,12 +726,7 @@
           "statusCode": {
             "type": "number"
           }
-        },
-        "required": [
-          "message",
-          "error",
-          "statusCode"
-        ]
+        }
       },
       "500": {
         "type": "object",
@@ -845,12 +740,7 @@
           "statusCode": {
             "type": "number"
           }
-        },
-        "required": [
-          "message",
-          "error",
-          "statusCode"
-        ]
+        }
       }
     }
   }

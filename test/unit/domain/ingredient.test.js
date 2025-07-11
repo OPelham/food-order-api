@@ -1,30 +1,49 @@
 import t from "tap";
 import { Ingredient } from "../../../src/domain/ingredient.js";
 
+const validIngredientId = "57526bf4-7226-4195-b5d6-0219923f65b1";
+
 t.test("Ingredient domain entity", (t) => {
   t.test("constructor assigns properties", (t) => {
-    const data = { id: "1", name: "Tomato", quantity: 5 };
+    const data = {
+      ingredientId: validIngredientId,
+      name: "Tomato",
+      quantity: 1,
+      category: "FROZEN",
+    };
     const ingredient = new Ingredient(data);
 
-    t.equal(ingredient.id, "1");
+    t.equal(ingredient.ingredientId, validIngredientId);
     t.equal(ingredient.name, "Tomato");
-    t.equal(ingredient.quantity, 5);
+    t.equal(ingredient.quantity, 1);
+    t.equal(ingredient.category, "FROZEN");
     t.end();
   });
 
   t.test("fromRecord creates an Ingredient instance from plain object", (t) => {
-    const record = { id: "2", name: "Cheese", quantity: 2 };
+    const record = {
+      ingredientId: validIngredientId,
+      name: "Tomato",
+      quantity: 1,
+      category: "FROZEN",
+    };
     const ingredient = Ingredient.fromRecord(record);
 
     t.ok(ingredient instanceof Ingredient);
-    t.equal(ingredient.id, "2");
-    t.equal(ingredient.name, "Cheese");
-    t.equal(ingredient.quantity, 2);
+    t.equal(ingredient.ingredientId, validIngredientId);
+    t.equal(ingredient.name, "Tomato");
+    t.equal(ingredient.quantity, 1);
+    t.equal(ingredient.category, "FROZEN");
     t.end();
   });
 
   t.test("setQuantity updates quantity when positive", (t) => {
-    const ingredient = new Ingredient({ id: "3", name: "Basil", quantity: 1 });
+    const ingredient = new Ingredient({
+      ingredientId: validIngredientId,
+      name: "Tomato",
+      quantity: 1,
+      category: "FROZEN",
+    });
     ingredient.setQuantity(10);
 
     t.equal(ingredient.quantity, 10);
@@ -32,7 +51,12 @@ t.test("Ingredient domain entity", (t) => {
   });
 
   t.test("setQuantity throws when quantity is negative", (t) => {
-    const ingredient = new Ingredient({ id: "4", name: "Salt", quantity: 3 });
+    const ingredient = new Ingredient({
+      ingredientId: validIngredientId,
+      name: "Tomato",
+      quantity: 1,
+      category: "FROZEN",
+    });
 
     t.throws(() => {
       ingredient.setQuantity(-1);
@@ -42,14 +66,22 @@ t.test("Ingredient domain entity", (t) => {
   });
 
   t.test("toDTO returns correct plain object", (t) => {
-    const ingredient = new Ingredient({ id: "5", name: "Pepper", quantity: 7 });
+    const ingredient = new Ingredient({
+      ingredientId: validIngredientId,
+      name: "Tomato",
+      quantity: 1,
+      category: "FROZEN",
+    });
     const dto = ingredient.toDTO();
 
     t.same(dto, {
-      id: "5",
-      name: "Pepper",
-      quantity: 7,
+      ingredientId: validIngredientId,
+      name: "Tomato",
+      quantity: 1,
+      category: "FROZEN",
     });
+
+    //todo add tests for where not all are set, and test enums
 
     t.end();
   });

@@ -248,10 +248,10 @@ components:
           type: string
         statusCode:
           type: number
-      required:
-        - message
-        - error
-        - statusCode
+#      required: #todo reintroduce
+#        - message
+#        - error
+#        - statusCode
 
     Error400:
       description: Invalid input

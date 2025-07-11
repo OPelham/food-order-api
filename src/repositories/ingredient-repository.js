@@ -19,8 +19,7 @@ export function createIngredientRepository(db) {
       const result = await db.query("SELECT * FROM ingredients WHERE id = $1", [
         id,
       ]);
-      console.log("result", result); //todo remove
-      return result.rows[0] ?? null;
+      return result ?? null;
     },
   };
 }

@@ -17,10 +17,10 @@ export class Ingredient {
 
   toDTO() {
     return {
-      ingredientId: this.id,
+      ingredientId: this.ingredientId,
       name: this.name,
       quantity: this.quantity,
-      category: "FROZEN",
+      category: this.category,
     };
   }
 }

@@ -10,7 +10,10 @@ t.test(
     // Mock controller with predictable response
     const controller = {
       getIngredientById: async (req, reply) => {
-        return reply.send({ id: req.params.ingredientId, name: "Tomato" });
+        return reply.send({
+          ingredientId: req.params.ingredientId,
+          name: "Tomato",
+        });
       },
     };
 
@@ -55,7 +58,7 @@ t.test(
 
     t.equal(response.statusCode, 200);
     t.same(JSON.parse(response.body), {
-      id: "57526bf4-7226-4195-b5d6-0219923f65b1",
+      ingredientId: "57526bf4-7226-4195-b5d6-0219923f65b1",
       name: "Tomato",
     });
     t.end();
@@ -65,14 +68,16 @@ t.test(
 import { Ingredient } from "../../../src/domain/ingredient.js";
 
 t.test("domain class works", (t) => {
-  const i = new Ingredient({
-    id: "57526bf4-7226-4195-b5d6-0219923f65b1",
+  const ingredient = new Ingredient({
+    ingredientId: "57526bf4-7226-4195-b5d6-0219923f65b1",
     name: "Carrot",
+    category: "FROZEN",
     quantity: 5,
   });
-  t.same(i.toDTO(), {
-    id: "57526bf4-7226-4195-b5d6-0219923f65b1",
+  t.same(ingredient.toDTO(), {
+    ingredientId: "57526bf4-7226-4195-b5d6-0219923f65b1",
     name: "Carrot",
+    category: "FROZEN",
     quantity: 5,
   });
   t.end();
