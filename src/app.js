@@ -8,11 +8,11 @@ import onReadyHook from "./hooks/on-ready-hook.js";
 import onSendHook from "./hooks/on-send-hook.js";
 import preValidationHook from "./hooks/pre-validation-hook.js";
 
+import { createDatabase } from "./infrastructure/database.js";
 import { ingredientRoutes } from "./routes/ingredients-routes.js";
 import { createIngredientRepository } from "./repositories/ingredient-repository.js";
 import { createIngredientService } from "./services/ingredients-service.js";
 import { createIngredientController } from "./controllers/ingredients-controller.js";
-import database from "./infrastructure/database.js";
 
 const prefix = `${applicationVariables.applicationName}/api/${applicationVariables.version}`;
 
@@ -27,6 +27,10 @@ export default function buildServer() {
   const log = fastify.log.child({ module: "app" });
 
   // === Setup DB and services ===
+  const databaseConfig = {
+    connectionString: process.env.DATABASE_URL,
+  };
+  const database = createDatabase(databaseConfig);
   const ingredientRepository = createIngredientRepository(database);
   const ingredientService = createIngredientService(ingredientRepository);
   const ingredientController = createIngredientController(ingredientService);

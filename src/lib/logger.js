@@ -48,7 +48,7 @@ export function configureLogger() {
           levelFirst: true,
         },
       },
-      level: process.env.LOG_LEVEL ?? "debug",
+      level: process.env.LOG_LEVEL || "debug",
       serializers: serializers,
     },
     production: {
@@ -56,11 +56,16 @@ export function configureLogger() {
       formatters: {
         level: (label) => ({ level: label.toUpperCase() }),
       },
-      level: process.env.LOG_LEVEL ?? "info",
+      level: process.env.LOG_LEVEL || "info",
       redact: redactions,
       serializers: serializers,
     },
     test: false,
   };
-  return envToLogger[process.env.ENVIRONMENT] ?? envToLogger["production"]; // default to production if no value
+  return Object.prototype.hasOwnProperty.call(
+    envToLogger,
+    process.env.ENVIRONMENT,
+  ) // default to production if no value
+    ? envToLogger[process.env.ENVIRONMENT]
+    : envToLogger["production"];
 }
