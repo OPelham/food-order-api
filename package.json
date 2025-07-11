@@ -6,7 +6,7 @@
   "scripts": {
     "generate:schema": "node scripts/generate-schema.js",
     "test": "ENVIRONMENT=test tap \"test/**/*.test.js\"",
-    "test:watch": "ENVIRONMENT=test tap \"test/**/*.test.js\" --watch",
+    "test:report": "ENVIRONMENT=test tap --coverage-report=html \"test/**/*.test.js\"",
     "start:dev": "ENVIRONMENT=local nodemon src/server.js",
     "start:dev-trace": "LOG_LEVEL=trace ENVIRONMENT=local nodemon src/server.js",
     "start": "node src/server.js",
@@ -49,14 +49,22 @@
     "pino-pretty": "^13.0.0",
     "prettier": "^3.6.2",
     "sinon": "^21.0.0",
-    "tap": "^16.1.0"
+    "tap": "^21.1.0"
   },
   "c8": {
     "branches": 80,
     "functions": 80,
     "lines": 85,
-    "statements": 85
+    "statements": 85,
+    "include": [
+      "src/**/*.js"
+    ],
+    "exclude": [
+      "test/**",
+      "scripts/**"
+    ]
   },
+  "tap": {},
   "lint-staged": {
     "*.js": "eslint --fix"
   }

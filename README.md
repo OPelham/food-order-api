@@ -64,10 +64,10 @@ LOG_LEVEL=debug
 npm test
 ```
 
-### Watch mode
+### Report mode
 
 ```bash
-npm run test:watch
+npm run test:report
 ```
 Coverage thresholds are defined under c8 in package.json.
 

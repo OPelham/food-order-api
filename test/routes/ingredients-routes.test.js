@@ -1,51 +1,105 @@
+// import t from 'tap';
+// import sinon from 'sinon';
+// import { ingredientRoutes } from '../../src/routes/ingredients-routes.js';
+//
+// t.test('ingredientRoutes registers GET /ingredients/:ingredientId correctly', async (t) => {
+//   const fastifyMock = {
+//     route: sinon.spy(),
+//   };
+//
+//   const fakeHandler = async () => {};
+//   const fakeSchema = {
+//     description: 'Fake schema for testing',
+//   };
+//
+//   const mockController = {
+//     getIngredientById: fakeHandler,
+//   };
+//
+//   const mockSchemas = {
+//     paths: {
+//       "/ingredients/{ingredientId}": fakeSchema,
+//     },
+//   };
+//
+//   await ingredientRoutes(fastifyMock, {
+//     controller: mockController,
+//     schemas: mockSchemas,
+//   });
+//
+//   t.ok(fastifyMock.route.calledOnce, 'fastify.route should be called once');
+//
+//   const routeArgs = fastifyMock.route.firstCall.args[0];
+//
+//   t.equal(routeArgs.method, 'GET', 'method should be GET');
+//   t.equal(routeArgs.url, '/ingredients/:ingredientId', 'correct route path');
+//   t.equal(routeArgs.handler, fakeHandler, 'handler should match controller.getIngredientById');
+//   t.same(routeArgs.schema, fakeSchema, 'schema should match the injected schema object');
+// });
+
 import t from "tap";
 import Fastify from "fastify";
+import { ingredientRoutes } from "../../src/routes/ingredients-routes.js";
 
-// todo refactor with dependency injection if cant get mockImport to work
-t.test("ingredientRoutes uses mock controller", async (t) => {
-  // Step 1: Mock the controller
-  const mockController = {
-    getIngredientById: async (req, res) => {
-      if (req.params.ingredientId === "notfound") {
-        res.code(404).send({ error: "Ingredient not found" });
-      } else {
-        res.send({ ingredientId: req.params.ingredientId });
-      }
-    },
-  };
+t.test(
+  "GET /ingredients/:ingredientId - returns mocked ingredient",
+  async (t) => {
+    const fastify = Fastify();
 
-  // Step 2: Replace controller with mock using tap.mockImport
-  const { ingredientRoutes: mockedRoutes } = await t.mockImport(
-    "../../src/routes/ingredients-routes.js",
-    {
-      "../controllers/ingredients-controller.js": mockController,
-    },
-  );
+    // Mock controller with predictable response
+    const controller = {
+      getIngredientById: async (req, reply) => {
+        return reply.send({ id: req.params.ingredientId, name: "Tomato" });
+      },
+    };
 
-  // Step 3: Set up a real Fastify instance using mocked routes
-  const fastify = Fastify();
-  fastify.register(mockedRoutes, { prefix: "/mock" });
-  await fastify.ready();
-  t.teardown(() => fastify.close());
+    // Minimal schema object to satisfy Fastify's input
+    const schemas = {
+      paths: {
+        "/ingredients/{ingredientId}": {
+          params: {
+            type: "object",
+            properties: {
+              ingredientId: { type: "string" },
+            },
+            required: ["ingredientId"],
+          },
+          response: {
+            200: {
+              type: "object",
+              properties: {
+                id: { type: "string" },
+                name: { type: "string" },
+              },
+            },
+          },
+        },
+      },
+    };
 
-  // Step 4: Run tests
-  t.test("returns 200 for valid ID", async (t) => {
-    const res = await fastify.inject({
-      method: "GET",
-      url: "/mock/ingredients/abc123",
+    // Register the route with mock controller and schema
+    fastify.register(ingredientRoutes, {
+      controller,
+      schemas,
     });
 
-    t.equal(res.statusCode, 200);
-    t.same(JSON.parse(res.body), { ingredientId: "abc123" });
-  });
+    await fastify.ready();
+    t.teardown(() => fastify.close());
 
-  t.test("returns 404 for notfound", async (t) => {
-    const res = await fastify.inject({
+    const response = await fastify.inject({
       method: "GET",
-      url: "/mock/ingredients/notfound",
+      url: "/ingredients/abc123",
     });
 
-    t.equal(res.statusCode, 404);
-    t.same(JSON.parse(res.body), { error: "Ingredient not found" });
-  });
+    t.equal(response.statusCode, 200);
+    t.same(JSON.parse(response.body), { id: "abc123", name: "Tomato" });
+  },
+);
+
+import { Ingredient } from "../../src/domain/ingredient.js";
+
+t.test("domain class works", (t) => {
+  const i = new Ingredient({ id: "1", name: "Carrot", quantity: 5 });
+  t.same(i.toDTO(), { id: "1", name: "Carrot", quantity: 5 });
+  t.end();
 });
