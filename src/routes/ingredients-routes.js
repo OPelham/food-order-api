@@ -7,12 +7,11 @@
  */
 export async function ingredientRoutes(fastify, options) {
   const { controller, schemas } = options;
-  console.log(schemas.paths["/ingredients/{ingredientId}"]);
 
   fastify.route({
     method: "GET",
     url: "/ingredients/:ingredientId",
-    schema: schemas.paths["/ingredients/{ingredientId}"], //todo test this gets the schema we want
+    schema: schemas["getIngredientById"],
     handler: controller.getIngredientById,
   });
 }

@@ -43,7 +43,7 @@ paths:
               $ref: '#/components/schemas/Ingredient'
         required: true
       responses:
-        '200':
+        '200': #todo refactor to 201 and return only id?
           description: Successful operation
           content:
             application/json:
@@ -206,6 +206,7 @@ components:
   schemas:
     Ingredient:
       required:
+        - ingredientId
         - name
         - quantity
         - category
@@ -361,7 +362,7 @@ components:
     IngredientId:
       name: ingredientId
       in: path
-      description: Ingredient id to delete
+      description: This ingredients ID
       required: true
       example: a58bdc-555a-4980-b779-355fc7e27cb5
       schema:

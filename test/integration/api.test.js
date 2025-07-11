@@ -5,7 +5,12 @@ import Fastify from "fastify";
 const mockDB = {
   query: async (text, params) => {
     if (text.includes("SELECT")) {
-      return { rows: [{ id: 1, name: "Tomato" }] };
+      return {
+        ingredientId: "57526bf4-7226-4195-b5d6-0219923f65b1",
+        name: "Tomato",
+        quantity: 1,
+        category: "FROZEN",
+      };
     }
     return { rows: [] };
   },
@@ -58,9 +63,18 @@ t.test("GET /ingredients/:ingredientId returns fake list", async (t) => {
   const response = await app.inject({
     method: "GET",
     url: "/food-orders/api/v1/ingredients/57526bf4-7226-4195-b5d6-0219923f65b1",
+    headers: {
+      "correlation-id": "57526bf4-7226-4195-b5d6-0219923f65b1",
+    },
   });
 
   t.equal(response.statusCode, 200);
-  console.log({ response });
-  t.same(JSON.parse(response.payload), { id: 1, name: "Tomato" });
+  console.log(response.payload); //todo remove
+  t.same(JSON.parse(response.payload), {
+    ingredientId: "57526bf4-7226-4195-b5d6-0219923f65b1",
+    name: "Tomato",
+    quantity: 1,
+    category: "FROZEN",
+  });
+  //todo prevent 500 when missing required on mandatory instead return field as null?
 });

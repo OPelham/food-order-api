@@ -1,8 +1,9 @@
 export class Ingredient {
-  constructor({ id, name, quantity }) {
-    this.id = id;
+  constructor({ ingredientId, name, quantity, category }) {
+    this.ingredientId = ingredientId;
     this.name = name;
     this.quantity = quantity;
+    this.category = category;
   }
 
   static fromRecord(record) {
@@ -16,9 +17,10 @@ export class Ingredient {
 
   toDTO() {
     return {
-      id: this.id,
+      ingredientId: this.id,
       name: this.name,
       quantity: this.quantity,
+      category: "FROZEN",
     };
   }
 }
