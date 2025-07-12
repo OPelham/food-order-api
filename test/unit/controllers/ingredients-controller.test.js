@@ -19,7 +19,7 @@ t.test("Ingredient Controller - getIngredientById", async (t) => {
 
     const request = {
       params: { ingredientId: "abc123" },
-      log: { child: () => ({ debug: () => {} }) },
+      log: { child: () => ({ info: () => {} }) },
     };
 
     const reply = {
@@ -40,7 +40,7 @@ t.test("Ingredient Controller - getIngredientById", async (t) => {
 
       const request = {
         params: { ingredientId: "missing-id" },
-        log: { child: () => ({ debug: () => {} }) },
+        log: { child: () => ({ info: () => {} }) },
       };
 
       const reply = {
@@ -60,7 +60,7 @@ t.test("Ingredient Controller - getIngredientById", async (t) => {
     mockService.getById.rejects(error);
 
     const errorLogger = {
-      debug: () => {},
+      info: () => {},
       error: sinon.spy(),
     };
 

@@ -27,10 +27,12 @@ import { ingredientRoutes } from "../../src/routes/ingredients-routes.js";
 import Ajv from "ajv-oai";
 
 // Build isolated app
-function buildIsolatedApp() {
-  const fastify = Fastify({
-    logger: false,
-  });
+function buildIsolatedApp(mockLogger) {
+  const fastify = Fastify({ logger: false }); // don't pass mockLogger here
+
+  if (mockLogger) {
+    fastify.log = mockLogger; // set the mock directly
+  }
 
   const ingredientRepository = createIngredientRepository(mockDB);
   const ingredientService = createIngredientService(ingredientRepository);
@@ -78,3 +80,5 @@ t.test("GET /ingredients/:ingredientId returns fake list", async (t) => {
   });
   //todo prevent 500 when missing required on mandatory instead return field as null?
 });
+
+//todo test logger and revert githook to call int and unit tests
