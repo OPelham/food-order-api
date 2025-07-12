@@ -38,16 +38,12 @@ Includes strong type-safe schema validation, centralized logging, health checks,
 npm install
 ```
 
-### 2. Set Environment Variables
+### 2. Set Local Environment Variables
 
-Create a .env file or export variables manually: 
-
-[//]: # (TODO review this )
+Create a .env file using .env.example or export variables manually: 
 
 ```bash
-DATABASE_URL=postgres://user:password@localhost:5432/yourdb
-ENVIRONMENT=local
-LOG_LEVEL=debug
+DATABASE_URL=postgres://<USERNAME>:<PASSWORD>@localhost:5432/testdb
 ```
 
 ### 3. Run Prepare Script
@@ -57,6 +53,47 @@ Runs "husky" command to ensure git hooks are active
 ```bash
 npm run prepare
 ```
+
+---
+
+## Run Database Locally
+
+The local database is used for local development and for integration tests
+
+Consists of a postgres database built using docker-compose.yml
+Volume is initialised with test data via init.sql and includes a persistent volume
+
+### start database
+
+```bash
+npm run db:start
+```
+
+### stop database
+
+```bash
+npm run db:stop
+```
+
+### Or via docker-compose CLI
+
+run in detached mode
+- ```docker-compose up -d```
+
+list volumes
+- ```docker volume ls```
+
+inspect volume
+- ```docker volume inspect food-order-api_postgres-data```
+
+stop database
+- ```docker-compose down```
+
+stop database and remove volume
+- ```docker-compose down -v```
+
+access database via psql CLI
+- ```psql -h localhost -U testuser -d testdb```
 
 ---
 
@@ -90,7 +127,9 @@ npm run test:integration
 
 ### Running an individual test
 
-### Setting log level for tests
+```bash
+tap test/unit/repositories/ingredient-repository.test.js
+```
 
 Coverage thresholds are defined under c8 in package.json.
 
@@ -117,14 +156,12 @@ This project uses Husky for Git hooks.
 
 ### Pre-commit checks
 
-- lint-staged to run "eslint --fix" on staged files
-- This is triggered automatically when committing 
+- uses lint-staged to run "eslint --fix" on staged files
 - See .husky/pre-commit
 
 ### Pre-push checks
 
 - Runs "npm run test" prior to push
-- This is triggered automatically when pushing
 - See .husky/pre-commit
 
 To skip verification use the "--no-verify" flag
@@ -132,7 +169,7 @@ To skip verification use the "--no-verify" flag
 git push --no-verify
 ```
 
-### Setup (if needed)
+### Setup (if required)
 ```bash
 npx husky init
 ```
@@ -141,13 +178,13 @@ npx husky init
 
 ## 📐 Generate API Schema
 
-To generate schema from OpenAPI spec or similar source:
+To re-generate schema from OpenAPI spec:
 
 ```bash
 npm run generate:schema
 ```
 
-The logic for this is in scripts/generate-schema.js.
+See: scripts/generate-schema.js.
 
 ---
 
