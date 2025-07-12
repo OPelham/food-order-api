@@ -226,7 +226,7 @@ src/
 ├── routes/                    # Route registration
 ├── schemas/                   # Schemas
 ├── services/                  # Business logic
-test/                          # Tests
+test/                          # Test files: unit/ integration/
 scripts/                       # Scripts (e.g., schema generator)
 api-spec.yaml                  # OAS 3.1.0 
 ```
