@@ -205,7 +205,7 @@ paths:
 components:
   schemas:
     Ingredient:
-      required:
+      required: # todo find out about mandatory for response fields
         - ingredientId
         - name
         - quantity
@@ -248,10 +248,10 @@ components:
           type: string
         statusCode:
           type: number
-      required:
-        - message
-        - error
-        - statusCode
+#      required: #todo review error
+#        - message
+#        - error
+#        - statusCode
 
     Error400:
       description: Invalid input

@@ -10,16 +10,29 @@ export function createIngredientRepository(db) {
     /**
      * Finds an ingredient by ID.
      *
-     * @param {string} id - Ingredient ID
+     * @param {string} ingredientId - Ingredient ID
+     * @param log
      * @returns {Promise<Object|null>} Ingredient record or null
      */
-    async findById(id, log) {
+    async findById(ingredientId, log) {
       const repositoryLog = log.child({ module: "ingredient-repository" });
-      repositoryLog.debug("test log");
-      const result = await db.query("SELECT * FROM ingredients WHERE id = $1", [
-        id,
-      ]);
-      return result ?? null;
+      const result = await db.query(
+        "SELECT * FROM ingredients WHERE ingredient_id = $1",
+        [ingredientId],
+      );
+
+      //todo make this a function and use dependency inversion to pass? this would make using other dbs later easier
+      let transformedResult;
+      if (result) {
+        transformedResult = {
+          ingredientId: result.rows[0].ingredient_id,
+          name: result.rows[0].name,
+          quantity: result.rows[0].quantity,
+          category: result.rows[0].category,
+        };
+      }
+
+      return transformedResult ?? null; //todo check this
     },
   };
 }

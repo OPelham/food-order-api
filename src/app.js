@@ -16,6 +16,13 @@ import { createIngredientController } from "./controllers/ingredients-controller
 
 const prefix = `${applicationVariables.applicationName}/api/${applicationVariables.version}`;
 
+// get env variables from .env file only when ENVIRONMENT=local
+if (process.env.ENVIRONMENT === "local") {
+  const dotenv = await import("dotenv");
+  dotenv.config();
+}
+//todo test calls/connection to database on local and set up a test? also refactor tests to be consistne t wit test data on local db
+
 // ==== create server instance ====
 export default function buildServer() {
   const fastify = Fastify({
