@@ -4,9 +4,17 @@
   "type": "module",
   "main": "index.js",
   "scripts": {
-    "test": "tap \"src/test/**/*.test.js\"",
-    "start:dev": "ENVIRONMENT=development node src/app.js",
-    "start": "node src/app.js"
+    "generate:schema": "node scripts/generate-schema.js",
+    "test": "npm run test:unit && npm run test:integration",
+    "test:unit": "ENVIRONMENT=test tap \"test/unit/**/*.test.js\"",
+    "test:report": "ENVIRONMENT=test tap --coverage-report=html \"test/unit/**/*.test.js\"",
+    "test:integration": "ENVIRONMENT=test tap \"test/integration/**/*.test.js\" --disable-coverage",
+    "start:dev": "ENVIRONMENT=local nodemon src/server.js",
+    "start:dev-trace": "LOG_LEVEL=trace ENVIRONMENT=local nodemon src/server.js",
+    "start": "node src/server.js",
+    "lint": "eslint .",
+    "lint:fix": "eslint . --fix",
+    "prepare": "husky"
   },
   "directories": {
     "test": "test"
@@ -16,12 +24,49 @@
   "license": "ISC",
   "description": "",
   "dependencies": {
+    "@fastify/sensible": "^5.0.0",
+    "ajv": "^6.12.6",
+    "ajv-formats": "^3.0.1",
+    "ajv-oai": "^1.2.1",
     "fastify": "^5.4.0",
+    "fastify-healthcheck": "^5.1.0",
     "fastify-plugin": "^4.0.0",
-    "@fastify/sensible": "^5.0.0"
+    "figlet": "^1.8.1",
+    "pg": "^8.16.3",
+    "pino": "^9.7.0"
   },
   "devDependencies": {
-    "tap": "^16.1.0",
-    "pino-pretty": "^13.0.0"
+    "@apidevtools/json-schema-ref-parser": "^14.1.0",
+    "eslint": "^8.57.1",
+    "eslint-config-airbnb-base": "^15.0.0",
+    "eslint-config-prettier": "^10.1.5",
+    "eslint-plugin-import": "^2.32.0",
+    "eslint-plugin-node": "^11.1.0",
+    "eslint-plugin-prettier": "^5.5.1",
+    "eslint-plugin-security": "^3.0.1",
+    "globals": "^16.3.0",
+    "husky": "^9.1.7",
+    "lint-staged": "^16.1.2",
+    "nodemon": "^3.1.10",
+    "pino-pretty": "^13.0.0",
+    "prettier": "^3.6.2",
+    "sinon": "^21.0.0",
+    "tap": "^21.1.0"
+  },
+  "c8": {
+    "branches": 95,
+    "functions": 95,
+    "lines": 95,
+    "statements": 95,
+    "include": [
+      "src/**/*.js"
+    ],
+    "exclude": [
+      "scripts/**"
+    ]
+  },
+  "tap": {},
+  "lint-staged": {
+    "*.js": "eslint --fix"
   }
 }

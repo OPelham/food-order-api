@@ -1,0 +1,5 @@
+{
+  "applicationName": "food-orders",
+  "version": "v1",
+  "port": 3000
+}
