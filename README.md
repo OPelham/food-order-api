@@ -26,8 +26,6 @@ Includes strong type-safe schema validation, centralized logging, health checks,
 - PostgreSQL
 - `DATABASE_URL` environment variable (see `.env.example` or setup instructions below)
 
-[//]: # (TODO check env variable setup)
-
 ---
 
 ## 🛠️ Getting Started
@@ -63,37 +61,39 @@ The local database is used for local development and for integration tests
 Consists of a postgres database built using docker-compose.yml
 Volume is initialised with test data via init.sql and includes a persistent volume
 
-### start database
+### Start database
 
 ```bash
 npm run db:start
 ```
 
-### stop database
+### Stop database
 
 ```bash
 npm run db:stop
 ```
 
-### Or via docker-compose CLI
+### docker-compose CLI
 
-run in detached mode
-- ```docker-compose up -d```
+Run in detached mode:
+```docker-compose up -d```
 
-list volumes
-- ```docker volume ls```
+List volumes:
+```docker volume ls```
 
-inspect volume
-- ```docker volume inspect food-order-api_postgres-data```
+Inspect volume:
+```docker volume inspect food-order-api_postgres-data```
 
-stop database
-- ```docker-compose down```
+Stop database:
+```docker-compose down```
 
-stop database and remove volume
-- ```docker-compose down -v```
+Stop database and remove volume:
+```docker-compose down -v```
 
-access database via psql CLI
-- ```psql -h localhost -U testuser -d testdb```
+### psql CLI
+
+Access database via terminal:
+```psql -h localhost -U testuser -d testdb```
 
 ---
 
