@@ -165,6 +165,7 @@ npm run start
 - log level debug
 - log redaction off
 - pino-pretty logs
+- run with nodemon
 
 ```bash
 npm run start:dev
