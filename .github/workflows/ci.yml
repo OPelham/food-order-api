@@ -119,5 +119,5 @@ jobs:
       - name: 🚀 Push Docker image
         run: |
           docker tag ${{ steps.meta.outputs.name }}:${{ steps.meta.outputs.tag }} \
-            docker.io/${{ secrets.YOUR_USER }}/${{ steps.meta.outputs.name }}:${{ steps.meta.outputs.tag }}
-          docker push docker.io/${{ secrets.YOUR_USER }}/${{ steps.meta.outputs.name }}:${{ steps.meta.outputs.tag }}
+            docker.io/${{ secrets.REGISTRY_USERNAME }}/${{ steps.meta.outputs.name }}:${{ steps.meta.outputs.tag }}
+          docker push docker.io/${{ secrets.REGISTRY_USERNAME }}/${{ steps.meta.outputs.name }}:${{ steps.meta.outputs.tag }}
