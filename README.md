@@ -64,19 +64,19 @@ Volume is initialised with test data via init.sql and includes a persistent volu
 ### Start database
 
 ```bash
-npm run db:start
+npm run db:up
 ```
 
 ### Stop database
 
 ```bash
-npm run db:stop
+npm run db:down
 ```
 
 ### docker-compose CLI
 
 Run in detached mode:
-```docker compose up -d```
+```docker compose up -d postgress```
 
 List volumes:
 ```docker volume ls```
@@ -88,7 +88,7 @@ Stop database:
 ```docker compose down```
 
 Stop database and remove volume:
-```docker compose down -v```
+```docker compose down --volumes```
 
 ### psql CLI
 
@@ -96,6 +96,26 @@ Access database via terminal:
 ```psql -h localhost -U testuser -d testdb```
 
 ---
+
+## Running all with docker compose
+
+```bash
+docker compose up --build
+```
+
+```bash
+docker compose up --build -d
+```
+
+run tests
+```bash
+docker compose exec api npm test
+```
+
+for CI (removes after run?)
+```bash
+docker compose run --rm api npm test
+```
 
 ## 🧪 Running Tests
 

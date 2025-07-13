@@ -1,4 +1,3 @@
-version: '3.8'
 services:
   postgres:
     image: postgres:15
@@ -16,6 +15,15 @@ services:
 
       # 2. File mount: init.sql runs only on first init
       - ./init.sql:/docker-entrypoint-initdb.d/init.sql
-
+  api:
+    build: .
+    ports:
+      - "3000:3000" # host:container
+    environment:
+      # note calling @ database service name
+      DATABASE_URL: postgres://testuser:testuserpassword@postgres:5432/testdb
+    depends_on:
+      - postgres
+# how set up secrets for this?
 volumes:
   postgres-data:

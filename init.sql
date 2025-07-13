@@ -15,6 +15,6 @@ CREATE TABLE ingredients (
 -- Insert initial data with explicit UUIDs
 INSERT INTO ingredients (ingredient_id, name, quantity, category)
 VALUES
-    ('e60c517b-2f86-4ece-bd1a-83191bb34ba4', 'Tomato', 10, 'CHILLED'),
+    ('e60c517b-2f86-4ece-bd1a-83191bb34ba4', 'Tomato', 1, 'CHILLED'),
     ('fd093f46-b6c6-4cf6-a5c7-40f8a9deecad', 'Frozen Peas', 5, 'FROZEN'),
     (uuid_generate_v4(), 'Onion', 8, 'CHILLED');
