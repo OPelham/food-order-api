@@ -94,7 +94,7 @@ jobs:
         run: |
           NAME=$(node -p "require('./package.json').name")
           VERSION=$(node -p "require('./package.json').version")
-          BRANCH_NAME=${GITHUB_REF#refs/heads/}
+          BRANCH_NAME=${RAW_BRANCH%%/*}
           IMAGE_TAG=${BRANCH_NAME}-${VERSION}
           echo "name=$NAME" >> $GITHUB_OUTPUT
           echo "tag=$IMAGE_TAG" >> $GITHUB_OUTPUT
