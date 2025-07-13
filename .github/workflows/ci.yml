@@ -4,7 +4,7 @@ on:
   push:
     branches: ['feature/**']
   pull_request:
-    branches: [release, main]
+    branches: ["release/**", develop, main]
 
 permissions:
   actions: read
