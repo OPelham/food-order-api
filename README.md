@@ -76,7 +76,7 @@ npm run db:stop
 ### docker-compose CLI
 
 Run in detached mode:
-```docker-compose up -d```
+```docker compose up -d```
 
 List volumes:
 ```docker volume ls```
@@ -85,10 +85,10 @@ Inspect volume:
 ```docker volume inspect food-order-api_postgres-data```
 
 Stop database:
-```docker-compose down```
+```docker compose down```
 
 Stop database and remove volume:
-```docker-compose down -v```
+```docker compose down -v```
 
 ### psql CLI
 
