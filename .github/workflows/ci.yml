@@ -4,7 +4,7 @@ on:
   push:
     branches: ['feature/**']
   pull_request:
-    branches: [release, develop]
+    branches: [release, main]
 
 permissions:
   actions: read
@@ -35,6 +35,9 @@ jobs:
         uses: github/codeql-action/init@v3
         with:
           languages: javascript
+
+      - name: 🧱 CodeQL Autobuild
+          uses: github/codeql-action/autobuild@v3
 
       - name: 🧠 CodeQL Analyze
         uses: github/codeql-action/analyze@v3
