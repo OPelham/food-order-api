@@ -96,7 +96,10 @@ jobs:
           VERSION=$(node -p "require('./package.json').version")
           RAW_BRANCH=${GITHUB_REF#refs/heads/}
           BRANCH_PREFIX=${RAW_BRANCH%%/*}
-          IMAGE_TAG=${BRANCH_PREFIX}-${VERSION}
+          SHORT_SHA=${GITHUB_SHA::7}
+          
+          IMAGE_TAG=${BRANCH_PREFIX}-${VERSION}-${SHORT_SHA}
+          
           echo "name=$NAME" >> $GITHUB_OUTPUT
           echo "tag=$IMAGE_TAG" >> $GITHUB_OUTPUT
 
