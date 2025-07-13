@@ -31,7 +31,7 @@ jobs:
       - name: 🕒 Wait for Postgres to be ready
         run: |
           echo "Waiting for Postgres..."
-          until docker exec $(docker compose ps -q db) pg_isready -U testuser; do sleep 1; done
+          until docker exec $(docker compose ps -q postgres) pg_isready -U testuser; do sleep 1; done
 
       - name: ✅ Run tests in container
         run: docker compose run --rm api npm test
