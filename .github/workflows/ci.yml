@@ -32,7 +32,7 @@ jobs:
         run: npm audit --audit-level=high || exit 1
 
       - name: 🧠 CodeQL Init
-        uses: github/codeql-action/init@v2
+        uses: github/codeql-action/init@v3
         with:
           languages: javascript
 
