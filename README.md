@@ -97,25 +97,29 @@ Access database via terminal:
 
 ---
 
-## Running all with docker compose
+## Running APP and Database with docker compose
 
+### Run server + database
 ```bash
 docker compose up --build
 ```
 
 ```bash
-docker compose up --build -d
+docker compose up --build --detach
 ```
+Call from local via: ```http://localhost:3000```
 
-run tests
+### Run tests on running container
 ```bash
 docker compose exec api npm test
 ```
 
-for CI (removes after run?)
+### Start container test, remove container (for CI)
 ```bash
 docker compose run --rm api npm test
 ```
+
+for CI (removes after run?)
 
 ## 🧪 Running Tests
 

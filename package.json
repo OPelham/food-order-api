@@ -12,7 +12,7 @@
     "start:dev": "ENVIRONMENT=local nodemon src/server.js",
     "start:dev-trace": "LOG_LEVEL=trace ENVIRONMENT=local nodemon src/server.js",
     "start": "node src/server.js",
-    "db:up": "docker compose up -d",
+    "db:up": "docker compose up postgres -d",
     "db:down": "docker compose down",
     "lint": "eslint .",
     "lint:fix": "eslint . --fix"
