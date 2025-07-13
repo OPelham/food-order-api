@@ -1,16 +1,25 @@
 import t from "tap";
 import Fastify from "fastify";
 
+// import mocks
+const mockDatabaseResponseJSON = fs.readFileSync(
+  "./test/stubs/get-ingredient-by-id/postgres-database-response-success.json",
+  "utf8",
+);
+const mockIngredientJSON = fs.readFileSync(
+  "./test/stubs/get-ingredient-by-id/ingredientDTO.json",
+  "utf8",
+);
+const mockDatabaseResponse = JSON.parse(mockDatabaseResponseJSON);
+const mockIngredient = JSON.parse(mockIngredientJSON);
+
+const validCorrelationId = "63952edf-0d25-6216-2905-da621999d9ad";
+
 // Create a fake DB with stubbed query method
 const mockDB = {
   query: async (text, params) => {
     if (text.includes("SELECT")) {
-      return {
-        ingredientId: "57526bf4-7226-4195-b5d6-0219923f65b1",
-        name: "Tomato",
-        quantity: 1,
-        category: "FROZEN",
-      };
+      return mockDatabaseResponse;
     }
     return { rows: [] };
   },
@@ -25,6 +34,7 @@ import { applicationVariables } from "../../src/config/index.js";
 import { configureLogger } from "../../src/lib/logger.js";
 import { ingredientRoutes } from "../../src/routes/ingredients-routes.js";
 import Ajv from "ajv-oai";
+import fs from "node:fs";
 
 // Build isolated app
 function buildIsolatedApp(mockLogger) {
@@ -62,22 +72,17 @@ function buildIsolatedApp(mockLogger) {
 t.test("GET /ingredients/:ingredientId returns fake list", async (t) => {
   const app = buildIsolatedApp();
 
+  console.log(mockDatabaseResponse.rows[0].ingredient_id, "[00]-id"); //todo remove
   const response = await app.inject({
     method: "GET",
-    url: "/food-orders/api/v1/ingredients/57526bf4-7226-4195-b5d6-0219923f65b1",
+    url: `/food-orders/api/v1/ingredients/${mockIngredient.ingredientId}`,
     headers: {
-      "correlation-id": "57526bf4-7226-4195-b5d6-0219923f65b1",
+      "correlation-id": validCorrelationId,
     },
   });
 
   t.equal(response.statusCode, 200);
-  console.log(response.payload); //todo remove
-  t.same(JSON.parse(response.payload), {
-    ingredientId: "57526bf4-7226-4195-b5d6-0219923f65b1",
-    name: "Tomato",
-    quantity: 1,
-    category: "FROZEN",
-  });
+  t.same(JSON.parse(response.payload), mockIngredient);
   //todo prevent 500 when missing required on mandatory instead return field as null?
 });
 
