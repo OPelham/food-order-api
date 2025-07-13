@@ -76,12 +76,6 @@ jobs:
       - name: 🔻 Shut down containers
         run: docker compose down
 
-#      - name: 🐳 Build production Docker image
-#        run: docker build -t my-api-app:prod -f Dockerfile .
-#
-#      - name: 📷 Show built image info
-#        run: docker images my-api-app:prod
-
   docker:
     name: 🐳 Build & Push Docker Image
     runs-on: ubuntu-latest
@@ -101,7 +95,7 @@ jobs:
         run: |
           NAME=$(node -p "require('./package.json').name")
           VERSION=$(node -p "require('./package.json').version")
-          BRANCH_NAME=${GITHUB_REF##*/}
+          BRANCH_NAME=${GITHUB_REF#refs/heads/}
           IMAGE_TAG=${BRANCH_NAME}-${VERSION}
           echo "name=$NAME" >> $GITHUB_OUTPUT
           echo "tag=$IMAGE_TAG" >> $GITHUB_OUTPUT
