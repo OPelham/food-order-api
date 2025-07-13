@@ -17,11 +17,13 @@ export function createIngredientService(repository) {
      */
     async getById(id, log) {
       const serviceLog = log.child({ module: "ingredient-service" });
-      serviceLog.debug("test log");
+
       const record = await repository.findById(id, log);
+      serviceLog.debug({ record: record });
       if (!record) throw new Error("Ingredient not found");
 
       const ingredient = Ingredient.fromRecord(record);
+      serviceLog.debug({ ingredientDTO: ingredient.toDTO() });
       return ingredient.toDTO();
     },
   };

@@ -1,22 +1,33 @@
 import t from "tap";
 import Fastify from "fastify";
+import dotenv from "dotenv";
 
-// Create a fake DB with stubbed query method
-const mockDB = {
-  query: async (text, params) => {
-    if (text.includes("SELECT")) {
-      return {
-        ingredientId: "57526bf4-7226-4195-b5d6-0219923f65b1",
-        name: "Tomato",
-        quantity: 1,
-        category: "FROZEN",
-      };
-    }
-    return { rows: [] };
-  },
-};
+// import mocks
+const mockDatabaseResponseJSON = fs.readFileSync(
+  "./test/stubs/get-ingredient-by-id/postgres-database-response-success.json",
+  "utf8",
+);
+const mockIngredientJSON = fs.readFileSync(
+  "./test/stubs/get-ingredient-by-id/ingredientDTO.json",
+  "utf8",
+);
+const mockDatabaseResponse = JSON.parse(mockDatabaseResponseJSON);
+const mockIngredient = JSON.parse(mockIngredientJSON);
+
+const validCorrelationId = "63952edf-0d25-6216-2905-da621999d9ad";
+
+// // Create a fake DB with stubbed query method
+// const mockDB = {
+//   query: async (text, params) => {
+//     if (text.includes("SELECT")) {
+//       return mockDatabaseResponse;
+//     }
+//     return { rows: [] };
+//   },
+// }; //todo remove
 
 // Mock repository, service, and controller like your app does
+import { createDatabase } from "../../src/infrastructure/database.js";
 import { createIngredientRepository } from "../../src/repositories/ingredient-repository.js";
 import { createIngredientService } from "../../src/services/ingredients-service.js";
 import { createIngredientController } from "../../src/controllers/ingredients-controller.js";
@@ -25,16 +36,23 @@ import { applicationVariables } from "../../src/config/index.js";
 import { configureLogger } from "../../src/lib/logger.js";
 import { ingredientRoutes } from "../../src/routes/ingredients-routes.js";
 import Ajv from "ajv-oai";
+import fs from "node:fs";
+import { config } from "dotenv";
 
 // Build isolated app
 function buildIsolatedApp(mockLogger) {
-  const fastify = Fastify({ logger: false }); // don't pass mockLogger here
+  const fastify = Fastify({ logger: false });
+
+  dotenv.config();
 
   if (mockLogger) {
-    fastify.log = mockLogger; // set the mock directly
+    fastify.log = mockLogger;
   }
 
-  const ingredientRepository = createIngredientRepository(mockDB);
+  const database = createDatabase({
+    connectionString: process.env.DATABASE_URL,
+  });
+  const ingredientRepository = createIngredientRepository(database);
   const ingredientService = createIngredientService(ingredientRepository);
   const ingredientController = createIngredientController(ingredientService);
 
@@ -64,20 +82,14 @@ t.test("GET /ingredients/:ingredientId returns fake list", async (t) => {
 
   const response = await app.inject({
     method: "GET",
-    url: "/food-orders/api/v1/ingredients/57526bf4-7226-4195-b5d6-0219923f65b1",
+    url: `/food-orders/api/v1/ingredients/${mockIngredient.ingredientId}`,
     headers: {
-      "correlation-id": "57526bf4-7226-4195-b5d6-0219923f65b1",
+      "correlation-id": validCorrelationId,
     },
   });
 
   t.equal(response.statusCode, 200);
-  console.log(response.payload); //todo remove
-  t.same(JSON.parse(response.payload), {
-    ingredientId: "57526bf4-7226-4195-b5d6-0219923f65b1",
-    name: "Tomato",
-    quantity: 1,
-    category: "FROZEN",
-  });
+  t.same(JSON.parse(response.payload), mockIngredient);
   //todo prevent 500 when missing required on mandatory instead return field as null?
 });
 

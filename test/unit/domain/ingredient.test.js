@@ -1,49 +1,45 @@
 import t from "tap";
 import { Ingredient } from "../../../src/domain/ingredient.js";
+import fs from "node:fs";
 
-const validIngredientId = "57526bf4-7226-4195-b5d6-0219923f65b1";
+// import mocks
+const mockIngredientJSON = fs.readFileSync(
+  "./test/stubs/get-ingredient-by-id/ingredientDTO.json",
+  "utf8",
+);
+const mockIngredientRepositoryOutputJSON = fs.readFileSync(
+  "./test/stubs/get-ingredient-by-id/postgres-ingredient-repository-output-success.json",
+  "utf8",
+);
+const mockIngredient = JSON.parse(mockIngredientJSON);
+const mockIngredientRepositoryOutput = JSON.parse(
+  mockIngredientRepositoryOutputJSON,
+);
 
 t.test("Ingredient domain entity", (t) => {
   t.test("constructor assigns properties", (t) => {
-    const data = {
-      ingredientId: validIngredientId,
-      name: "Tomato",
-      quantity: 1,
-      category: "FROZEN",
-    };
-    const ingredient = new Ingredient(data);
+    const ingredient = new Ingredient(mockIngredient);
 
-    t.equal(ingredient.ingredientId, validIngredientId);
-    t.equal(ingredient.name, "Tomato");
-    t.equal(ingredient.quantity, 1);
-    t.equal(ingredient.category, "FROZEN");
+    t.equal(ingredient.ingredientId, mockIngredient.ingredientId);
+    t.equal(ingredient.name, mockIngredient.name);
+    t.equal(ingredient.quantity, mockIngredient.quantity);
+    t.equal(ingredient.category, mockIngredient.category);
     t.end();
   });
 
   t.test("fromRecord creates an Ingredient instance from plain object", (t) => {
-    const record = {
-      ingredientId: validIngredientId,
-      name: "Tomato",
-      quantity: 1,
-      category: "FROZEN",
-    };
-    const ingredient = Ingredient.fromRecord(record);
+    const ingredient = Ingredient.fromRecord(mockIngredientRepositoryOutput);
 
     t.ok(ingredient instanceof Ingredient);
-    t.equal(ingredient.ingredientId, validIngredientId);
-    t.equal(ingredient.name, "Tomato");
-    t.equal(ingredient.quantity, 1);
-    t.equal(ingredient.category, "FROZEN");
+    t.equal(ingredient.ingredientId, mockIngredient.ingredientId);
+    t.equal(ingredient.name, mockIngredient.name);
+    t.equal(ingredient.quantity, mockIngredient.quantity);
+    t.equal(ingredient.category, mockIngredient.category);
     t.end();
   });
 
   t.test("setQuantity updates quantity when positive", (t) => {
-    const ingredient = new Ingredient({
-      ingredientId: validIngredientId,
-      name: "Tomato",
-      quantity: 1,
-      category: "FROZEN",
-    });
+    const ingredient = new Ingredient(mockIngredient);
     ingredient.setQuantity(10);
 
     t.equal(ingredient.quantity, 10);
@@ -51,12 +47,7 @@ t.test("Ingredient domain entity", (t) => {
   });
 
   t.test("setQuantity throws when quantity is negative", (t) => {
-    const ingredient = new Ingredient({
-      ingredientId: validIngredientId,
-      name: "Tomato",
-      quantity: 1,
-      category: "FROZEN",
-    });
+    const ingredient = new Ingredient(mockIngredient);
 
     t.throws(() => {
       ingredient.setQuantity(-1);
@@ -66,20 +57,10 @@ t.test("Ingredient domain entity", (t) => {
   });
 
   t.test("toDTO returns correct plain object", (t) => {
-    const ingredient = new Ingredient({
-      ingredientId: validIngredientId,
-      name: "Tomato",
-      quantity: 1,
-      category: "FROZEN",
-    });
+    const ingredient = new Ingredient(mockIngredient);
     const dto = ingredient.toDTO();
 
-    t.same(dto, {
-      ingredientId: validIngredientId,
-      name: "Tomato",
-      quantity: 1,
-      category: "FROZEN",
-    });
+    t.same(dto, mockIngredient);
 
     //todo add tests for where not all are set, and test enums
 

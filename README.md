@@ -26,8 +26,6 @@ Includes strong type-safe schema validation, centralized logging, health checks,
 - PostgreSQL
 - `DATABASE_URL` environment variable (see `.env.example` or setup instructions below)
 
-[//]: # (TODO check env variable setup)
-
 ---
 
 ## 🛠️ Getting Started
@@ -38,16 +36,12 @@ Includes strong type-safe schema validation, centralized logging, health checks,
 npm install
 ```
 
-### 2. Set Environment Variables
+### 2. Set Local Environment Variables
 
-Create a .env file or export variables manually: 
-
-[//]: # (TODO review this )
+Create a .env file using .env.example or export variables manually: 
 
 ```bash
-DATABASE_URL=postgres://user:password@localhost:5432/yourdb
-ENVIRONMENT=local
-LOG_LEVEL=debug
+DATABASE_URL=postgres://<USERNAME>:<PASSWORD>@localhost:5432/testdb
 ```
 
 ### 3. Run Prepare Script
@@ -59,6 +53,73 @@ npm run prepare
 ```
 
 ---
+
+## Run Database Locally
+
+The local database is used for local development and for integration tests
+
+Consists of a postgres database built using docker-compose.yml
+Volume is initialised with test data via init.sql and includes a persistent volume
+
+### Start database
+
+```bash
+npm run db:up
+```
+
+### Stop database
+
+```bash
+npm run db:down
+```
+
+### docker-compose CLI
+
+Run in detached mode:
+```docker compose up -d postgress```
+
+List volumes:
+```docker volume ls```
+
+Inspect volume:
+```docker volume inspect food-order-api_postgres-data```
+
+Stop database:
+```docker compose down```
+
+Stop database and remove volume:
+```docker compose down --volumes```
+
+### psql CLI
+
+Access database via terminal:
+```psql -h localhost -U testuser -d testdb```
+
+---
+
+## Running APP and Database with docker compose
+
+### Run server + database
+```bash
+docker compose up --build
+```
+
+```bash
+docker compose up --build --detach
+```
+Call from local via: ```http://localhost:3000```
+
+### Run tests on running container
+```bash
+docker compose exec api npm test
+```
+
+### Start container test, remove container (for CI)
+```bash
+docker compose run --rm api npm test
+```
+
+for CI (removes after run?)
 
 ## 🧪 Running Tests
 
@@ -90,7 +151,9 @@ npm run test:integration
 
 ### Running an individual test
 
-### Setting log level for tests
+```bash
+tap test/unit/repositories/ingredient-repository.test.js
+```
 
 Coverage thresholds are defined under c8 in package.json.
 
@@ -117,14 +180,12 @@ This project uses Husky for Git hooks.
 
 ### Pre-commit checks
 
-- lint-staged to run "eslint --fix" on staged files
-- This is triggered automatically when committing 
+- uses lint-staged to run "eslint --fix" on staged files
 - See .husky/pre-commit
 
 ### Pre-push checks
 
 - Runs "npm run test" prior to push
-- This is triggered automatically when pushing
 - See .husky/pre-commit
 
 To skip verification use the "--no-verify" flag
@@ -132,7 +193,7 @@ To skip verification use the "--no-verify" flag
 git push --no-verify
 ```
 
-### Setup (if needed)
+### Setup (if required)
 ```bash
 npx husky init
 ```
@@ -141,13 +202,13 @@ npx husky init
 
 ## 📐 Generate API Schema
 
-To generate schema from OpenAPI spec or similar source:
+To re-generate schema from OpenAPI spec:
 
 ```bash
 npm run generate:schema
 ```
 
-The logic for this is in scripts/generate-schema.js.
+See: scripts/generate-schema.js.
 
 ---
 
@@ -165,6 +226,7 @@ npm run start
 - log level debug
 - log redaction off
 - pino-pretty logs
+- run with nodemon
 
 ```bash
 npm run start:dev
@@ -189,6 +251,8 @@ src/
 ├── schemas/                   # Schemas
 ├── services/                  # Business logic
 test/                          # Tests
+├── unit/                      # Unit tests
+├── integration/               # Integration tests
 scripts/                       # Scripts (e.g., schema generator)
 api-spec.yaml                  # OAS 3.1.0 
 ```

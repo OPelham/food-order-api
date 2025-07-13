@@ -1,0 +1,43 @@
+name: CI Pipeline
+
+on:
+  push:
+    branches: [main]
+  pull_request:
+    branches: [main]
+
+jobs:
+  test-and-build:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: 🧾 Checkout code
+        uses: actions/checkout@v4
+
+      - name: 🐳 Set up Docker Buildx
+        uses: docker/setup-buildx-action@v3
+
+      - name: 🐳 Install Docker Compose (fallback for some runners)
+        run: |
+          docker compose version || curl -SL https://github.com/docker/compose/releases/download/v2.24.6/docker-compose-linux-x86_64 -o /usr/local/bin/docker-compose
+          chmod +x /usr/local/bin/docker-compose
+
+      - name: 🧱 Build and start services
+        run: docker compose up -d --build
+
+      - name: 🕒 Wait for Postgres to be ready
+        run: |
+          echo "Waiting for Postgres..."
+          until docker exec $(docker compose ps -q db) pg_isready -U testuser; do sleep 1; done
+
+      - name: ✅ Run tests in container
+        run: docker compose run --rm api npm test
+
+      - name: 🔻 Shut down containers
+        run: docker compose down
+
+      - name: 🐳 Build production Docker image
+        run: docker build -t my-api-app:prod -f Dockerfile .
+
+      - name: 📷 Show built image info
+        run: docker images my-api-app:prod

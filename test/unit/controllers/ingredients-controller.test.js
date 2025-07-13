@@ -1,6 +1,14 @@
 import t from "tap";
 import sinon from "sinon";
 import { createIngredientController } from "../../../src/controllers/ingredients-controller.js";
+import fs from "node:fs";
+
+// import mocks
+const mockIngredientJSON = fs.readFileSync(
+  "./test/stubs/get-ingredient-by-id/ingredientDTO.json",
+  "utf8",
+);
+const mockIngredient = JSON.parse(mockIngredientJSON);
 
 t.test("Ingredient Controller - getIngredientById", async (t) => {
   const sandbox = sinon.createSandbox();
@@ -14,12 +22,13 @@ t.test("Ingredient Controller - getIngredientById", async (t) => {
   t.teardown(() => sandbox.restore());
 
   t.test("responds with 200 and ingredient when found", async (t) => {
-    const fakeIngredient = { id: "abc123", name: "Tomato" };
-    mockService.getById.resolves(fakeIngredient);
+    mockService.getById.resolves(mockIngredient);
 
     const request = {
-      params: { ingredientId: "abc123" },
-      log: { child: () => ({ info: () => {} }) },
+      params: { ingredientId: mockIngredient.ingredientId },
+      log: {
+        child: () => ({ info: () => {}, debug: () => {}, error: () => {} }),
+      },
     };
 
     const reply = {
@@ -28,8 +37,13 @@ t.test("Ingredient Controller - getIngredientById", async (t) => {
 
     await controller.getIngredientById(request, reply);
 
-    t.ok(mockService.getById.calledOnceWith("abc123", request.log));
-    t.same(reply.send.firstCall.args[0], fakeIngredient);
+    t.ok(
+      mockService.getById.calledOnceWith(
+        mockIngredient.ingredientId,
+        request.log,
+      ),
+    );
+    t.same(reply.send.firstCall.args[0], mockIngredient);
   });
 
   t.test(
@@ -40,7 +54,9 @@ t.test("Ingredient Controller - getIngredientById", async (t) => {
 
       const request = {
         params: { ingredientId: "missing-id" },
-        log: { child: () => ({ info: () => {} }) },
+        log: {
+          child: () => ({ info: () => {}, debug: () => {}, error: () => {} }),
+        },
       };
 
       const reply = {
@@ -60,12 +76,12 @@ t.test("Ingredient Controller - getIngredientById", async (t) => {
     mockService.getById.rejects(error);
 
     const errorLogger = {
-      info: () => {},
+      debug: () => {},
       error: sinon.spy(),
     };
 
     const request = {
-      params: { ingredientId: "abc123" },
+      params: { ingredientId: mockIngredient.ingredientId },
       log: { child: () => errorLogger },
     };
 

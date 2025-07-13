@@ -15,10 +15,11 @@ export function createIngredientController(service) {
     async getIngredientById(request, reply) {
       const log = request.log;
       const controllerLog = log.child({ model: "ingredients-controller" });
-      controllerLog.info("test log");
+
       try {
         const { ingredientId } = request.params;
         const ingredient = await service.getById(ingredientId, log);
+        controllerLog.debug({ ingredient: ingredient });
         reply.send(ingredient);
       } catch (err) {
         if (err.message === "Ingredient not found") {

@@ -2,14 +2,24 @@ import t from "tap";
 import sinon from "sinon";
 import { createIngredientService } from "../../../src/services/ingredients-service.js";
 import { Ingredient } from "../../../src/domain/ingredient.js";
+import fs from "node:fs";
+
+// import mocks
+const mockIngredientRepositoryOutputJSON = fs.readFileSync(
+  "./test/stubs/get-ingredient-by-id/postgres-ingredient-repository-output-success.json",
+  "utf8",
+);
+const mockIngredientRepositoryOutput = JSON.parse(
+  mockIngredientRepositoryOutputJSON,
+);
 
 t.test("Ingredient Service", async (t) => {
   const mockRepository = {
     findById: sinon.stub(),
   };
 
-  const fakeRecord = { id: "123", name: "Salt", quantity: 10 };
-  const expectedDTO = new Ingredient(fakeRecord).toDTO();
+  const mockRecord = mockIngredientRepositoryOutput;
+  const expectedDTO = new Ingredient(mockRecord).toDTO();
 
   const mockLog = {
     child: sinon.stub().returnsThis(),
@@ -19,20 +29,30 @@ t.test("Ingredient Service", async (t) => {
   const service = createIngredientService(mockRepository);
 
   t.test("getById: should return ingredient DTO if found", async (t) => {
-    mockRepository.findById.resolves(fakeRecord);
+    mockRepository.findById.resolves(mockRecord);
 
-    const result = await service.getById("123", mockLog);
+    const result = await service.getById(mockRecord.ingredientId, mockLog);
 
     t.same(result, expectedDTO, "should return DTO from domain entity");
     t.ok(
-      mockRepository.findById.calledOnceWith("123", mockLog),
+      mockRepository.findById.calledOnceWith(mockRecord.ingredientId, mockLog),
       "calls repository with correct args",
     );
     t.ok(
       mockLog.child.calledOnceWith({ module: "ingredient-service" }),
       "creates child logger",
     );
-    t.ok(mockLog.debug.calledOnceWith("test log"), "logs debug message");
+    t.same(
+      mockLog.debug.getCall(0).args[0],
+      { record: mockRecord },
+      "first debug call logs the record",
+    );
+
+    t.same(
+      mockLog.debug.getCall(1).args[0],
+      { ingredientDTO: expectedDTO },
+      "second debug call logs the DTO",
+    );
   });
 
   t.test("getById: should throw error if ingredient not found", async (t) => {

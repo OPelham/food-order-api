@@ -33,10 +33,12 @@ export function configureLogger() {
     }),
     err: pino.stdSerializers.err,
   };
+
   // set up log redaction paths
   const redactions = {
     paths: ["*.headers.authorization"],
   };
+
   // set up logging based on environment
   const envToLogger = {
     local: {
