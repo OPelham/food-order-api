@@ -31,7 +31,10 @@ t.test("Ingredient Repository", async (t) => {
 
   t.test("findById: returns result when found", async (t) => {
     mockDb.query.resolves(mockDatabaseResponse);
-    const result = await repository.findById("123", mockLog);
+    const result = await repository.findById(
+      mockIngredientRepositoryOutput.ingredientId,
+      mockLog,
+    );
 
     t.same(
       result,

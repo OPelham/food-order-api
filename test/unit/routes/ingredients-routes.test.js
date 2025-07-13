@@ -1,6 +1,16 @@
 import t from "tap";
 import Fastify from "fastify";
 import { ingredientRoutes } from "../../../src/routes/ingredients-routes.js";
+import { schemas } from "../../../src/schemas/index.js";
+
+// import mocks
+const mockIngredientJSON = fs.readFileSync(
+  "./test/stubs/get-ingredient-by-id/ingredientDTO.json",
+  "utf8",
+);
+const mockIngredient = JSON.parse(mockIngredientJSON);
+
+const validCorrelationId = "63952edf-0d25-6216-2905-da621999d9ad";
 
 t.test(
   "GET /ingredients/:ingredientId - returns mocked ingredient",
@@ -10,35 +20,7 @@ t.test(
     // Mock controller with predictable response
     const controller = {
       getIngredientById: async (req, reply) => {
-        return reply.send({
-          ingredientId: req.params.ingredientId,
-          name: "Tomato",
-        });
-      },
-    };
-
-    // Minimal schema object to satisfy Fastify's input
-    const schemas = {
-      //todo check with actual schema and stub request
-      paths: {
-        "/ingredients/{ingredientId}": {
-          params: {
-            type: "object",
-            properties: {
-              ingredientId: { type: "string" },
-            },
-            required: ["ingredientId"],
-          },
-          response: {
-            200: {
-              type: "object",
-              properties: {
-                id: { type: "string" },
-                name: { type: "string" },
-              },
-            },
-          },
-        },
+        return reply.send(mockIngredient);
       },
     };
 
@@ -51,35 +33,28 @@ t.test(
     await fastify.ready();
     t.teardown(() => fastify.close());
 
+    console.log(`/ingredients/${mockIngredient.ingredientId}`);
+
     const response = await fastify.inject({
       method: "GET",
-      url: "/ingredients/57526bf4-7226-4195-b5d6-0219923f65b1",
+      url: `/ingredients/${mockIngredient.ingredientId}`,
+      headers: {
+        "correlation-id": validCorrelationId,
+      },
     });
 
     t.equal(response.statusCode, 200);
-    t.same(JSON.parse(response.body), {
-      ingredientId: "57526bf4-7226-4195-b5d6-0219923f65b1",
-      name: "Tomato",
-    });
+    t.same(JSON.parse(response.body), mockIngredient);
     t.end();
   },
 );
 
 import { Ingredient } from "../../../src/domain/ingredient.js";
+import fs from "node:fs";
 
 t.test("domain class works", (t) => {
-  const ingredient = new Ingredient({
-    ingredientId: "57526bf4-7226-4195-b5d6-0219923f65b1",
-    name: "Carrot",
-    category: "FROZEN",
-    quantity: 5,
-  });
-  t.same(ingredient.toDTO(), {
-    ingredientId: "57526bf4-7226-4195-b5d6-0219923f65b1",
-    name: "Carrot",
-    category: "FROZEN",
-    quantity: 5,
-  });
+  const ingredient = new Ingredient(mockIngredient);
+  t.same(ingredient.toDTO(), mockIngredient);
   t.end();
 });
 
