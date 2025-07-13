@@ -32,7 +32,7 @@ jobs:
           languages: javascript
 
       - name: 🧠 CodeQL Analyze
-        uses: github/codeql-action/analyze@v2
+        uses: github/codeql-action/analyze@v3
 
   lint-and-test:
     name: 🧪 Lint & Test
