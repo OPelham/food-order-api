@@ -1,6 +1,6 @@
 export class Ingredient {
-  constructor({ ingredientid, name, quantity, category }) {
-    this.ingredientId = ingredientid;
+  constructor({ ingredientId, name, quantity, category }) {
+    this.ingredientId = ingredientId;
     this.name = name;
     this.quantity = quantity;
     this.category = category;

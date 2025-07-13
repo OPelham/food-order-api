@@ -1,6 +1,21 @@
 import t from "tap";
 import sinon from "sinon";
 import { createIngredientRepository } from "../../../src/repositories/ingredient-repository.js";
+import fs from "node:fs";
+
+// import mocks
+const mockDatabaseResponseJSON = fs.readFileSync(
+  "./test/stubs/get-ingredient-by-id/postgres-database-response-success.json",
+  "utf8",
+);
+const mockIngredientRepositoryOutputJSON = fs.readFileSync(
+  "./test/stubs/get-ingredient-by-id/postgres-ingredient-repository-output-success.json",
+  "utf8",
+);
+const mockDatabaseResponse = JSON.parse(mockDatabaseResponseJSON);
+const mockIngredientRepositoryOutput = JSON.parse(
+  mockIngredientRepositoryOutputJSON,
+);
 
 t.test("Ingredient Repository", async (t) => {
   const mockDb = {
@@ -15,23 +30,29 @@ t.test("Ingredient Repository", async (t) => {
   const repository = createIngredientRepository(mockDb);
 
   t.test("findById: returns result when found", async (t) => {
-    const fakeRecord = { id: "123", name: "Pepper", quantity: 7 };
-    mockDb.query.resolves(fakeRecord);
-
+    mockDb.query.resolves(mockDatabaseResponse);
     const result = await repository.findById("123", mockLog);
 
-    t.same(result, fakeRecord, "should return first row from DB");
+    t.same(
+      result,
+      mockIngredientRepositoryOutput,
+      "should return first row from DB",
+    );
     t.ok(
-      mockDb.query.calledOnceWith("SELECT * FROM ingredients WHERE id = $1", [
-        "123",
-      ]),
+      mockDb.query.calledOnceWith(
+        "SELECT * FROM ingredients WHERE ingredient_id = $1",
+        [mockIngredientRepositoryOutput.ingredientId],
+      ),
       "should call DB with correct query and params",
     );
     t.ok(
       mockLog.child.calledOnceWith({ module: "ingredient-repository" }),
       "should use child logger",
     );
-    t.ok(mockLog.debug.calledOnceWith("test log"), "should log debug message");
+    t.ok(
+      mockLog.debug.calledOnceWith({ databaseResponse: mockDatabaseResponse }),
+      "should log debug message",
+    );
   });
 
   t.test("findById: returns null when not found", async (t) => {
