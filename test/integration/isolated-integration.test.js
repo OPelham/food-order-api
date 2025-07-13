@@ -72,7 +72,6 @@ function buildIsolatedApp(mockLogger) {
 t.test("GET /ingredients/:ingredientId returns fake list", async (t) => {
   const app = buildIsolatedApp();
 
-  console.log(mockDatabaseResponse.rows[0].ingredient_id, "[00]-id"); //todo remove
   const response = await app.inject({
     method: "GET",
     url: `/food-orders/api/v1/ingredients/${mockIngredient.ingredientId}`,
