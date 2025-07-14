@@ -4,7 +4,7 @@ on:
   push:
     branches: ['feature/**']
   pull_request:
-    branches: ['release/**', 'develop']
+    branches: ['release/**', 'release', 'develop']
 
 permissions:
   actions: read
@@ -73,7 +73,7 @@ jobs:
     needs: [scan, lint-and-test]
     if: >
       github.event_name == 'pull_request' &&
-      (github.base_ref == 'develop' || startsWith(github.base_ref, 'release/'))
+      (github.base_ref == 'develop' || github.base_ref == 'release' || startsWith(github.base_ref, 'release/'))
 
     steps:
       - name: 📥 Checkout code
