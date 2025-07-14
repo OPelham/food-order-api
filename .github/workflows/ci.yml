@@ -45,7 +45,6 @@ jobs:
   lint-and-test:
     name: 🧪 Lint & Test
     runs-on: ubuntu-latest
-    needs: scan
 
     steps:
       - name: 📥 Checkout code
