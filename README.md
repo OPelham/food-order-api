@@ -1,13 +1,7 @@
-Develop Image:
-![Docker Image](https://img.shields.io/docker/v/opelham/food-order-api?sort=semver&pattern=develop)
-![CI](https://github.com/OPelham/food-orders/actions/workflows/ci.yml/badge.svg?branch=develop)
-
-Release Image:
-![Docker Image](https://img.shields.io/docker/v/opelham/food-order-api?sort=semver&pattern=release.*)
-![CI](https://github.com/OPelham/food-orders/actions/workflows/ci.yml/badge.svg?branch=release)
-
 # 🍔 Food Order API
-![License](https://img.shields.io/github/license/OPelham/food-order-api)
+![Docker Image](https://img.shields.io/docker/v/opelham/food-order-api?sort=semver)
+![CI](https://github.com/OPelham/food-orders/actions/workflows/ci.yml/badge.svg)
+![License](https://img.shields.io/github/license/OPelham/food-orders)
 
 A modern, modular Fastify API built for managing food ordering workflows.  
 Includes strong type-safe schema validation, centralized logging, health checks, and structured architecture using the Dependency Inversion principle.
