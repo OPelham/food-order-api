@@ -1,5 +1,5 @@
 ![Docker Image](https://img.shields.io/docker/v/opelham/food-order-api?sort=semver)
-![CI](https://github.com/OPelham/food-orders/actions/workflows/ci.yml/badge.svg)
+![CI](https://github.com/OPelham/food-order-api/actions/workflows/ci.yml/badge.svg)
 
 # 🍔 Food Order API
 
