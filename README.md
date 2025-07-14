@@ -1,4 +1,4 @@
-![CI](https://github.com/OPelham/food-orders/actions/workflows/ci.yml/badge.svg?branch=release)
+![CI](https://github.com/OPelham/food-orders/actions/workflows/ci.yml/badge.svg?branch=develop)
 ![Docker Image](https://img.shields.io/docker/v/opelham/food-order-api?sort=semver&pattern=release.*)
 ![License](https://img.shields.io/github/license/OPelham/food-order-api)
 
