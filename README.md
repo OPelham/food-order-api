@@ -1,7 +1,6 @@
 # 🍔 Food Order API
 
-![CI](https://github.com/OPelham/food-order-api/actions/workflows/ci.yml/badge.svg)
-![CodeQL](https://github.com/OPelham/food-order-api/actions/workflows/codeql-analysis.yml/badge.svg)
+![CI](https://github.com/OPelham/food-orders/actions/workflows/ci.yml/badge.svg)
 ![Docker Image](https://img.shields.io/docker/v/opelham/food-order-api?sort=semver&pattern=release.*)
 ![License](https://img.shields.io/github/license/OPelham/food-order-api)
 
