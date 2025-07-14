@@ -79,8 +79,8 @@ jobs:
     name: 🐳 Build & Push Docker Image
     runs-on: ubuntu-latest
     needs: [scan, lint-and-test]
-    if: github.event_name == 'pull_request' &&
-    (github.base_ref == 'develop' || startsWith(github.base_ref, 'release')
+    if: (github.event_name == 'pull_request' &&
+    (github.base_ref == 'develop' || startsWith(github.base_ref, 'release'))
 
     steps:
       - name: 📥 Checkout code
