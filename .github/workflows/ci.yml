@@ -90,8 +90,8 @@ jobs:
         run: |
           NAME=$(node -p "require('./package.json').name")
           VERSION=$(node -p "require('./package.json').version")
-          RAW_BRANCH=${GITHUB_HEAD_REF:-${GITHUB_REF#refs/heads/}}
-          BRANCH_PREFIX=${RAW_BRANCH%%/*}
+          TARGET_BRANCH=${GITHUB_BASE_REF:-${GITHUB_REF#refs/heads/}}
+          BRANCH_PREFIX=${TARGET_BRANCH%%/*}
           SHORT_SHA=${GITHUB_SHA::7}
           IMAGE_TAG=${BRANCH_PREFIX}-${VERSION}-${SHORT_SHA}
 
