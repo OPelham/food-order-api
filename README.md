@@ -1,8 +1,8 @@
 # 🍔 Food Order API
 
 ![CI](https://github.com/OPelham/food-order-api/actions/workflows/ci.yml/badge.svg)
-![CodeQL](https://github.comOPelham/food-order-api/actions/workflows/codeql-analysis.yml/badge.svg)
-![Docker Image](https://img.shields.io/docker/v/opelham/food-order-apii?sort=semver&pattern=release.*)
+![CodeQL](https://github.com/OPelham/food-order-api/actions/workflows/codeql-analysis.yml/badge.svg)
+![Docker Image](https://img.shields.io/docker/v/opelham/food-order-api?sort=semver&pattern=release.*)
 ![License](https://img.shields.io/github/license/OPelham/food-order-api)
 
 A modern, modular Fastify API built for managing food ordering workflows.  
