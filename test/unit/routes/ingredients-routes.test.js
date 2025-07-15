@@ -33,8 +33,6 @@ t.test(
     await fastify.ready();
     t.teardown(() => fastify.close());
 
-    console.log(`/ingredients/${mockIngredient.ingredientId}`);
-
     const response = await fastify.inject({
       method: "GET",
       url: `/ingredients/${mockIngredient.ingredientId}`,
