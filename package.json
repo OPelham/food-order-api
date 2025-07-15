@@ -6,7 +6,7 @@
   "scripts": {
     "generate:schema": "node scripts/generate-schema.js",
     "test": "ENVIRONMENT=test tap \"test/**/*.test.js\"",
-    "test:unit": "ENVIRONMENT=test tap \"test/unit/**/*.test.js\"",
+    "test:unit": "ENVIRONMENT=test tap  \"test/unit/**/*.test.js\"",
     "test:report": "ENVIRONMENT=test tap --coverage-report=html \"test/unit/**/*.test.js\"",
     "test:integration": "ENVIRONMENT=test tap \"test/integration/*.test.js\" --coverage-report=text --allow-incomplete-coverage",
     "start:dev": "ENVIRONMENT=local nodemon src/server.js",
