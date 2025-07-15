@@ -11,11 +11,11 @@ const mockIngredientJSON = fs.readFileSync(
   "./test/stubs/get-ingredient-by-id/ingredientDTO.json",
   "utf8",
 );
-const mockDatabaseResponse = JSON.parse(mockDatabaseResponseJSON);
 const mockIngredient = JSON.parse(mockIngredientJSON);
 
 const validCorrelationId = "63952edf-0d25-6216-2905-da621999d9ad";
 
+// const mockDatabaseResponse = JSON.parse(mockDatabaseResponseJSON);
 // // Create a fake DB with stubbed query method
 // const mockDB = {
 //   query: async (text, params) => {
@@ -77,20 +77,38 @@ function buildIsolatedApp(mockLogger) {
   return fastify;
 }
 
-t.test("GET /ingredients/:ingredientId returns fake list", async (t) => {
-  const app = buildIsolatedApp();
+t.test(
+  "GET /ingredients/:ingredientId returns mocked ingredient",
+  async (t) => {
+    const app = buildIsolatedApp();
 
-  const response = await app.inject({
-    method: "GET",
-    url: `/food-orders/api/v1/ingredients/${mockIngredient.ingredientId}`,
-    headers: {
-      "correlation-id": validCorrelationId,
-    },
-  });
+    const response = await app.inject({
+      method: "GET",
+      url: `/food-orders/api/v1/ingredients/${mockIngredient.ingredientId}`,
+      headers: {
+        "correlation-id": validCorrelationId,
+      },
+    });
 
-  t.equal(response.statusCode, 200);
-  t.same(JSON.parse(response.payload), mockIngredient);
-  //todo prevent 500 when missing required on mandatory instead return field as null?
-});
+    t.equal(response.statusCode, 200);
+    t.same(JSON.parse(response.payload), mockIngredient);
+  },
+);
 
-//todo test logger and revert githook to call int and unit tests
+//todo set this up for schema validation when error handling is in place
+// t.test("GET /ingredients/:ingredientId returns mocked ingredient", async (t) => {
+//   const app = buildIsolatedApp();
+//
+//   const response = await app.inject({
+//     method: "GET",
+//     url: `/food-orders/api/v1/ingredients/${mockIngredient.ingredientId}`,
+//     headers: {
+//       "correlation-id": validCorrelationId,
+//     },
+//   });
+//
+//   t.equal(response.statusCode, 200);
+//   t.same(JSON.parse(response.payload), mockIngredient);
+// });
+
+// todo test all error options

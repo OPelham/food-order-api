@@ -1,7 +1,7 @@
-![Docker Image](https://img.shields.io/docker/v/opelham/food-order-api?sort=semver)
-![CI](https://github.com/OPelham/food-order-api/actions/workflows/ci.yml/badge.svg)
-
 # 🍔 Food Order API
+[![Fastify](https://img.shields.io/badge/fastify-v5-blue)](https://github.com/fastify/fastify)
+![Node.js LTS](https://img.shields.io/badge/node.js-22.x%20-339933?logo=node.js&logoColor=white)
+
 
 A modern, modular Fastify API built for managing food ordering workflows.  
 Includes strong type-safe schema validation, centralized logging, health checks, and structured architecture using the Dependency Inversion principle.
@@ -79,7 +79,7 @@ npm run db:down
 ### docker-compose CLI
 
 Run in detached mode:
-```docker compose up -d postgress```
+```docker compose up -d postgres```
 
 List volumes:
 ```docker volume ls```
@@ -238,6 +238,9 @@ npm run start:dev
 ---
 
 ## 🧪 Continuous Integration (CI)
+![CI](https://github.com/OPelham/food-order-api/actions/workflows/ci.yml/badge.svg)
+![Docker Image](https://img.shields.io/docker/v/opelham/food-order-api?sort=semver)
+
 
 This project uses **GitHub Actions** to automate linting, security scanning, testing, and Docker image publishing.
 

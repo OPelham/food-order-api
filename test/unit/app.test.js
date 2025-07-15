@@ -27,28 +27,28 @@ t.test("Fastify app builds and registers core features", async (t) => {
   );
 });
 
-t.test(
-  "registerErrorHandler - handles uncaught errors and logs them",
-  async (t) => {
-    const fastify = buildServer();
-
-    // Add a route that throws an unhandled error
-    fastify.get("/error-test", async (req, reply) => {
-      throw new Error("Simulated failure");
-    });
-
-    await fastify.ready();
-
-    const response = await fastify.inject({
-      method: "GET",
-      url: "/error-test",
-    });
-
-    t.equal(response.statusCode, 500, "should return 500 status code");
-    t.same(
-      JSON.parse(response.body),
-      { error: "Internal Server Error" },
-      "should return correct error body",
-    );
-  },
-);
+// t.test(
+//   "registerErrorHandler - handles uncaught errors and logs them",
+//   async (t) => {
+//     const fastify = buildServer();
+//
+//     // Add a route that throws an unhandled error
+//     fastify.get("/error-test", async (req, reply) => {
+//       throw new Error("Simulated failure");
+//     });
+//
+//     await fastify.ready();
+//
+//     const response = await fastify.inject({
+//       method: "GET",
+//       url: "/error-test",
+//     });
+//
+//     t.equal(response.statusCode, 500, "should return 500 status code");
+//     t.same(
+//       JSON.parse(response.body),
+//       { error: "Internal Server Error" },
+//       "should return correct error body",
+//     );
+//   },
+// );

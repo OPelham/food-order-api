@@ -21,7 +21,8 @@ export function createIngredientRepository(db) {
         [ingredientId],
       );
 
-      repositoryLog.debug({ databaseResponse: databaseResponse });
+      repositoryLog.debug({ databaseResponseRows: databaseResponse.rows });
+      // todo if empty array return 404? - handle here or in service? - service handle DB specific errors only here
 
       //todo make this a function and use dependency inversion to pass? this would make using other dbs later easier
       let transformedDBResponse;
