@@ -1,5 +1,6 @@
 import t from "tap";
 import buildServer from "../../src/app.js";
+import esmock from "esmock";
 
 t.test("Fastify app builds and registers core features", async (t) => {
   const fastify = buildServer();
@@ -24,6 +25,43 @@ t.test("Fastify app builds and registers core features", async (t) => {
   t.ok(
     Object.getOwnPropertyDescriptor(fastify, "applicationVariables")?.get,
     "applicationVariables decorator is registered as a getter",
+  );
+});
+
+t.test("loads dotenv when ENVIRONMENT=local", async (t) => {
+  // Arrange
+  process.env.ENVIRONMENT = "local";
+  let configCalled = false;
+
+  // Act: Mock dotenv and import app
+  await esmock("../../src/app.js", {
+    dotenv: {
+      config: () => {
+        configCalled = true;
+      },
+    },
+  });
+
+  // Assert
+  t.ok(configCalled, "dotenv.config() should be called when ENVIRONMENT=local");
+});
+
+t.test("does not load dotenv when ENVIRONMENT is not local", async (t) => {
+  // Arrange
+  process.env.ENVIRONMENT = "production";
+  let configCalled = false;
+
+  await esmock("../../src/app.js", {
+    dotenv: {
+      config: () => {
+        configCalled = true;
+      },
+    },
+  });
+
+  t.notOk(
+    configCalled,
+    "dotenv.config() should NOT be called when ENVIRONMENT is not local",
   );
 });
 
