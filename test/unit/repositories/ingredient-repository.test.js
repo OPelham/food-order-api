@@ -53,7 +53,9 @@ t.test("Ingredient Repository", async (t) => {
       "should use child logger",
     );
     t.ok(
-      mockLog.debug.calledOnceWith({ databaseResponse: mockDatabaseResponse }),
+      mockLog.debug.calledOnceWith({
+        databaseResponseRows: mockDatabaseResponse.rows,
+      }),
       "should log debug message",
     );
   });

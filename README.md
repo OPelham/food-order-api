@@ -1,4 +1,7 @@
 # 🍔 Food Order API
+[![Fastify](https://img.shields.io/badge/fastify-v5-blue)](https://github.com/fastify/fastify)
+![Node.js LTS](https://img.shields.io/badge/node.js-22.x%20-339933?logo=node.js&logoColor=white)
+
 
 A modern, modular Fastify API built for managing food ordering workflows.  
 Includes strong type-safe schema validation, centralized logging, health checks, and structured architecture using the Dependency Inversion principle.
@@ -76,7 +79,7 @@ npm run db:down
 ### docker-compose CLI
 
 Run in detached mode:
-```docker compose up -d postgress```
+```docker compose up -d postgres```
 
 List volumes:
 ```docker volume ls```
@@ -231,6 +234,52 @@ npm run start
 ```bash
 npm run start:dev
 ```
+
+---
+
+## 🧪 Continuous Integration (CI)
+![CI](https://github.com/OPelham/food-order-api/actions/workflows/ci.yml/badge.svg)
+![Docker Image](https://img.shields.io/docker/v/opelham/food-order-api?sort=semver)
+
+
+This project uses **GitHub Actions** to automate linting, security scanning, testing, and Docker image publishing.
+
+### ⚙️ CI Pipeline Overview
+
+The CI pipeline consists of three independent jobs:
+
+| Job                | Description                                                                                                                                                                                                                            |
+|--------------------|----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------|
+| 🔍 `scan`          | Runs `npm audit` and [CodeQL](https://docs.github.com/en/code-security/code-scanning/automatically-scanning-your-code-for-vulnerabilities-and-errors/codeql-overview) static analysis to detect vulnerabilities and code quality issues. |
+| 🧪 `lint-and-test` | Uses Docker Compose to build the API and Postgres service. Then runs `npm run lint` and `npm test`.                                                                                                                                    |
+| 🐳 `docker`        | Builds and pushes a Docker image using metadata from `package.json`, the branch name, and the commit SHA. This job only runs on pull requests to `develop`, `release`, or `release/**`.                                                |
+
+### 📦 Branch-Based Behavior
+
+| Event          | Source Branch | Target Branch | Triggered Jobs          |
+|----------------|---------------|---------------|-------------------------|
+| `push`         | `feature/**`  | —             | `scan`, `lint-and-test` |
+| `pull_request` | `develop`     | `release`     | All                     |
+| `pull_request` | `release`     | `main`        | All                     |
+
+> ℹ️ The `docker` job is skipped for pull requests into `feature/**`.
+
+### 🏷️ Docker Image Tag Format
+
+The image is tagged using the format:
+
+```text
+<environment>-<version>-<short-sha>
+```
+
+For example:
+```release-1.0.0-a1b2c3d```
+
+Where:
+
+- **environment** is derived from the target branch (e.g., release, develop, main)
+- **version** comes from package.json
+- **short-sha** is the first 7 characters of the commit SHA
 
 ---
 

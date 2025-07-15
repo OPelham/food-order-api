@@ -43,7 +43,7 @@ export default function buildServer() {
   const ingredientController = createIngredientController(ingredientService);
 
   // ==== configure server ====
-  registerErrorHandler(fastify, log);
+  // registerErrorHandler(fastify, log);
   registerDecorators(fastify, log);
   registerHooks(fastify, log);
   registerPlugins(fastify, log);
@@ -54,15 +54,15 @@ export default function buildServer() {
 }
 
 // ==== helper functions ====
-// todo add error handler and docstring and refactor below
-function registerErrorHandler(fastify, log) {
-  fastify.setErrorHandler((err, request, reply) => {
-    request.log.error(err, "Unhandled error");
-    reply.code(500).send({ error: "Internal Server Error" });
-  });
-
-  log.info("Registered error handler");
-}
+// // todo add error handler and docstring and refactor below
+// function registerErrorHandler(fastify, log) {
+//   fastify.setErrorHandler((err, request, reply) => {
+//     request.log.error(err, "Unhandled error");
+//     reply.code(500).send({ error: "Internal Server Error" });
+//   });
+//
+//   log.info("Registered error handler");
+// }
 
 /**
  * Registers custom Fastify decorators.
