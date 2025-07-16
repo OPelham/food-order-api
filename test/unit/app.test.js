@@ -65,28 +65,63 @@ t.test("does not load dotenv when ENVIRONMENT is not local", async (t) => {
   );
 });
 
-// t.test(
-//   "registerErrorHandler - handles uncaught errors and logs them",
-//   async (t) => {
-//     const fastify = buildServer();
-//
-//     // Add a route that throws an unhandled error
-//     fastify.get("/error-test", async (req, reply) => {
-//       throw new Error("Simulated failure");
-//     });
-//
-//     await fastify.ready();
-//
-//     const response = await fastify.inject({
-//       method: "GET",
-//       url: "/error-test",
-//     });
-//
-//     t.equal(response.statusCode, 500, "should return 500 status code");
-//     t.same(
-//       JSON.parse(response.body),
-//       { error: "Internal Server Error" },
-//       "should return correct error body",
-//     );
-//   },
-// );
+t.test("registerErrorHandler", async (t) => {
+  const fastify = buildServer();
+
+  // Add a route that throws a basic error
+  fastify.get("/test-unhandled-error", async () => {
+    throw new Error("An unexpected error occurred");
+  });
+
+  // Add a route that throws an error with statusCode and message
+  fastify.get("/test-custom-error", async () => {
+    const err = new Error("Custom failure");
+    err.statusCode = 403;
+    err.name = "ForbiddenError";
+    return Promise.reject(err);
+  });
+
+  await fastify.ready();
+
+  t.test("handles generic error with default status/message", async (t) => {
+    const res = await fastify.inject({
+      method: "GET",
+      url: "/test-unhandled-error",
+    });
+
+    t.equal(res.statusCode, 500, "should return 500 for generic errors");
+
+    const body = JSON.parse(res.body);
+    t.same(
+      body,
+      {
+        statusCode: 500,
+        error: "Error",
+        message: "An unexpected error occurred",
+      },
+      "should return default error structure",
+    );
+    t.end();
+  });
+
+  t.test("handles custom error with provided status and message", async (t) => {
+    const res = await fastify.inject({
+      method: "GET",
+      url: "/test-custom-error",
+    });
+
+    t.equal(res.statusCode, 403, "should return custom status code");
+
+    const body = JSON.parse(res.body);
+    t.same(
+      body,
+      {
+        statusCode: 403,
+        error: "ForbiddenError",
+        message: "Custom failure",
+      },
+      "should return custom error body",
+    );
+    t.end();
+  });
+});
