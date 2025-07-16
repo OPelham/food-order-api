@@ -13,6 +13,12 @@
       ]
     },
     "body": {
+      "required": [
+        "ingredientId",
+        "name",
+        "quantity",
+        "category"
+      ],
       "type": "object",
       "properties": {
         "ingredientId": {
@@ -52,6 +58,12 @@
     },
     "response": {
       "200": {
+        "required": [
+          "ingredientId",
+          "name",
+          "quantity",
+          "category"
+        ],
         "type": "object",
         "properties": {
           "ingredientId": {
@@ -101,7 +113,12 @@
           "statusCode": {
             "type": "number"
           }
-        }
+        },
+        "required": [
+          "message",
+          "error",
+          "statusCode"
+        ]
       },
       "401": {
         "type": "object",
@@ -115,7 +132,12 @@
           "statusCode": {
             "type": "number"
           }
-        }
+        },
+        "required": [
+          "message",
+          "error",
+          "statusCode"
+        ]
       },
       "404": {
         "type": "object",
@@ -129,21 +151,12 @@
           "statusCode": {
             "type": "number"
           }
-        }
-      },
-      "422": {
-        "type": "object",
-        "properties": {
-          "message": {
-            "type": "string"
-          },
-          "error": {
-            "type": "string"
-          },
-          "statusCode": {
-            "type": "number"
-          }
-        }
+        },
+        "required": [
+          "message",
+          "error",
+          "statusCode"
+        ]
       },
       "500": {
         "type": "object",
@@ -157,7 +170,12 @@
           "statusCode": {
             "type": "number"
           }
-        }
+        },
+        "required": [
+          "message",
+          "error",
+          "statusCode"
+        ]
       }
     }
   },
@@ -189,6 +207,12 @@
     },
     "response": {
       "200": {
+        "required": [
+          "ingredientId",
+          "name",
+          "quantity",
+          "category"
+        ],
         "type": "object",
         "properties": {
           "ingredientId": {
@@ -238,7 +262,12 @@
           "statusCode": {
             "type": "number"
           }
-        }
+        },
+        "required": [
+          "message",
+          "error",
+          "statusCode"
+        ]
       },
       "401": {
         "type": "object",
@@ -252,7 +281,12 @@
           "statusCode": {
             "type": "number"
           }
-        }
+        },
+        "required": [
+          "message",
+          "error",
+          "statusCode"
+        ]
       },
       "404": {
         "type": "object",
@@ -266,7 +300,12 @@
           "statusCode": {
             "type": "number"
           }
-        }
+        },
+        "required": [
+          "message",
+          "error",
+          "statusCode"
+        ]
       },
       "500": {
         "type": "object",
@@ -280,7 +319,12 @@
           "statusCode": {
             "type": "number"
           }
-        }
+        },
+        "required": [
+          "message",
+          "error",
+          "statusCode"
+        ]
       }
     }
   },
@@ -311,6 +355,12 @@
     },
     "response": {
       "200": {
+        "required": [
+          "ingredientId",
+          "name",
+          "quantity",
+          "category"
+        ],
         "type": "object",
         "properties": {
           "ingredientId": {
@@ -360,7 +410,12 @@
           "statusCode": {
             "type": "number"
           }
-        }
+        },
+        "required": [
+          "message",
+          "error",
+          "statusCode"
+        ]
       },
       "401": {
         "type": "object",
@@ -374,7 +429,12 @@
           "statusCode": {
             "type": "number"
           }
-        }
+        },
+        "required": [
+          "message",
+          "error",
+          "statusCode"
+        ]
       },
       "404": {
         "type": "object",
@@ -388,7 +448,12 @@
           "statusCode": {
             "type": "number"
           }
-        }
+        },
+        "required": [
+          "message",
+          "error",
+          "statusCode"
+        ]
       },
       "500": {
         "type": "object",
@@ -402,7 +467,12 @@
           "statusCode": {
             "type": "number"
           }
-        }
+        },
+        "required": [
+          "message",
+          "error",
+          "statusCode"
+        ]
       }
     }
   },
@@ -432,6 +502,12 @@
       ]
     },
     "body": {
+      "required": [
+        "ingredientId",
+        "name",
+        "quantity",
+        "category"
+      ],
       "type": "object",
       "properties": {
         "ingredientId": {
@@ -471,6 +547,12 @@
     },
     "response": {
       "200": {
+        "required": [
+          "ingredientId",
+          "name",
+          "quantity",
+          "category"
+        ],
         "type": "object",
         "properties": {
           "ingredientId": {
@@ -520,7 +602,12 @@
           "statusCode": {
             "type": "number"
           }
-        }
+        },
+        "required": [
+          "message",
+          "error",
+          "statusCode"
+        ]
       },
       "401": {
         "type": "object",
@@ -534,7 +621,12 @@
           "statusCode": {
             "type": "number"
           }
-        }
+        },
+        "required": [
+          "message",
+          "error",
+          "statusCode"
+        ]
       },
       "404": {
         "type": "object",
@@ -548,21 +640,12 @@
           "statusCode": {
             "type": "number"
           }
-        }
-      },
-      "422": {
-        "type": "object",
-        "properties": {
-          "message": {
-            "type": "string"
-          },
-          "error": {
-            "type": "string"
-          },
-          "statusCode": {
-            "type": "number"
-          }
-        }
+        },
+        "required": [
+          "message",
+          "error",
+          "statusCode"
+        ]
       },
       "500": {
         "type": "object",
@@ -576,7 +659,12 @@
           "statusCode": {
             "type": "number"
           }
-        }
+        },
+        "required": [
+          "message",
+          "error",
+          "statusCode"
+        ]
       }
     }
   },
@@ -607,6 +695,12 @@
     },
     "response": {
       "200": {
+        "required": [
+          "ingredientId",
+          "name",
+          "quantity",
+          "category"
+        ],
         "type": "object",
         "properties": {
           "ingredientId": {
@@ -656,7 +750,12 @@
           "statusCode": {
             "type": "number"
           }
-        }
+        },
+        "required": [
+          "message",
+          "error",
+          "statusCode"
+        ]
       },
       "401": {
         "type": "object",
@@ -670,7 +769,12 @@
           "statusCode": {
             "type": "number"
           }
-        }
+        },
+        "required": [
+          "message",
+          "error",
+          "statusCode"
+        ]
       },
       "404": {
         "type": "object",
@@ -684,7 +788,12 @@
           "statusCode": {
             "type": "number"
           }
-        }
+        },
+        "required": [
+          "message",
+          "error",
+          "statusCode"
+        ]
       },
       "500": {
         "type": "object",
@@ -698,7 +807,12 @@
           "statusCode": {
             "type": "number"
           }
-        }
+        },
+        "required": [
+          "message",
+          "error",
+          "statusCode"
+        ]
       }
     }
   }

@@ -55,8 +55,6 @@ paths:
           $ref: "#/components/schemas/Error401"
         '404':
           $ref: "#/components/schemas/Error404"
-        '422':
-          $ref: "#/components/schemas/Error422"
         '500':
           $ref: "#/components/schemas/Error500"
 
@@ -162,8 +160,6 @@ paths:
           $ref: "#/components/schemas/Error401"
         '404':
           $ref: "#/components/schemas/Error404"
-        '422':
-          $ref: "#/components/schemas/Error422"
         '500':
           $ref: "#/components/schemas/Error500"
     
