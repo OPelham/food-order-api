@@ -31,6 +31,28 @@ export function configureLogger() {
     res: (reply) => ({
       statusCode: reply.statusCode,
     }),
+    err: (err) => {
+      //todo is this required? will this get back to consumer?
+      if (!err || typeof err !== "object") return err;
+      return {
+        type: err.name,
+        message: err.message,
+        statusCode: err.statusCode,
+        // deliberately exclude stack
+      };
+    },
+  };
+
+  const localSerializers = {
+    req: (request) => ({
+      method: request.method,
+      url: request.url,
+      headers: request.headers, // extra
+      ip: request.ip,
+    }),
+    res: (reply) => ({
+      statusCode: reply.statusCode,
+    }),
     err: pino.stdSerializers.err,
   };
 
@@ -51,7 +73,7 @@ export function configureLogger() {
         },
       },
       level: process.env.LOG_LEVEL || "debug",
-      serializers: serializers,
+      serializers: localSerializers,
     },
     production: {
       timestamp: pino.stdTimeFunctions.isoTime,

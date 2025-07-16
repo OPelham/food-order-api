@@ -14,21 +14,14 @@ export function createIngredientController(service) {
      */
     async getIngredientById(request, reply) {
       const log = request.log;
-      const controllerLog = log.child({ model: "ingredients-controller" });
+      const controllerLog = log.child({ module: "ingredients-controller" });
 
-      try {
-        const { ingredientId } = request.params;
-        const ingredient = await service.getById(ingredientId, log);
-        controllerLog.debug({ ingredient: ingredient });
-        reply.send(ingredient);
-      } catch (err) {
-        if (err.message === "Ingredient not found") {
-          reply.code(404).send({ error: err.message });
-        } else {
-          controllerLog.error(err);
-          reply.code(500).send({ error: "Internal Server Error" });
-        }
-      }
+      const { ingredientId } = request.params;
+      const ingredient = await service.getById(ingredientId, log);
+
+      controllerLog.debug({ ingredient: ingredient });
+
+      reply.send(ingredient);
     },
   };
 }

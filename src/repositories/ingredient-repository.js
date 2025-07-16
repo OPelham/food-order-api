@@ -1,3 +1,5 @@
+import { httpErrors } from "@fastify/sensible";
+
 /**
  * Creates a concrete implementation of the Ingredient repository.
  * This abstracts database operations for ingredients and allows for substitution in tests.
@@ -16,26 +18,35 @@ export function createIngredientRepository(db) {
      */
     async findById(ingredientId, log) {
       const repositoryLog = log.child({ module: "ingredient-repository" });
-      const databaseResponse = await db.query(
-        "SELECT * FROM ingredients WHERE ingredient_id = $1",
-        [ingredientId],
-      );
+      try {
+        const databaseResponse = await db.query(
+          "SELECT * FROM ingredients WHERE ingredient_id = $1",
+          [ingredientId],
+        );
 
-      repositoryLog.debug({ databaseResponseRows: databaseResponse?.rows });
-      // todo if empty array return 404? - handle here or in service? - service handle DB specific errors only here
+        repositoryLog.debug({ databaseResponseRows: databaseResponse?.rows });
 
-      //todo make this a function and use dependency inversion to pass? this would make using other dbs later easier
-      let transformedDBResponse;
-      if (databaseResponse) {
-        transformedDBResponse = {
-          ingredientId: databaseResponse.rows[0].ingredient_id,
-          name: databaseResponse.rows[0].name,
-          quantity: databaseResponse.rows[0].quantity,
-          category: databaseResponse.rows[0].category,
+        if (databaseResponse?.rows.length === 0) {
+          return null;
+        }
+
+        const row = databaseResponse.rows[0];
+        return {
+          ingredientId: row.ingredient_id,
+          name: row.name,
+          quantity: row.quantity,
+          category: row.category,
         };
+      } catch (error) {
+        //todo are there any db errors that need to be handled differently?
+        repositoryLog.error({
+          error,
+          ingredientId,
+          query: "SELECT * FROM ingredients WHERE ingredient_id = $1",
+          context: "Database error in findById",
+        });
+        throw httpErrors.internalServerError(); //todo state database error or not?
       }
-
-      return transformedDBResponse ?? null; //todo check this
     },
   };
 }

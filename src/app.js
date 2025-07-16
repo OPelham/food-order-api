@@ -43,7 +43,7 @@ export default function buildServer() {
   const ingredientController = createIngredientController(ingredientService);
 
   // ==== configure server ====
-  // registerErrorHandler(fastify, log);
+  registerErrorHandler(fastify, log);
   registerDecorators(fastify, log);
   registerHooks(fastify, log);
   registerPlugins(fastify, log);
@@ -54,15 +54,30 @@ export default function buildServer() {
 }
 
 // ==== helper functions ====
-// // todo add error handler and docstring and refactor below
-// function registerErrorHandler(fastify, log) {
-//   fastify.setErrorHandler((err, request, reply) => {
-//     request.log.error(err, "Unhandled error");
-//     reply.code(500).send({ error: "Internal Server Error" });
-//   });
-//
-//   log.info("Registered error handler");
-// }
+
+/**
+ * Registers a global error handler for the Fastify instance.
+ *
+ * This handler catches all uncaught errors in the application and ensures that:
+ * - An appropriate HTTP status code is returned (defaults to 500 if missing).
+ * - A user-safe error message is returned, with a fallback default if none is provided.
+ * - Internal error details are logged using Fastify's request logger.
+ */
+function registerErrorHandler(fastify, log) {
+  fastify.setErrorHandler((err, req, reply) => {
+    const statusCode = err.statusCode || 500;
+    const message = err.message || "An unexpected error occurred";
+
+    req.log.error(err);
+
+    reply.status(statusCode).send({
+      statusCode,
+      error: err.name || "Internal Server Error",
+      message,
+    });
+  });
+  log.info("Registered error handler");
+}
 
 /**
  * Registers custom Fastify decorators.

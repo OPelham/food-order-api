@@ -30,6 +30,53 @@ t.test("configureLogger", (t) => {
     t.end();
   });
 
+  t.test("local serializers should use pino std serializers", (t) => {
+    process.env.ENVIRONMENT = "local";
+    const config = configureLogger();
+
+    const mockRequest = {
+      method: "POST",
+      url: "/local-test",
+      headers: { "x-test": "true" },
+      ip: "192.168.0.1",
+    };
+
+    const mockReply = {
+      statusCode: 404,
+    };
+
+    const mockError = new Error("Local error");
+    mockError.customProp = "extra";
+
+    const reqLog = config.serializers.req(mockRequest);
+    const resLog = config.serializers.res(mockReply);
+    const errLog = config.serializers.err(mockError);
+
+    t.same(
+      reqLog,
+      {
+        method: "POST",
+        url: "/local-test",
+        headers: { "x-test": "true" },
+        ip: "192.168.0.1",
+      },
+      "local req serializer should return expected fields",
+    );
+
+    t.same(
+      resLog,
+      { statusCode: 404 },
+      "local res serializer should return statusCode",
+    );
+
+    t.ok(
+      errLog.stack && errLog.message === "Local error",
+      "local err serializer should include stack and message",
+    );
+
+    t.end();
+  });
+
   t.test("should use LOG_LEVEL if set in local environment", (t) => {
     process.env.ENVIRONMENT = "local";
     process.env.LOG_LEVEL = "trace";
@@ -79,6 +126,18 @@ t.test("configureLogger", (t) => {
     t.end();
   });
 
+  t.test(
+    "should fallback to production config if ENVIRONMENT is unknown",
+    (t) => {
+      process.env.ENVIRONMENT = "foo"; // not defined in envToLogger
+      const config = configureLogger();
+
+      t.equal(config.level, "info", "should default to production config");
+      t.ok(config.timestamp, "should include timestamp");
+      t.end();
+    },
+  );
+
   t.test("should return false in test environment", (t) => {
     process.env.ENVIRONMENT = "test";
     const config = configureLogger();
@@ -96,6 +155,41 @@ t.test("configureLogger", (t) => {
       t.end();
     },
   );
+
+  t.test("production err serializer should exclude stack", (t) => {
+    process.env.ENVIRONMENT = "production";
+    const config = configureLogger();
+
+    const error = new Error("Boom!");
+    error.statusCode = 500;
+    const errLog = config.serializers.err(error);
+
+    t.same(
+      errLog,
+      {
+        type: "Error",
+        message: "Boom!",
+        statusCode: 500,
+      },
+      "should only include type, message, and statusCode",
+    );
+
+    t.notOk(errLog.stack, "should not include stack trace");
+    t.end();
+  });
+
+  t.test("err serializer should return input if not an object", (t) => {
+    process.env.ENVIRONMENT = "production";
+    const config = configureLogger();
+
+    const errLog = config.serializers.err(null);
+    t.equal(errLog, null, "should return null as-is");
+
+    const stringLog = config.serializers.err("oops");
+    t.equal(stringLog, "oops", "should return string as-is");
+
+    t.end();
+  });
 
   t.test("should invoke serializer functions", (t) => {
     process.env.ENVIRONMENT = "production";
