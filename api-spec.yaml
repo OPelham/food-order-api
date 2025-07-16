@@ -248,10 +248,10 @@ components:
           type: string
         statusCode:
           type: number
-#      required: #todo review error
-#        - message
-#        - error
-#        - statusCode
+      required:
+        - message
+        - error
+        - statusCode
 
     Error400:
       description: Invalid input
@@ -261,8 +261,8 @@ components:
             $ref: "#/components/schemas/Error"
           example:
             {
-              "message": "tbc",
-              "error": "tbc",
+              "message": "Bad Request",
+              "error": "BadRequestError",
               "statusCode": 400
             }
     Error401:
@@ -273,8 +273,8 @@ components:
             $ref: "#/components/schemas/Error"
           example:
             {
-              "message": "tbc",
-              "error": "tbc",
+              "message": "Unauthorized",
+              "error": "UnauthorizedError",
               "statusCode": 401
             }
     Error404:
@@ -285,21 +285,9 @@ components:
             $ref: "#/components/schemas/Error"
           example:
             {
-              "message": "Route GET:/example not founder",
-              "error": "Not Found",
+              "message": "Not Found",
+              "error": "NotFoundError",
               "statusCode": 404
-            }
-    Error422:
-      description: Validation exception
-      content:
-        application/json:
-          schema:
-            $ref: "#/components/schemas/Error"
-          example:
-            {
-              "message": "tbc",
-              "error": "tbc",
-              "statusCode": 422
             }
     Error500:
       description: General error
@@ -309,8 +297,8 @@ components:
             $ref: "#/components/schemas/Error"
           example:
             {
-              "message": "tbc",
-              "error": "tbc",
+              "message": "Internal Server Error",
+              "error": "InternalServerError",
               "statusCode": 500
             }
 
@@ -319,32 +307,32 @@ components:
       summary: A 400 error
       value:
         {
-          "message": "tbc",
-          "error": "tbc",
+          "message": "Bad Request",
+          "error": "BadRequestError",
           "statusCode": 400
         }
     Error401:
       summary: A 401 error
       value:
         {
-          "message": "tbc",
-          "error": "tbc",
+          "message": "Unauthorized",
+          "error": "UnauthorizedError",
           "statusCode": 401
         }
     Error404:
       summary: A 404 error
       value:
         {
-          "message": "Route GET:/example not founder",
-          "error": "Not Found",
+          "message": "Not Found",
+          "error": "NotFoundError",
           "statusCode": 404
         }
     Error500:
       summary: A 500 error
       value:
         {
-          "message": "tbc",
-          "error": "tbc",
+          "message": "Internal Server Error",
+          "error": "InternalServerError",
           "statusCode": 500
         }
 

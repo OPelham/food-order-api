@@ -25,6 +25,7 @@ t.test("Ingredient Repository", async (t) => {
   const mockLog = {
     child: sinon.stub().returnsThis(),
     debug: sinon.stub(),
+    error: sinon.stub(),
   };
 
   const repository = createIngredientRepository(mockDb);
@@ -61,10 +62,32 @@ t.test("Ingredient Repository", async (t) => {
   });
 
   t.test("findById: returns null when not found", async (t) => {
-    mockDb.query.resolves(null);
+    mockDb.query.resolves({ rowCount: 0, rows: [] });
 
     const result = await repository.findById("not-found", mockLog);
 
     t.equal(result, null, "should return null if no rows returned");
+  });
+
+  t.test("findById: logs and throws on DB error", async (t) => {
+    const fakeError = new Error("Simulated DB error");
+    mockDb.query.rejects(fakeError);
+
+    try {
+      await repository.findById("fail-id", mockLog);
+      t.fail("Should have thrown");
+    } catch (err) {
+      t.equal(err.statusCode, 500, "should throw internal server error");
+
+      t.match(
+        mockLog.error.firstCall.args[0],
+        {
+          error: fakeError,
+          ingredientId: "fail-id",
+          context: "Database error in findById",
+        },
+        "should log error with context",
+      );
+    }
   });
 });

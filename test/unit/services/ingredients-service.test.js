@@ -64,7 +64,7 @@ t.test("Ingredient Service", async (t) => {
     } catch (err) {
       t.equal(
         err.message,
-        "Ingredient not found",
+        "Ingredient with id missing-id not found",
         "throws correct error message",
       );
     }

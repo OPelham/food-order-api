@@ -1,4 +1,5 @@
 import { Ingredient } from "../domain/ingredient.js";
+import { httpErrors } from "@fastify/sensible";
 
 /**
  * Creates the ingredient service that uses the repository and domain model.
@@ -20,7 +21,10 @@ export function createIngredientService(repository) {
 
       const record = await repository.findById(id, log);
       serviceLog.debug({ record: record });
-      if (!record) throw new Error("Ingredient not found");
+      if (!record) {
+        //todo review cleaner way to handle errors
+        throw httpErrors.notFound(`Ingredient with id ${id} not found`);
+      }
 
       const ingredient = Ingredient.fromRecord(record);
       serviceLog.debug({ ingredientDTO: ingredient.toDTO() });
