@@ -322,7 +322,7 @@ Useful for container orchestration platforms (e.g., Docker, Kubernetes).
 
 ## 🧱 Architectural Overview
 
-This project adheres to the Dependency Inversion Principle, organizing code using concepts inspired by Onion 
+This project adheres to the Dependency Inversion Principle, organizing code using concepts inspired by Clean 
 Architecture, with clear separation between domain, application, and infrastructure layers.
 
 - Controllers receive requests and delegate to services
