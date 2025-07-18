@@ -40,13 +40,13 @@ paths:
         content:
           application/json:
             schema:
-              $ref: '#/components/schemas/Ingredient'
+              $ref: '#/components/schemas/IngredientRequest'
             examples:
               sample:
                 $ref: '#/components/examples/IngredientRequest'
         required: true
       responses:
-        '201': #todo refactor to 201 and return only id?
+        '201':
           description: Successful operation
           content:
             application/json:
@@ -61,6 +61,8 @@ paths:
           $ref: "#/components/responses/Error401"
         '404':
           $ref: "#/components/responses/Error404"
+        '409':
+          $ref: "#/components/responses/Error409"
         '500':
           $ref: "#/components/responses/Error500"
 
@@ -128,7 +130,7 @@ paths:
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/Ingredient'
+                $ref: '#/components/schemas/IngredientResponse'
               examples:
                 sample:
                   $ref: '#/components/examples/IngredientResponse'
@@ -158,7 +160,7 @@ paths:
         content:
           application/json:
             schema:
-              $ref: '#/components/schemas/Ingredient'
+              $ref: '#/components/schemas/IngredientRequest'
             examples:
               sample:
                 $ref: '#/components/examples/IngredientRequest'
@@ -171,6 +173,8 @@ paths:
           $ref: "#/components/responses/Error401"
         '404':
           $ref: "#/components/responses/Error404"
+        '409':
+          $ref: "#/components/responses/Error409"
         '500':
           $ref: "#/components/responses/Error500"
 
@@ -207,8 +211,28 @@ paths:
 
 components:
   schemas:
-    Ingredient:
+    IngredientRequest:
       required: # todo find out about mandatory for response fields
+        - name
+        - quantity
+        - category
+      type: object
+      additionalProperties: false
+      properties:
+        name:
+          type: string
+        quantity:
+          type: integer
+        category:
+          type: string
+          description: Storage Category of this ingredient
+          enum:
+            - FROZEN
+            - CHILLED
+            - DRY_GOOD
+    
+    IngredientResponse:
+      required:
         - ingredientId
         - name
         - quantity
@@ -243,7 +267,7 @@ components:
     IngredientsList:
       type: array
       items:
-        $ref: '#/components/schemas/Ingredient'
+        $ref: '#/components/schemas/IngredientResponse'
 
     AddIngredientResponse:
       required:
@@ -315,6 +339,20 @@ components:
                   "error": "NotFoundError",
                   "statusCode": 404
                 }
+    Error409:
+      description: Conflict error
+      content:
+        application/json:
+          schema:
+            $ref: "#/components/schemas/Error"
+          examples:
+            sample:
+              value:
+                {
+                  "message": "Ingredient Already Exists",
+                  "error": "ConflictError",
+                  "statusCode": 409
+                }
     Error500:
       description: General error
       content:
@@ -385,6 +423,14 @@ components:
           "message": "Not Found",
           "error": "NotFoundError",
           "statusCode": 404
+        }
+    Error409:
+      summary: A 409 error
+      value:
+        {
+          "message": "Ingredient Already Exists",
+          "error": "ConflictError",
+          "statusCode": 409
         }
     Error500:
       summary: A 500 error

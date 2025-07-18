@@ -136,11 +136,10 @@ function registerPlugins(fastify, log) {
  * - `ingredientRoutes`: All ingredient-related API endpoints, mounted with the specified prefix.
  */
 function registerRoutes(fastify, log, schemas, controllers) {
-  //todo refactor to allow more controllers?
   fastify.register(ingredientRoutes, {
     prefix: prefix,
     schemas: schemas,
-    controller: controllers.ingredient, // injected dependency
+    controller: controllers.ingredient,
   });
   log.info("Registered routes");
 }

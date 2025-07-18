@@ -14,4 +14,12 @@ export async function ingredientRoutes(fastify, options) {
     schema: schemas["getIngredientById"],
     handler: controller.getIngredientById,
   });
+
+  fastify.route({
+    method: "POST",
+    url: "/ingredients",
+    schema: schemas["addIngredient"],
+    // todo add prehandler with sanitisation
+    handler: controller.addIngredient,
+  });
 }

@@ -31,7 +31,10 @@ t.test("Ingredient Service", async (t) => {
   t.test("getById: should return ingredient DTO if found", async (t) => {
     mockRepository.findById.resolves(mockRecord);
 
-    const result = await service.getById(mockRecord.ingredientId, mockLog);
+    const result = await service.getIngredientById(
+      mockRecord.ingredientId,
+      mockLog,
+    );
 
     t.same(result, expectedDTO, "should return DTO from domain entity");
     t.ok(
@@ -59,7 +62,7 @@ t.test("Ingredient Service", async (t) => {
     mockRepository.findById.resolves(null);
 
     try {
-      await service.getById("missing-id", mockLog);
+      await service.getIngredientById("missing-id", mockLog);
       t.fail("should have thrown");
     } catch (err) {
       t.equal(

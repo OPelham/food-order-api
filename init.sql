@@ -7,7 +7,7 @@ CREATE TYPE ingredient_category AS ENUM ('FROZEN', 'CHILLED', 'DRY_GOOD');
 -- Create ingredients table with UUID default and enum type
 CREATE TABLE ingredients (
      ingredient_id UUID PRIMARY KEY DEFAULT uuid_generate_v4(),
-     name TEXT NOT NULL,
+     name TEXT NOT NULL UNIQUE,
      quantity INTEGER NOT NULL CHECK (quantity >= 0),
      category ingredient_category NOT NULL
 );

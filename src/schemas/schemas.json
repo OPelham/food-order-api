@@ -14,7 +14,6 @@
     },
     "body": {
       "required": [
-        "ingredientId",
         "name",
         "quantity",
         "category"
@@ -22,12 +21,6 @@
       "type": "object",
       "additionalProperties": false,
       "properties": {
-        "ingredientId": {
-          "type": "string",
-          "description": "Unique identifier of this ingredient.",
-          "readOnly": true,
-          "format": "uuid"
-        },
         "name": {
           "type": "string"
         },
@@ -41,15 +34,6 @@
             "FROZEN",
             "CHILLED",
             "DRY_GOOD"
-          ]
-        },
-        "availability": {
-          "type": "string",
-          "description": "System generated availability status.",
-          "readOnly": true,
-          "enum": [
-            "AVAILABLE",
-            "UNAVAILABLE"
           ]
         }
       }
@@ -111,6 +95,26 @@
         ]
       },
       "404": {
+        "type": "object",
+        "additionalProperties": false,
+        "properties": {
+          "message": {
+            "type": "string"
+          },
+          "error": {
+            "type": "string"
+          },
+          "statusCode": {
+            "type": "number"
+          }
+        },
+        "required": [
+          "message",
+          "error",
+          "statusCode"
+        ]
+      },
+      "409": {
         "type": "object",
         "additionalProperties": false,
         "properties": {
@@ -483,7 +487,6 @@
     },
     "body": {
       "required": [
-        "ingredientId",
         "name",
         "quantity",
         "category"
@@ -491,12 +494,6 @@
       "type": "object",
       "additionalProperties": false,
       "properties": {
-        "ingredientId": {
-          "type": "string",
-          "description": "Unique identifier of this ingredient.",
-          "readOnly": true,
-          "format": "uuid"
-        },
         "name": {
           "type": "string"
         },
@@ -510,15 +507,6 @@
             "FROZEN",
             "CHILLED",
             "DRY_GOOD"
-          ]
-        },
-        "availability": {
-          "type": "string",
-          "description": "System generated availability status.",
-          "readOnly": true,
-          "enum": [
-            "AVAILABLE",
-            "UNAVAILABLE"
           ]
         }
       }
@@ -565,6 +553,26 @@
         ]
       },
       "404": {
+        "type": "object",
+        "additionalProperties": false,
+        "properties": {
+          "message": {
+            "type": "string"
+          },
+          "error": {
+            "type": "string"
+          },
+          "statusCode": {
+            "type": "number"
+          }
+        },
+        "required": [
+          "message",
+          "error",
+          "statusCode"
+        ]
+      },
+      "409": {
         "type": "object",
         "additionalProperties": false,
         "properties": {
