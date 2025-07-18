@@ -1,5 +1,5 @@
 {
-  "addIngredients": {
+  "addIngredient": {
     "headers": {
       "type": "object",
       "properties": {
@@ -25,16 +25,13 @@
           "type": "string",
           "description": "Unique identifier of this ingredient.",
           "readOnly": true,
-          "format": "uuid",
-          "example": "07a58bdc-555a-4980-b779-355fc7e27cb5"
+          "format": "uuid"
         },
         "name": {
-          "type": "string",
-          "example": "tomato"
+          "type": "string"
         },
         "quantity": {
-          "type": "integer",
-          "example": 28
+          "type": "integer"
         },
         "category": {
           "type": "string",
@@ -57,12 +54,9 @@
       }
     },
     "response": {
-      "200": {
+      "201": {
         "required": [
-          "ingredientId",
-          "name",
-          "quantity",
-          "category"
+          "ingredientId"
         ],
         "type": "object",
         "properties": {
@@ -70,34 +64,7 @@
             "type": "string",
             "description": "Unique identifier of this ingredient.",
             "readOnly": true,
-            "format": "uuid",
-            "example": "07a58bdc-555a-4980-b779-355fc7e27cb5"
-          },
-          "name": {
-            "type": "string",
-            "example": "tomato"
-          },
-          "quantity": {
-            "type": "integer",
-            "example": 28
-          },
-          "category": {
-            "type": "string",
-            "description": "Storage Category of this ingredient",
-            "enum": [
-              "FROZEN",
-              "CHILLED",
-              "DRY_GOOD"
-            ]
-          },
-          "availability": {
-            "type": "string",
-            "description": "System generated availability status.",
-            "readOnly": true,
-            "enum": [
-              "AVAILABLE",
-              "UNAVAILABLE"
-            ]
+            "format": "uuid"
           }
         }
       },
@@ -207,46 +174,46 @@
     },
     "response": {
       "200": {
-        "required": [
-          "ingredientId",
-          "name",
-          "quantity",
-          "category"
-        ],
-        "type": "object",
-        "properties": {
-          "ingredientId": {
-            "type": "string",
-            "description": "Unique identifier of this ingredient.",
-            "readOnly": true,
-            "format": "uuid",
-            "example": "07a58bdc-555a-4980-b779-355fc7e27cb5"
-          },
-          "name": {
-            "type": "string",
-            "example": "tomato"
-          },
-          "quantity": {
-            "type": "integer",
-            "example": 28
-          },
-          "category": {
-            "type": "string",
-            "description": "Storage Category of this ingredient",
-            "enum": [
-              "FROZEN",
-              "CHILLED",
-              "DRY_GOOD"
-            ]
-          },
-          "availability": {
-            "type": "string",
-            "description": "System generated availability status.",
-            "readOnly": true,
-            "enum": [
-              "AVAILABLE",
-              "UNAVAILABLE"
-            ]
+        "type": "array",
+        "items": {
+          "required": [
+            "ingredientId",
+            "name",
+            "quantity",
+            "category"
+          ],
+          "type": "object",
+          "properties": {
+            "ingredientId": {
+              "type": "string",
+              "description": "Unique identifier of this ingredient.",
+              "readOnly": true,
+              "format": "uuid"
+            },
+            "name": {
+              "type": "string"
+            },
+            "quantity": {
+              "type": "integer"
+            },
+            "category": {
+              "type": "string",
+              "description": "Storage Category of this ingredient",
+              "enum": [
+                "FROZEN",
+                "CHILLED",
+                "DRY_GOOD"
+              ]
+            },
+            "availability": {
+              "type": "string",
+              "description": "System generated availability status.",
+              "readOnly": true,
+              "enum": [
+                "AVAILABLE",
+                "UNAVAILABLE"
+              ]
+            }
           }
         }
       },
@@ -367,16 +334,13 @@
             "type": "string",
             "description": "Unique identifier of this ingredient.",
             "readOnly": true,
-            "format": "uuid",
-            "example": "07a58bdc-555a-4980-b779-355fc7e27cb5"
+            "format": "uuid"
           },
           "name": {
-            "type": "string",
-            "example": "tomato"
+            "type": "string"
           },
           "quantity": {
-            "type": "integer",
-            "example": 28
+            "type": "integer"
           },
           "category": {
             "type": "string",
@@ -514,16 +478,13 @@
           "type": "string",
           "description": "Unique identifier of this ingredient.",
           "readOnly": true,
-          "format": "uuid",
-          "example": "07a58bdc-555a-4980-b779-355fc7e27cb5"
+          "format": "uuid"
         },
         "name": {
-          "type": "string",
-          "example": "tomato"
+          "type": "string"
         },
         "quantity": {
-          "type": "integer",
-          "example": 28
+          "type": "integer"
         },
         "category": {
           "type": "string",
@@ -546,50 +507,6 @@
       }
     },
     "response": {
-      "200": {
-        "required": [
-          "ingredientId",
-          "name",
-          "quantity",
-          "category"
-        ],
-        "type": "object",
-        "properties": {
-          "ingredientId": {
-            "type": "string",
-            "description": "Unique identifier of this ingredient.",
-            "readOnly": true,
-            "format": "uuid",
-            "example": "07a58bdc-555a-4980-b779-355fc7e27cb5"
-          },
-          "name": {
-            "type": "string",
-            "example": "tomato"
-          },
-          "quantity": {
-            "type": "integer",
-            "example": 28
-          },
-          "category": {
-            "type": "string",
-            "description": "Storage Category of this ingredient",
-            "enum": [
-              "FROZEN",
-              "CHILLED",
-              "DRY_GOOD"
-            ]
-          },
-          "availability": {
-            "type": "string",
-            "description": "System generated availability status.",
-            "readOnly": true,
-            "enum": [
-              "AVAILABLE",
-              "UNAVAILABLE"
-            ]
-          }
-        }
-      },
       "400": {
         "type": "object",
         "properties": {
@@ -694,50 +611,6 @@
       ]
     },
     "response": {
-      "200": {
-        "required": [
-          "ingredientId",
-          "name",
-          "quantity",
-          "category"
-        ],
-        "type": "object",
-        "properties": {
-          "ingredientId": {
-            "type": "string",
-            "description": "Unique identifier of this ingredient.",
-            "readOnly": true,
-            "format": "uuid",
-            "example": "07a58bdc-555a-4980-b779-355fc7e27cb5"
-          },
-          "name": {
-            "type": "string",
-            "example": "tomato"
-          },
-          "quantity": {
-            "type": "integer",
-            "example": 28
-          },
-          "category": {
-            "type": "string",
-            "description": "Storage Category of this ingredient",
-            "enum": [
-              "FROZEN",
-              "CHILLED",
-              "DRY_GOOD"
-            ]
-          },
-          "availability": {
-            "type": "string",
-            "description": "System generated availability status.",
-            "readOnly": true,
-            "enum": [
-              "AVAILABLE",
-              "UNAVAILABLE"
-            ]
-          }
-        }
-      },
       "400": {
         "type": "object",
         "properties": {

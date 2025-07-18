@@ -3,11 +3,11 @@ info:
   title: Food Orders API
   description: |-
     Food Orders API for managing ingredients, menu items, and orders.
-#
-#    Security:
-#    Oauth 2
+  #
+  #    Security:
+  #    Oauth 2
   version: 1.0.0
-#  termsOfService: https://swagger.io/terms/
+  #  termsOfService: https://swagger.io/terms/
   contact:
     email: oliverpelhamdev@gmail.com
   license:
@@ -32,7 +32,7 @@ paths:
         - ingredients
       summary: Add a New Ingredient.
       description: Add a new ingredient type to inventory.
-      operationId: addIngredients
+      operationId: addIngredient
       parameters:
         - $ref: '#/components/parameters/CorrelationIdHeader'
       requestBody:
@@ -41,28 +41,34 @@ paths:
           application/json:
             schema:
               $ref: '#/components/schemas/Ingredient'
+            examples:
+              sample:
+                $ref: '#/components/examples/IngredientRequest'
         required: true
       responses:
-        '200': #todo refactor to 201 and return only id?
+        '201': #todo refactor to 201 and return only id?
           description: Successful operation
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/Ingredient'
+                $ref: '#/components/schemas/AddIngredientResponse'
+              examples:
+                sample:
+                  $ref: '#/components/examples/AddIngredientResponse'
         '400':
-          $ref: "#/components/schemas/Error400"
+          $ref: "#/components/responses/Error400"
         '401':
-          $ref: "#/components/schemas/Error401"
+          $ref: "#/components/responses/Error401"
         '404':
-          $ref: "#/components/schemas/Error404"
+          $ref: "#/components/responses/Error404"
         '500':
-          $ref: "#/components/schemas/Error500"
+          $ref: "#/components/responses/Error500"
 
-#      security:
-#        - food_orders_auth:
-#            - write:ingredients
-#            - read:ingredients
-          
+  #      security:
+  #        - food_orders_auth:
+  #            - write:ingredients
+  #            - read:ingredients
+
   /ingredients/findByAvailability:
     get:
       tags:
@@ -76,7 +82,7 @@ paths:
           in: query
           description: Status values that need to be considered for filter
           required: false
-          explode: false #todo check this 
+          explode: false #todo check this
           schema:
             type: string
             default: AVAILABLE
@@ -89,20 +95,23 @@ paths:
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/Ingredient' #todo refactor as list
+                $ref: '#/components/schemas/IngredientsList' #todo add any other high level fields?
+              examples:
+                sample:
+                  $ref: '#/components/examples/IngredientsList'
         '400':
-          $ref: "#/components/schemas/Error400"
+          $ref: "#/components/responses/Error400" #todo refer to responses then schemas within?
         '401':
-          $ref: "#/components/schemas/Error401"
+          $ref: "#/components/responses/Error401"
         '404':
-          $ref: "#/components/schemas/Error404"
+          $ref: "#/components/responses/Error404"
         '500':
-          $ref: "#/components/schemas/Error500"
+          $ref: "#/components/responses/Error500"
 
-#      security:
-#        - food_orders_auth:
-#            - read:ingredients
-  
+  #      security:
+  #        - food_orders_auth:
+  #            - read:ingredients
+
   /ingredients/{ingredientId}:
     get:
       tags:
@@ -120,18 +129,21 @@ paths:
             application/json:
               schema:
                 $ref: '#/components/schemas/Ingredient'
+              examples:
+                sample:
+                  $ref: '#/components/examples/IngredientResponse'
         '400':
-          $ref: "#/components/schemas/Error400"
+          $ref: "#/components/responses/Error400"
         '401':
-          $ref: "#/components/schemas/Error401"
+          $ref: "#/components/responses/Error401"
         '404':
-          $ref: "#/components/schemas/Error404"
+          $ref: "#/components/responses/Error404"
         '500':
-          $ref: "#/components/schemas/Error500"
-#      security:
-#        - food_orders_auth:
-#            - read:ingredients
-            
+          $ref: "#/components/responses/Error500"
+    #      security:
+    #        - food_orders_auth:
+    #            - read:ingredients
+
     put:
       tags:
         - ingredients
@@ -147,22 +159,21 @@ paths:
           application/json:
             schema:
               $ref: '#/components/schemas/Ingredient'
+            examples:
+              sample:
+                $ref: '#/components/examples/IngredientRequest'
       responses:
-        '200':
+        '204':
           description: Successful operation
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/Ingredient'
         '400':
-          $ref: "#/components/schemas/Error400"
+          $ref: "#/components/responses/Error400"
         '401':
-          $ref: "#/components/schemas/Error401"
+          $ref: "#/components/responses/Error401"
         '404':
-          $ref: "#/components/schemas/Error404"
+          $ref: "#/components/responses/Error404"
         '500':
-          $ref: "#/components/schemas/Error500"
-    
+          $ref: "#/components/responses/Error500"
+
     delete:
       tags:
         - ingredients
@@ -171,33 +182,29 @@ paths:
       operationId: deleteIngredient
       parameters:
         - $ref: '#/components/parameters/CorrelationIdHeader'
-#        - name: api_key
-#          in: header
-#          description: ''
-#          required: false
-#          schema:
-#            type: string
+        #        - name: api_key
+        #          in: header
+        #          description: ''
+        #          required: false
+        #          schema:
+        #            type: string
         - $ref: '#/components/parameters/IngredientId'
       responses:
-        '200':
+        '204':
           description: Successful operation
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/Ingredient'
         '400':
-          $ref: "#/components/schemas/Error400"
+          $ref: "#/components/responses/Error400"
         '401':
-          $ref: "#/components/schemas/Error401"
+          $ref: "#/components/responses/Error401"
         '404':
-          $ref: "#/components/schemas/Error404"
+          $ref: "#/components/responses/Error404"
         '500':
-          $ref: "#/components/schemas/Error500"
+          $ref: "#/components/responses/Error500"
 #      security:
 #        - petstore_auth:
 #            - write:pets
 #            - read:pets
-  
+
 components:
   schemas:
     Ingredient:
@@ -213,13 +220,10 @@ components:
           description: Unique identifier of this ingredient.
           readOnly: true
           format: uuid
-          example: 07a58bdc-555a-4980-b779-355fc7e27cb5
         name:
           type: string
-          example: tomato
         quantity:
           type: integer
-          example: 28
         category:
           type: string
           description: Storage Category of this ingredient
@@ -235,6 +239,22 @@ components:
             - AVAILABLE
             - UNAVAILABLE
 
+    IngredientsList:
+      type: array
+      items:
+        $ref: '#/components/schemas/Ingredient'
+
+    AddIngredientResponse:
+      required:
+        - ingredientId
+      type: object
+      properties:
+        ingredientId:
+          type: string
+          description: Unique identifier of this ingredient.
+          readOnly: true
+          format: uuid
+
     Error:
       type: object
       properties:
@@ -249,56 +269,96 @@ components:
         - error
         - statusCode
 
+  responses:
     Error400:
       description: Invalid input
       content:
         application/json:
           schema:
             $ref: "#/components/schemas/Error"
-          example:
-            {
-              "message": "Bad Request",
-              "error": "BadRequestError",
-              "statusCode": 400
-            }
+          examples:
+            sample:
+              value:
+                {
+                  "message": "Bad Request",
+                  "error": "BadRequestError",
+                  "statusCode": 400
+                }
     Error401:
       description: Unauthorised
       content:
         application/json:
           schema:
             $ref: "#/components/schemas/Error"
-          example:
-            {
-              "message": "Unauthorized",
-              "error": "UnauthorizedError",
-              "statusCode": 401
-            }
+          examples:
+            sample:
+              value:
+                {
+                  "message": "Unauthorized",
+                  "error": "UnauthorizedError",
+                  "statusCode": 401
+                }
     Error404:
       description: Resource not found
       content:
         application/json:
           schema:
             $ref: "#/components/schemas/Error"
-          example:
-            {
-              "message": "Not Found",
-              "error": "NotFoundError",
-              "statusCode": 404
-            }
+          examples:
+            sample:
+              value:
+                {
+                  "message": "Not Found",
+                  "error": "NotFoundError",
+                  "statusCode": 404
+                }
     Error500:
       description: General error
       content:
         application/json:
           schema:
             $ref: "#/components/schemas/Error"
-          example:
-            {
-              "message": "Internal Server Error",
-              "error": "InternalServerError",
-              "statusCode": 500
-            }
+          examples:
+            sample:
+              value:
+                {
+                  "message": "Internal Server Error",
+                  "error": "InternalServerError",
+                  "statusCode": 500
+                }
 
   examples:
+    IngredientRequest:
+      summary: Sample request body
+      value:
+        name: Tomato
+        quantity: 5
+        category: CHILLED
+    IngredientResponse:
+      summary: sample response body
+      value:
+        ingredientId: 3fa85f64-5717-4562-b3fc-2c963f66afa6
+        name: Tomato
+        quantity: 5
+        category: CHILLED
+        availability: AVAILABLE
+    AddIngredientResponse:
+      summary: sample response body
+      value:
+        ingredientId: 3fa85f64-5717-4562-b3fc-2c963f66afa6
+    IngredientsList:
+      summary: sample response body
+      value:
+        - ingredientId: 3fa85f64-5717-4562-b3fc-2c963f66afa6
+          name: Tomato
+          quantity: 5
+          category: CHILLED
+          availability: AVAILABLE
+        - ingredientId: 8cf2d12b-bb75-4a13-996f-d72b7ed2fb2b
+          name: Lettuce
+          quantity: 12
+          category: DRY_GOOD
+          availability: AVAILABLE
     Error400:
       summary: A 400 error
       value:
