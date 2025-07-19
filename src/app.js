@@ -126,6 +126,9 @@ function registerPlugins(fastify, log) {
     logLevel: "warn",
     healthcheckUrl: `/${prefix}/health/check`,
   });
+  fastify.register(import("@fastify/helmet"), {
+    global: true,
+  }); //todo test this
   log.info("Registered plugins");
 }
 
@@ -136,10 +139,11 @@ function registerPlugins(fastify, log) {
  * - `ingredientRoutes`: All ingredient-related API endpoints, mounted with the specified prefix.
  */
 function registerRoutes(fastify, log, schemas, controllers) {
+  //todo refactor to allow more controllers?
   fastify.register(ingredientRoutes, {
     prefix: prefix,
     schemas: schemas,
-    controller: controllers.ingredient,
+    controller: controllers.ingredient, // injected dependency
   });
   log.info("Registered routes");
 }
@@ -161,6 +165,8 @@ function registerValidation(fastify, log) {
     coerceTypes: false,
     allErrors: true,
     nullable: true,
+    verbose: true,
+    //todo add verbose to see if too much details?
   });
   fastify.setValidatorCompiler(({ schema }) => ajv.compile(schema));
   log.info("Registered validation");

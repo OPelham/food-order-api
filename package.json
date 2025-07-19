@@ -5,19 +5,15 @@
   "main": "index.js",
   "scripts": {
     "generate:schema": "node scripts/generate-schema.js",
-
     "test": "ENVIRONMENT=test tap \"test/**/*.test.js\"",
     "test:unit": "ENVIRONMENT=test tap  \"test/unit/**/*.test.js\"",
     "test:report": "ENVIRONMENT=test tap --coverage-report=html \"test/unit/**/*.test.js\"",
     "test:integration": "ENVIRONMENT=test tap \"test/integration/*.test.js\" --coverage-report=text --allow-incomplete-coverage",
-
     "start": "node src/server.js",
     "start:dev": "ENVIRONMENT=local nodemon src/server.js",
     "start:dev-trace": "LOG_LEVEL=trace ENVIRONMENT=local nodemon src/server.js",
-
     "db:up": "docker compose up postgres -d",
     "db:down": "docker compose down",
-
     "lint": "eslint .",
     "lint:fix": "eslint . --fix"
   },
@@ -29,6 +25,7 @@
   "license": "ISC",
   "description": "",
   "dependencies": {
+    "@fastify/helmet": "^13.0.1",
     "@fastify/sensible": "^5.0.0",
     "ajv": "^6.12.6",
     "ajv-formats": "^3.0.1",

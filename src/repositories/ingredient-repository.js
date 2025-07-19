@@ -90,7 +90,7 @@ export function createIngredientRepository(db) {
         });
 
         if (error.code === "23505") {
-          throw httpErrors.conflict("Ingredient already exists");
+          throw httpErrors.conflict("Ingredient Already Exists");
         }
         throw httpErrors.internalServerError();
       }

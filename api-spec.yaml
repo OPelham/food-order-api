@@ -221,6 +221,8 @@ components:
       properties:
         name:
           type: string
+          minLength: 2
+          maxLength: 20
         quantity:
           type: integer
         category:
@@ -245,7 +247,7 @@ components:
           description: Unique identifier of this ingredient.
           readOnly: true
           format: uuid
-        name:
+        name: #todo add length check on all request and parameterise
           type: string
         quantity:
           type: integer
