@@ -222,7 +222,7 @@ components:
         name:
           type: string
           minLength: 2
-          maxLength: 20
+          maxLength: 40
         quantity:
           type: integer
         category:

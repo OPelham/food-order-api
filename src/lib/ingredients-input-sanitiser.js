@@ -1,11 +1,28 @@
-export function sanitizeUserInput(input) {
-  return {
-    //todo customise to our needs and call in prehandler
-    ...input,
-    name: input.name?.trim(),
-    email: input.email?.trim().toLowerCase(),
-  };
+import xss from "xss";
 
-  // check the following free test fields
-  // - name
+/**
+ * Sanitizes and normalizes user input for ingredients.
+ *
+ * @param {Object} input - Raw user input
+ * @returns {{ sanitizedInput: Object, wasSanitized: boolean }}
+ */
+export function sanitizeUserInput(input) {
+  let wasSanitized = false;
+
+  const name = input.name?.trim();
+  const email = input.email?.trim().toLowerCase();
+
+  const safeName = xss(name);
+  if (safeName !== name) {
+    wasSanitized = true;
+  }
+
+  return {
+    sanitizedInput: {
+      ...input,
+      name: safeName,
+      email,
+    },
+    wasSanitized,
+  };
 }

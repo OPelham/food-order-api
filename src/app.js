@@ -21,7 +21,8 @@ if (process.env.ENVIRONMENT === "local") {
   const dotenv = await import("dotenv");
   dotenv.config();
 }
-//todo test calls/connection to database on local and set up a test? also refactor tests to be consistne t wit test data on local db
+
+const allowedOrigins = process.env.CORS_ORIGIN?.split(",");
 
 // ==== create server instance ====
 export default function buildServer() {
@@ -52,8 +53,6 @@ export default function buildServer() {
 
   return fastify;
 }
-
-// ==== helper functions ====
 
 /**
  * Registers a global error handler for the Fastify instance.
@@ -129,6 +128,9 @@ function registerPlugins(fastify, log) {
   fastify.register(import("@fastify/helmet"), {
     global: true,
   }); //todo test this
+  fastify.register(import("@fastify/cors"), {
+    origin: allowedOrigins,
+  }); //todo test this
   log.info("Registered plugins");
 }
 
@@ -165,7 +167,6 @@ function registerValidation(fastify, log) {
     coerceTypes: false,
     allErrors: true,
     nullable: true,
-    verbose: true,
     //todo add verbose to see if too much details?
   });
   fastify.setValidatorCompiler(({ schema }) => ajv.compile(schema));
