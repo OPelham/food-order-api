@@ -45,6 +45,12 @@ jobs:
   lint-and-test:
     name: 🧪 Lint & Test
     runs-on: ubuntu-latest
+    env:
+      POSTGRES_USER: ${{ secrets.POSTGRES_USER }}
+      POSTGRES_PASSWORD: ${{ secrets.POSTGRES_PASSWORD }}
+      POSTGRES_DB: ${{ secrets.POSTGRES_DB }}
+      DATABASE_URL: ${{ secrets.DATABASE_URL }}
+      CORS_ORIGIN: ${{ secrets.CORS_ORIGIN }}
 
     steps:
       - name: 📥 Checkout code

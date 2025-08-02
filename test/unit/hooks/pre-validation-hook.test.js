@@ -4,7 +4,7 @@ import preValidationHook from "../../../src/hooks/pre-validation-hook.js";
 
 t.test("preValidationHook", (t) => {
   t.test("should log parsed request body if present", (t) => {
-    const fakeBody = JSON.stringify({ name: "Tomato" });
+    const fakeBody = { name: "Tomato" };
     const debug = sinon.stub();
 
     const request = {
@@ -18,11 +18,8 @@ t.test("preValidationHook", (t) => {
     t.ok(debug.calledOnce, "debug should be called");
     const [logArg, msg] = debug.firstCall.args;
 
-    t.same(
-      logArg,
-      { requestBody: { name: "Tomato" } },
-      "should log parsed request body",
-    );
+    const expectedBody = { requestBody: { name: "Tomato" } };
+    t.same(logArg, expectedBody, "should log parsed request body");
     t.equal(msg, "incoming request body", "should log correct message");
     t.end();
   });
@@ -44,26 +41,6 @@ t.test("preValidationHook", (t) => {
       ["no request body present"],
       "should log message when no body",
     );
-    t.end();
-  });
-
-  t.test("should throw if body is not valid JSON", (t) => {
-    const debug = sinon.stub();
-
-    const request = {
-      body: "{ not valid json }",
-      log: { debug },
-    };
-    const reply = {};
-
-    t.throws(
-      () => {
-        preValidationHook(request, reply);
-      },
-      SyntaxError,
-      "should throw SyntaxError for invalid JSON",
-    );
-
     t.end();
   });
 

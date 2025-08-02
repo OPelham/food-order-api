@@ -64,6 +64,9 @@ export function createIngredientRepository(db) {
       const childLog = log.child({
         module: "ingredient-repository-addIngredient",
       });
+      if (!ingredientDTO) {
+        return { ingredientId: undefined };
+      }
       const { ingredientId, name, quantity, category } = ingredientDTO;
 
       try {

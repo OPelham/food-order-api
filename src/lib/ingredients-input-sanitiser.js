@@ -9,19 +9,20 @@ import xss from "xss";
 export function sanitizeUserInput(input) {
   let wasSanitized = false;
 
-  const name = input.name?.trim();
-  const email = input.email?.trim().toLowerCase();
+  let processedName = input.name;
+  if (typeof input.name === "string") {
+    const trimmed = input.name.trim();
+    processedName = xss(trimmed);
 
-  const safeName = xss(name);
-  if (safeName !== name) {
-    wasSanitized = true;
+    if (processedName !== trimmed) {
+      wasSanitized = true;
+    }
   }
 
   return {
     sanitizedInput: {
       ...input,
-      name: safeName,
-      email,
+      name: processedName,
     },
     wasSanitized,
   };
