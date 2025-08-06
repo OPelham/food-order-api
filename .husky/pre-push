@@ -1,1 +1,1 @@
-npm test:local
+npm run test:local
