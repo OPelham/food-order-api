@@ -65,31 +65,4 @@ export function createIngredientService(repository) {
       return { ingredientId: ingredient.ingredientId }; //todo transform response
     },
   };
-
-  //   async addIngredient(addIngredientRequestBody, log) {
-  //     const childLog = log.child({module: "ingredient.service"});
-  //
-  //     let ingredient;
-  //
-  //     try {
-  //       ingredient = Ingredient.fromRecord(addIngredientRequestBody);
-  //
-  //       if (!ingredient) {
-  //         throw new InvalidIngredientError("Failed to create ingredient from record");
-  //       }
-  //
-  //       await repository.addIngredient(ingredient.toDTO(), log);
-  //
-  //     } catch (err) {
-  //       if (err instanceof InvalidIngredientError) {
-  //         throw httpErrors.badRequest(err.message);
-  //       }
-  //
-  //       childLog.error(err);
-  //       throw httpErrors.internalServerError();
-  //     }
-  //
-  //     return {ingredientId: ingredient.ingredientId};
-  //   }
-  // }
 }

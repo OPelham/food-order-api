@@ -49,8 +49,13 @@ function buildIsolatedApp(mockLogger) {
     fastify.log = mockLogger;
   }
 
+  const isLocal = process.env.ENVIRONMENT === "local";
+  const dbHost = isLocal ? "localhost" : "postgres";
+  const connectionString = `postgres://${process.env.POSTGRES_USER}:${process.env.POSTGRES_PASSWORD}@${dbHost}:5432/${process.env.POSTGRES_DB}`;
+
+  console.log(connectionString, "[00]connectionString"); //todo remove
   const database = createDatabase({
-    connectionString: process.env.DATABASE_URL,
+    connectionString: connectionString,
   });
   const ingredientRepository = createIngredientRepository(database);
   const ingredientService = createIngredientService(ingredientRepository);

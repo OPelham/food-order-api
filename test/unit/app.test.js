@@ -200,4 +200,85 @@ t.test("registerErrorHandler", async (t) => {
       "should return fallback error structure",
     );
   });
+
+  t.test(
+    "uses 'postgres' as dbHost when ENVIRONMENT is not local",
+    async (t) => {
+      // Arrange
+      process.env.ENVIRONMENT = "production"; // or any non-"local" value
+      process.env.POSTGRES_USER = "testuser";
+      process.env.POSTGRES_PASSWORD = "testpass";
+      process.env.POSTGRES_DB = "testdb";
+
+      let receivedConfig;
+
+      // Act: Mock the database module to capture the config
+      const app = await esmock("../../src/app.js", {
+        "../../src/infrastructure/database.js": {
+          createDatabase: (config) => {
+            receivedConfig = config;
+            return {}; // mock DB object
+          },
+        },
+        dotenv: {
+          config: () => {}, // no-op since ENVIRONMENT is not "local"
+        },
+      });
+
+      // Build the server to trigger the database creation
+      const fastify = app.default();
+      t.teardown(() => fastify.close());
+
+      // Assert
+      t.ok(receivedConfig, "Database config should be captured");
+      t.ok(
+        receivedConfig.connectionString.includes("postgres:5432"),
+        "Connection string should use 'postgres' as host when ENVIRONMENT is not local",
+      );
+      t.equal(
+        receivedConfig.connectionString,
+        "postgres://testuser:testpass@postgres:5432/testdb",
+        "Full connection string should use postgres host",
+      );
+    },
+  );
+
+  t.test("uses 'localhost' as dbHost when ENVIRONMENT is local", async (t) => {
+    // Arrange
+    process.env.ENVIRONMENT = "local";
+    process.env.POSTGRES_USER = "testuser";
+    process.env.POSTGRES_PASSWORD = "testpass";
+    process.env.POSTGRES_DB = "testdb";
+
+    let receivedConfig;
+
+    // Act: Mock the database module to capture the config
+    const app = await esmock("../../src/app.js", {
+      "../../src/infrastructure/database.js": {
+        createDatabase: (config) => {
+          receivedConfig = config;
+          return {}; // mock DB object
+        },
+      },
+      dotenv: {
+        config: () => {}, // mocked
+      },
+    });
+
+    // Build the server to trigger the database creation
+    const fastify = app.default();
+    t.teardown(() => fastify.close());
+
+    // Assert
+    t.ok(receivedConfig, "Database config should be captured");
+    t.ok(
+      receivedConfig.connectionString.includes("localhost:5432"),
+      "Connection string should use 'localhost' as host when ENVIRONMENT is local",
+    );
+    t.equal(
+      receivedConfig.connectionString,
+      "postgres://testuser:testpass@localhost:5432/testdb",
+      "Full connection string should use localhost host",
+    );
+  });
 });

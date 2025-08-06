@@ -285,36 +285,68 @@ t.test("Ingredient Repository", async (t) => {
     );
   });
 
-  // t.test("addIngredient: throws 500 if repository throws unknown error", async (t) => {
-  //   const mockRepository = {
-  //     addIngredient: sinon.stub().rejects(new Error("Unexpected failure")),
-  //   };
-  //
-  //   const service = createIngredientService(mockRepository);
-  //
-  //   const mockLog = {
-  //     child: sinon.stub().returnsThis(),
-  //     error: sinon.stub(),
-  //   };
-  //
-  //   const mockIngredientDTO = {
-  //     name: "Onion",
-  //     quantity: 2,
-  //     category: "CHILLED",
-  //   };
-  //
-  //   try {
-  //     await service.addIngredient(mockIngredientDTO, mockLog);
-  //     t.fail("Expected internal server error to be thrown");
-  //   } catch (err) {
-  //     t.equal(err.statusCode, 500, "Throws 500 Internal Server Error");
-  //     t.match(err.message, /Internal Server Error/i, "Error message is generic");
-  //     t.ok(mockLog.error.calledOnce, "Logs the unexpected error");
-  //     t.match(
-  //       mockLog.error.firstCall.args[0].message,
-  //       "Unexpected failure",
-  //       "Logs the original unexpected error message"
-  //     );
-  //   }
-  // });
+  t.test("addIngredient: throws 500 on generic database error", async (t) => {
+    const mockDb = {
+      query: sinon.stub().rejects({
+        code: "23503", // Foreign key violation (not 23505 duplicate key)
+        message: "violates foreign key constraint",
+      }),
+    };
+
+    const mockLog = {
+      child: sinon.stub().returnsThis(),
+      debug: sinon.stub(),
+      error: sinon.stub(),
+    };
+
+    const repository = createIngredientRepository(mockDb);
+
+    const ingredient = {
+      ingredientId: "test-id",
+      name: "Test Ingredient",
+      quantity: 1,
+      category: "FRESH",
+    };
+
+    try {
+      await repository.addIngredient(ingredient, mockLog);
+      t.fail("Expected internal server error");
+    } catch (err) {
+      t.equal(err.statusCode, 500, "throws 500 Internal Server Error");
+      t.match(
+        err.message,
+        "Internal Server Error",
+        "has expected error message",
+      );
+
+      // Verify error logging was called
+      t.ok(mockLog.error.calledOnce, "should log the error");
+
+      const loggedError = mockLog.error.firstCall.args[0];
+      t.equal(
+        loggedError.ingredientId,
+        "test-id",
+        "should log correct ingredientId",
+      );
+      t.equal(loggedError.name, "Test Ingredient", "should log correct name");
+      t.equal(loggedError.quantity, 1, "should log correct quantity");
+      t.equal(loggedError.category, "FRESH", "should log correct category");
+      t.equal(
+        loggedError.query,
+        "INSERT INTO ingredients ...",
+        "should log correct query",
+      );
+      t.equal(
+        loggedError.context,
+        "Database error in addIngredient",
+        "should log correct context",
+      );
+      t.ok(loggedError.error, "should log the error object");
+      t.equal(
+        loggedError.error.message,
+        "violates foreign key constraint",
+        "should log the original error message",
+      );
+    }
+  });
 });

@@ -65,7 +65,7 @@ export function createIngredientRepository(db) {
         module: "ingredient-repository-addIngredient",
       });
       if (!ingredientDTO) {
-        return { ingredientId: undefined };
+        return { ingredientId: undefined }; //todo do we want to do this or error etc??
       }
       const { ingredientId, name, quantity, category } = ingredientDTO;
 
