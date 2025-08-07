@@ -53,7 +53,6 @@ function buildIsolatedApp(mockLogger) {
   const dbHost = isLocal ? "localhost" : "postgres";
   const connectionString = `postgres://${process.env.POSTGRES_USER}:${process.env.POSTGRES_PASSWORD}@${dbHost}:5432/${process.env.POSTGRES_DB}`;
 
-  console.log(connectionString, "[00]connectionString"); //todo remove
   const database = createDatabase({
     connectionString: connectionString,
   });
