@@ -4,9 +4,9 @@ services:
     container_name: local-postgres
     restart: always
     environment:
-      POSTGRES_USER: testuser
-      POSTGRES_PASSWORD: testuserpassword
-      POSTGRES_DB: testdb
+      POSTGRES_USER: ${POSTGRES_USER}
+      POSTGRES_PASSWORD: ${POSTGRES_PASSWORD}
+      POSTGRES_DB: ${POSTGRES_DB}
     ports:
       - "5432:5432"
     volumes:
@@ -21,7 +21,10 @@ services:
       - "3000:3000" # host:container
     environment:
       # note calling @ database service name
-      DATABASE_URL: postgres://testuser:testuserpassword@postgres:5432/testdb
+      POSTGRES_USER: ${POSTGRES_USER}
+      POSTGRES_PASSWORD: ${POSTGRES_PASSWORD}
+      POSTGRES_DB: ${POSTGRES_DB}
+      CORS_ORIGIN: ${CORS_ORIGIN}
     depends_on:
       - postgres
 # how set up secrets for this?

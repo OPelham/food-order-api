@@ -15,13 +15,13 @@ import { createIngredientService } from "./services/ingredients-service.js";
 import { createIngredientController } from "./controllers/ingredients-controller.js";
 
 const prefix = `${applicationVariables.applicationName}/api/${applicationVariables.version}`;
+const isLocal = process.env.ENVIRONMENT === "local";
 
 // get env variables from .env file only when ENVIRONMENT=local
-if (process.env.ENVIRONMENT === "local") {
+if (isLocal) {
   const dotenv = await import("dotenv");
   dotenv.config();
 }
-//todo test calls/connection to database on local and set up a test? also refactor tests to be consistne t wit test data on local db
 
 // ==== create server instance ====
 export default function buildServer() {
@@ -34,9 +34,10 @@ export default function buildServer() {
   const log = fastify.log.child({ module: "app" });
 
   // === Setup DB and services ===
-  const databaseConfig = {
-    connectionString: process.env.DATABASE_URL,
-  };
+  const dbHost = isLocal ? "localhost" : "postgres";
+  const connectionString = `postgres://${process.env.POSTGRES_USER}:${process.env.POSTGRES_PASSWORD}@${dbHost}:5432/${process.env.POSTGRES_DB}`;
+  const databaseConfig = { connectionString };
+
   const database = createDatabase(databaseConfig);
   const ingredientRepository = createIngredientRepository(database);
   const ingredientService = createIngredientService(ingredientRepository);
@@ -52,8 +53,6 @@ export default function buildServer() {
 
   return fastify;
 }
-
-// ==== helper functions ====
 
 /**
  * Registers a global error handler for the Fastify instance.
@@ -122,10 +121,20 @@ function registerHooks(fastify, log) {
  * - `fastify-healthcheck`: Adds a health check route for readiness/liveness probes.
  */
 function registerPlugins(fastify, log) {
+  const allowedOrigins = process.env.CORS_ORIGIN?.split(",");
+
   fastify.register(import("fastify-healthcheck"), {
     logLevel: "warn",
     healthcheckUrl: `/${prefix}/health/check`,
   });
+  fastify.register(import("@fastify/helmet"), {
+    global: true,
+  }); //todo test this
+  fastify.register(import("@fastify/cors"), {
+    origin: allowedOrigins,
+    // methods: ['GET', 'POST', 'PUT', 'DELETE', 'OPTIONS'], //todo review
+    // credentials: true // todo when using authorization headers
+  }); //todo test this
   log.info("Registered plugins");
 }
 
@@ -136,7 +145,6 @@ function registerPlugins(fastify, log) {
  * - `ingredientRoutes`: All ingredient-related API endpoints, mounted with the specified prefix.
  */
 function registerRoutes(fastify, log, schemas, controllers) {
-  //todo refactor to allow more controllers?
   fastify.register(ingredientRoutes, {
     prefix: prefix,
     schemas: schemas,
@@ -162,6 +170,7 @@ function registerValidation(fastify, log) {
     coerceTypes: false,
     allErrors: true,
     nullable: true,
+    //todo add verbose to see if too much details?
   });
   fastify.setValidatorCompiler(({ schema }) => ajv.compile(schema));
   log.info("Registered validation");

@@ -1,3 +1,5 @@
+import { sanitizeUserInput } from "../lib/ingredients-input-sanitiser.js";
+
 /**
  * Registers ingredient-related routes.
  *
@@ -13,5 +15,23 @@ export async function ingredientRoutes(fastify, options) {
     url: "/ingredients/:ingredientId",
     schema: schemas["getIngredientById"],
     handler: controller.getIngredientById,
+  });
+
+  fastify.route({
+    method: "POST",
+    url: "/ingredients",
+    schema: schemas["addIngredient"],
+    preHandler: async (request, reply) => {
+      const log = request.log;
+      const childLog = log.child({ module: "addIngredient-route" });
+
+      const { sanitizedInput, wasSanitized } = sanitizeUserInput(request.body);
+      request.body = sanitizedInput;
+
+      if (wasSanitized) {
+        childLog.warn("Input Sanitized");
+      }
+    },
+    handler: controller.addIngredient,
   });
 }

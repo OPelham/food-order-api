@@ -1,5 +1,5 @@
 {
-  "addIngredients": {
+  "addIngredient": {
     "headers": {
       "type": "object",
       "properties": {
@@ -13,22 +13,21 @@
       ]
     },
     "body": {
+      "required": [
+        "name",
+        "quantity",
+        "category"
+      ],
       "type": "object",
+      "additionalProperties": false,
       "properties": {
-        "ingredientId": {
-          "type": "string",
-          "description": "Unique identifier of this ingredient.",
-          "readOnly": true,
-          "format": "uuid",
-          "example": "07a58bdc-555a-4980-b779-355fc7e27cb5"
-        },
         "name": {
           "type": "string",
-          "example": "tomato"
+          "minLength": 2,
+          "maxLength": 40
         },
         "quantity": {
-          "type": "integer",
-          "example": 28
+          "type": "integer"
         },
         "category": {
           "type": "string",
@@ -38,59 +37,28 @@
             "CHILLED",
             "DRY_GOOD"
           ]
-        },
-        "availability": {
-          "type": "string",
-          "description": "System generated availability status.",
-          "readOnly": true,
-          "enum": [
-            "AVAILABLE",
-            "UNAVAILABLE"
-          ]
         }
       }
     },
     "response": {
-      "200": {
+      "201": {
+        "required": [
+          "ingredientId"
+        ],
         "type": "object",
+        "additionalProperties": false,
         "properties": {
           "ingredientId": {
             "type": "string",
             "description": "Unique identifier of this ingredient.",
             "readOnly": true,
-            "format": "uuid",
-            "example": "07a58bdc-555a-4980-b779-355fc7e27cb5"
-          },
-          "name": {
-            "type": "string",
-            "example": "tomato"
-          },
-          "quantity": {
-            "type": "integer",
-            "example": 28
-          },
-          "category": {
-            "type": "string",
-            "description": "Storage Category of this ingredient",
-            "enum": [
-              "FROZEN",
-              "CHILLED",
-              "DRY_GOOD"
-            ]
-          },
-          "availability": {
-            "type": "string",
-            "description": "System generated availability status.",
-            "readOnly": true,
-            "enum": [
-              "AVAILABLE",
-              "UNAVAILABLE"
-            ]
+            "format": "uuid"
           }
         }
       },
       "400": {
         "type": "object",
+        "additionalProperties": false,
         "properties": {
           "message": {
             "type": "string"
@@ -101,10 +69,16 @@
           "statusCode": {
             "type": "number"
           }
-        }
+        },
+        "required": [
+          "message",
+          "error",
+          "statusCode"
+        ]
       },
       "401": {
         "type": "object",
+        "additionalProperties": false,
         "properties": {
           "message": {
             "type": "string"
@@ -115,10 +89,16 @@
           "statusCode": {
             "type": "number"
           }
-        }
+        },
+        "required": [
+          "message",
+          "error",
+          "statusCode"
+        ]
       },
       "404": {
         "type": "object",
+        "additionalProperties": false,
         "properties": {
           "message": {
             "type": "string"
@@ -129,10 +109,16 @@
           "statusCode": {
             "type": "number"
           }
-        }
+        },
+        "required": [
+          "message",
+          "error",
+          "statusCode"
+        ]
       },
-      "422": {
+      "409": {
         "type": "object",
+        "additionalProperties": false,
         "properties": {
           "message": {
             "type": "string"
@@ -143,10 +129,16 @@
           "statusCode": {
             "type": "number"
           }
-        }
+        },
+        "required": [
+          "message",
+          "error",
+          "statusCode"
+        ]
       },
       "500": {
         "type": "object",
+        "additionalProperties": false,
         "properties": {
           "message": {
             "type": "string"
@@ -157,7 +149,12 @@
           "statusCode": {
             "type": "number"
           }
-        }
+        },
+        "required": [
+          "message",
+          "error",
+          "statusCode"
+        ]
       }
     }
   },
@@ -189,45 +186,53 @@
     },
     "response": {
       "200": {
-        "type": "object",
-        "properties": {
-          "ingredientId": {
-            "type": "string",
-            "description": "Unique identifier of this ingredient.",
-            "readOnly": true,
-            "format": "uuid",
-            "example": "07a58bdc-555a-4980-b779-355fc7e27cb5"
-          },
-          "name": {
-            "type": "string",
-            "example": "tomato"
-          },
-          "quantity": {
-            "type": "integer",
-            "example": 28
-          },
-          "category": {
-            "type": "string",
-            "description": "Storage Category of this ingredient",
-            "enum": [
-              "FROZEN",
-              "CHILLED",
-              "DRY_GOOD"
-            ]
-          },
-          "availability": {
-            "type": "string",
-            "description": "System generated availability status.",
-            "readOnly": true,
-            "enum": [
-              "AVAILABLE",
-              "UNAVAILABLE"
-            ]
+        "type": "array",
+        "items": {
+          "required": [
+            "ingredientId",
+            "name",
+            "quantity",
+            "category"
+          ],
+          "type": "object",
+          "additionalProperties": false,
+          "properties": {
+            "ingredientId": {
+              "type": "string",
+              "description": "Unique identifier of this ingredient.",
+              "readOnly": true,
+              "format": "uuid"
+            },
+            "name": {
+              "type": "string"
+            },
+            "quantity": {
+              "type": "integer"
+            },
+            "category": {
+              "type": "string",
+              "description": "Storage Category of this ingredient",
+              "enum": [
+                "FROZEN",
+                "CHILLED",
+                "DRY_GOOD"
+              ]
+            },
+            "availability": {
+              "type": "string",
+              "description": "System generated availability status.",
+              "readOnly": true,
+              "enum": [
+                "AVAILABLE",
+                "UNAVAILABLE"
+              ]
+            }
           }
         }
       },
       "400": {
         "type": "object",
+        "additionalProperties": false,
         "properties": {
           "message": {
             "type": "string"
@@ -238,10 +243,16 @@
           "statusCode": {
             "type": "number"
           }
-        }
+        },
+        "required": [
+          "message",
+          "error",
+          "statusCode"
+        ]
       },
       "401": {
         "type": "object",
+        "additionalProperties": false,
         "properties": {
           "message": {
             "type": "string"
@@ -252,10 +263,16 @@
           "statusCode": {
             "type": "number"
           }
-        }
+        },
+        "required": [
+          "message",
+          "error",
+          "statusCode"
+        ]
       },
       "404": {
         "type": "object",
+        "additionalProperties": false,
         "properties": {
           "message": {
             "type": "string"
@@ -266,10 +283,16 @@
           "statusCode": {
             "type": "number"
           }
-        }
+        },
+        "required": [
+          "message",
+          "error",
+          "statusCode"
+        ]
       },
       "500": {
         "type": "object",
+        "additionalProperties": false,
         "properties": {
           "message": {
             "type": "string"
@@ -280,7 +303,12 @@
           "statusCode": {
             "type": "number"
           }
-        }
+        },
+        "required": [
+          "message",
+          "error",
+          "statusCode"
+        ]
       }
     }
   },
@@ -311,22 +339,26 @@
     },
     "response": {
       "200": {
+        "required": [
+          "ingredientId",
+          "name",
+          "quantity",
+          "category"
+        ],
         "type": "object",
+        "additionalProperties": false,
         "properties": {
           "ingredientId": {
             "type": "string",
             "description": "Unique identifier of this ingredient.",
             "readOnly": true,
-            "format": "uuid",
-            "example": "07a58bdc-555a-4980-b779-355fc7e27cb5"
+            "format": "uuid"
           },
           "name": {
-            "type": "string",
-            "example": "tomato"
+            "type": "string"
           },
           "quantity": {
-            "type": "integer",
-            "example": 28
+            "type": "integer"
           },
           "category": {
             "type": "string",
@@ -350,6 +382,7 @@
       },
       "400": {
         "type": "object",
+        "additionalProperties": false,
         "properties": {
           "message": {
             "type": "string"
@@ -360,10 +393,16 @@
           "statusCode": {
             "type": "number"
           }
-        }
+        },
+        "required": [
+          "message",
+          "error",
+          "statusCode"
+        ]
       },
       "401": {
         "type": "object",
+        "additionalProperties": false,
         "properties": {
           "message": {
             "type": "string"
@@ -374,10 +413,16 @@
           "statusCode": {
             "type": "number"
           }
-        }
+        },
+        "required": [
+          "message",
+          "error",
+          "statusCode"
+        ]
       },
       "404": {
         "type": "object",
+        "additionalProperties": false,
         "properties": {
           "message": {
             "type": "string"
@@ -388,10 +433,16 @@
           "statusCode": {
             "type": "number"
           }
-        }
+        },
+        "required": [
+          "message",
+          "error",
+          "statusCode"
+        ]
       },
       "500": {
         "type": "object",
+        "additionalProperties": false,
         "properties": {
           "message": {
             "type": "string"
@@ -402,7 +453,12 @@
           "statusCode": {
             "type": "number"
           }
-        }
+        },
+        "required": [
+          "message",
+          "error",
+          "statusCode"
+        ]
       }
     }
   },
@@ -432,22 +488,21 @@
       ]
     },
     "body": {
+      "required": [
+        "name",
+        "quantity",
+        "category"
+      ],
       "type": "object",
+      "additionalProperties": false,
       "properties": {
-        "ingredientId": {
-          "type": "string",
-          "description": "Unique identifier of this ingredient.",
-          "readOnly": true,
-          "format": "uuid",
-          "example": "07a58bdc-555a-4980-b779-355fc7e27cb5"
-        },
         "name": {
           "type": "string",
-          "example": "tomato"
+          "minLength": 2,
+          "maxLength": 40
         },
         "quantity": {
-          "type": "integer",
-          "example": 28
+          "type": "integer"
         },
         "category": {
           "type": "string",
@@ -457,59 +512,13 @@
             "CHILLED",
             "DRY_GOOD"
           ]
-        },
-        "availability": {
-          "type": "string",
-          "description": "System generated availability status.",
-          "readOnly": true,
-          "enum": [
-            "AVAILABLE",
-            "UNAVAILABLE"
-          ]
         }
       }
     },
     "response": {
-      "200": {
-        "type": "object",
-        "properties": {
-          "ingredientId": {
-            "type": "string",
-            "description": "Unique identifier of this ingredient.",
-            "readOnly": true,
-            "format": "uuid",
-            "example": "07a58bdc-555a-4980-b779-355fc7e27cb5"
-          },
-          "name": {
-            "type": "string",
-            "example": "tomato"
-          },
-          "quantity": {
-            "type": "integer",
-            "example": 28
-          },
-          "category": {
-            "type": "string",
-            "description": "Storage Category of this ingredient",
-            "enum": [
-              "FROZEN",
-              "CHILLED",
-              "DRY_GOOD"
-            ]
-          },
-          "availability": {
-            "type": "string",
-            "description": "System generated availability status.",
-            "readOnly": true,
-            "enum": [
-              "AVAILABLE",
-              "UNAVAILABLE"
-            ]
-          }
-        }
-      },
       "400": {
         "type": "object",
+        "additionalProperties": false,
         "properties": {
           "message": {
             "type": "string"
@@ -520,10 +529,16 @@
           "statusCode": {
             "type": "number"
           }
-        }
+        },
+        "required": [
+          "message",
+          "error",
+          "statusCode"
+        ]
       },
       "401": {
         "type": "object",
+        "additionalProperties": false,
         "properties": {
           "message": {
             "type": "string"
@@ -534,10 +549,16 @@
           "statusCode": {
             "type": "number"
           }
-        }
+        },
+        "required": [
+          "message",
+          "error",
+          "statusCode"
+        ]
       },
       "404": {
         "type": "object",
+        "additionalProperties": false,
         "properties": {
           "message": {
             "type": "string"
@@ -548,10 +569,16 @@
           "statusCode": {
             "type": "number"
           }
-        }
+        },
+        "required": [
+          "message",
+          "error",
+          "statusCode"
+        ]
       },
-      "422": {
+      "409": {
         "type": "object",
+        "additionalProperties": false,
         "properties": {
           "message": {
             "type": "string"
@@ -562,10 +589,16 @@
           "statusCode": {
             "type": "number"
           }
-        }
+        },
+        "required": [
+          "message",
+          "error",
+          "statusCode"
+        ]
       },
       "500": {
         "type": "object",
+        "additionalProperties": false,
         "properties": {
           "message": {
             "type": "string"
@@ -576,7 +609,12 @@
           "statusCode": {
             "type": "number"
           }
-        }
+        },
+        "required": [
+          "message",
+          "error",
+          "statusCode"
+        ]
       }
     }
   },
@@ -606,46 +644,9 @@
       ]
     },
     "response": {
-      "200": {
-        "type": "object",
-        "properties": {
-          "ingredientId": {
-            "type": "string",
-            "description": "Unique identifier of this ingredient.",
-            "readOnly": true,
-            "format": "uuid",
-            "example": "07a58bdc-555a-4980-b779-355fc7e27cb5"
-          },
-          "name": {
-            "type": "string",
-            "example": "tomato"
-          },
-          "quantity": {
-            "type": "integer",
-            "example": 28
-          },
-          "category": {
-            "type": "string",
-            "description": "Storage Category of this ingredient",
-            "enum": [
-              "FROZEN",
-              "CHILLED",
-              "DRY_GOOD"
-            ]
-          },
-          "availability": {
-            "type": "string",
-            "description": "System generated availability status.",
-            "readOnly": true,
-            "enum": [
-              "AVAILABLE",
-              "UNAVAILABLE"
-            ]
-          }
-        }
-      },
       "400": {
         "type": "object",
+        "additionalProperties": false,
         "properties": {
           "message": {
             "type": "string"
@@ -656,10 +657,16 @@
           "statusCode": {
             "type": "number"
           }
-        }
+        },
+        "required": [
+          "message",
+          "error",
+          "statusCode"
+        ]
       },
       "401": {
         "type": "object",
+        "additionalProperties": false,
         "properties": {
           "message": {
             "type": "string"
@@ -670,10 +677,16 @@
           "statusCode": {
             "type": "number"
           }
-        }
+        },
+        "required": [
+          "message",
+          "error",
+          "statusCode"
+        ]
       },
       "404": {
         "type": "object",
+        "additionalProperties": false,
         "properties": {
           "message": {
             "type": "string"
@@ -684,10 +697,16 @@
           "statusCode": {
             "type": "number"
           }
-        }
+        },
+        "required": [
+          "message",
+          "error",
+          "statusCode"
+        ]
       },
       "500": {
         "type": "object",
+        "additionalProperties": false,
         "properties": {
           "message": {
             "type": "string"
@@ -698,7 +717,12 @@
           "statusCode": {
             "type": "number"
           }
-        }
+        },
+        "required": [
+          "message",
+          "error",
+          "statusCode"
+        ]
       }
     }
   }

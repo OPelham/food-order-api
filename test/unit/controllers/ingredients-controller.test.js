@@ -14,7 +14,8 @@ t.test("Ingredient Controller - getIngredientById", async (t) => {
   const sandbox = sinon.createSandbox();
 
   const mockService = {
-    getById: sandbox.stub(),
+    getIngredientById: sandbox.stub(),
+    addIngredient: sandbox.stub(),
   };
 
   const controller = createIngredientController(mockService);
@@ -22,7 +23,7 @@ t.test("Ingredient Controller - getIngredientById", async (t) => {
   t.teardown(() => sandbox.restore());
 
   t.test("responds with 200 and ingredient when found", async (t) => {
-    mockService.getById.resolves(mockIngredient);
+    mockService.getIngredientById.resolves(mockIngredient);
 
     const request = {
       params: { ingredientId: mockIngredient.ingredientId },
@@ -38,11 +39,39 @@ t.test("Ingredient Controller - getIngredientById", async (t) => {
     await controller.getIngredientById(request, reply);
 
     t.ok(
-      mockService.getById.calledOnceWith(
+      mockService.getIngredientById.calledOnceWith(
         mockIngredient.ingredientId,
         request.log,
       ),
     );
     t.same(reply.send.firstCall.args[0], mockIngredient);
+  });
+
+  t.test("addIngredient: calls service and sends result", async (t) => {
+    const mockAddResponse = { ok: true };
+    mockService.addIngredient.resolves(mockAddResponse);
+
+    const request = {
+      body: mockIngredient,
+      log: {
+        child: () => ({ info: () => {}, debug: () => {}, error: () => {} }),
+      },
+    };
+
+    const reply = {
+      send: sinon.spy(),
+    };
+
+    await controller.addIngredient(request, reply);
+
+    t.ok(
+      mockService.addIngredient.calledOnceWith(mockIngredient, request.log),
+      "should call service.addIngredient with body and log",
+    );
+    t.same(
+      reply.send.firstCall.args[0],
+      mockAddResponse,
+      "should reply with service response",
+    );
   });
 });
