@@ -138,6 +138,11 @@ npm test
 npm run test:unit
 ```
 
+### Run tests with local environment
+```bash
+npm run test:local
+```
+
 ### Report mode 
 
 Applies to unit tests
