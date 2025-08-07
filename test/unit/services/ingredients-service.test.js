@@ -7,7 +7,7 @@ import { InvalidIngredientError } from "../../../src/lib/invalid-ingredient-erro
 
 // import mocks
 const mockIngredientRepositoryOutputJSON = fs.readFileSync(
-  "./test/stubs/get-ingredient-by-id/postgres-ingredient-repository-output-success.json",
+  "./test/stubs/common/postgres-ingredient-repository-output-success.json",
   "utf8",
 );
 const mockIngredientRepositoryOutput = JSON.parse(

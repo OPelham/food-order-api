@@ -4,11 +4,11 @@ import dotenv from "dotenv";
 
 // import mocks
 const mockDatabaseResponseJSON = fs.readFileSync(
-  "./test/stubs/get-ingredient-by-id/postgres-database-response-success.json",
+  "./test/stubs/common/postgres-database-response-success.json",
   "utf8",
 );
 const mockIngredientJSON = fs.readFileSync(
-  "./test/stubs/get-ingredient-by-id/ingredientDTO.json",
+  "./test/stubs/common/ingredientDTO.json",
   "utf8",
 );
 const mockIngredient = JSON.parse(mockIngredientJSON);

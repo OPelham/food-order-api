@@ -7,27 +7,6 @@
 export function createIngredientController(service) {
   return {
     /**
-     * Handles GET /ingredients/:ingredientId requests.
-     *
-     * @param {FastifyRequest} request - Fastify request object
-     * @param {FastifyReply} reply - Fastify reply object
-     */
-    async getIngredientById(request, reply) {
-      const log = request.log;
-      const childLog = log.child({ module: "getIngredientById-controller" });
-
-      const { ingredientId } = request.params;
-      const getIngredientResponse = await service.getIngredientById(
-        ingredientId,
-        log,
-      );
-
-      childLog.debug({ getIngredientResponse: getIngredientResponse });
-
-      reply.send(getIngredientResponse);
-    },
-
-    /**
      * Handles POST /ingredients requests.
      *
      * @param {FastifyRequest} request - Fastify request object
@@ -49,6 +28,50 @@ export function createIngredientController(service) {
       );
 
       reply.send(addIngredientResponse);
+    },
+
+    /**
+     * Handles GET /ingredients/:ingredientId requests.
+     *
+     * @param {FastifyRequest} request - Fastify request object
+     * @param {FastifyReply} reply - Fastify reply object
+     */
+    async getIngredientById(request, reply) {
+      const log = request.log;
+      const childLog = log.child({ module: "getIngredientById-controller" });
+
+      const { ingredientId } = request.params;
+      const getIngredientResponse = await service.getIngredientById(
+        ingredientId,
+        log,
+      );
+
+      childLog.debug({ getIngredientResponse: getIngredientResponse });
+
+      reply.send(getIngredientResponse);
+    },
+
+    /**
+     * Handles GET /ingredients/findByAvailability requests.
+     *
+     * @param {FastifyRequest} request - Fastify request object
+     * @param {FastifyReply} reply - Fastify reply object
+     */
+    async getIngredientsByAvailability(request, reply) {
+      const log = request.log;
+      const childLog = log.child({
+        module: "getIngredientsByAvailability-controller",
+      });
+
+      const { availability } = request.query;
+      const getIngredientsResponse = await service.getIngredientsByAvailability(
+        availability,
+        log,
+      );
+
+      childLog.debug({ getIngredientResponse: getIngredientsResponse });
+
+      reply.send(getIngredientsResponse);
     },
   };
 }

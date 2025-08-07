@@ -7,11 +7,11 @@ import { createIngredientService } from "../../../src/services/ingredients-servi
 
 // import mocks
 const mockDatabaseResponseJSON = fs.readFileSync(
-  "./test/stubs/get-ingredient-by-id/postgres-database-response-success.json",
+  "./test/stubs/common/postgres-database-response-success.json",
   "utf8",
 );
 const mockIngredientRepositoryOutputJSON = fs.readFileSync(
-  "./test/stubs/get-ingredient-by-id/postgres-ingredient-repository-output-success.json",
+  "./test/stubs/common/postgres-ingredient-repository-output-success.json",
   "utf8",
 );
 const mockDatabaseResponse = JSON.parse(mockDatabaseResponseJSON);

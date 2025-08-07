@@ -5,15 +5,15 @@ import { InvalidIngredientError } from "../../../src/lib/invalid-ingredient-erro
 
 // import mocks
 const mockIngredientJSON = fs.readFileSync(
-  "./test/stubs/get-ingredient-by-id/ingredientDTO.json",
+  "./test/stubs/common/ingredientDTO.json",
   "utf8",
 );
 const mockIngredientMandatoryFieldsJSON = fs.readFileSync(
-  "./test/stubs/get-ingredient-by-id/ingredientDTOMandatoryFields.json",
+  "./test/stubs/common/ingredientDTOMandatoryFields.json",
   "utf8",
 );
 const mockIngredientRepositoryOutputJSON = fs.readFileSync(
-  "./test/stubs/get-ingredient-by-id/postgres-ingredient-repository-output-success.json",
+  "./test/stubs/common/postgres-ingredient-repository-output-success.json",
   "utf8",
 );
 const mockIngredient = JSON.parse(mockIngredientJSON);

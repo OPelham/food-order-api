@@ -5,19 +5,21 @@ import fs from "node:fs";
 
 // import mocks
 const mockIngredientJSON = fs.readFileSync(
-  "./test/stubs/get-ingredient-by-id/ingredientDTO.json",
+  "./test/stubs/common/ingredientDTO.json",
   "utf8",
 );
 const mockIngredient = JSON.parse(mockIngredientJSON);
+const mockIngredientsJSON = fs.readFileSync(
+  "./test/stubs/get-ingredients-by-availability/available-ingredients-success.json",
+  "utf8",
+);
+const mockIngredients = JSON.parse(mockIngredientsJSON);
 
-t.test("Ingredient Controller - getIngredientById", async (t) => {
+t.test("Ingredient Controller - GET /ingredients/:ingredientId", async (t) => {
   const sandbox = sinon.createSandbox();
-
   const mockService = {
     getIngredientById: sandbox.stub(),
-    addIngredient: sandbox.stub(),
   };
-
   const controller = createIngredientController(mockService);
 
   t.teardown(() => sandbox.restore());
@@ -46,8 +48,56 @@ t.test("Ingredient Controller - getIngredientById", async (t) => {
     );
     t.same(reply.send.firstCall.args[0], mockIngredient);
   });
+});
 
-  t.test("addIngredient: calls service and sends result", async (t) => {
+t.test(
+  "Ingredient Controller - GET /ingredients/findByAvailability",
+  async (t) => {
+    const sandbox = sinon.createSandbox();
+    const mockService = {
+      getIngredientsByAvailability: sandbox.stub(),
+    };
+    const controller = createIngredientController(mockService);
+
+    t.teardown(() => sandbox.restore());
+
+    t.test("responds with 200 and ingredients when found", async (t) => {
+      mockService.getIngredientsByAvailability.resolves(mockIngredients);
+
+      const request = {
+        query: { availability: "AVAILABLE" },
+        log: {
+          child: () => ({ info: () => {}, debug: () => {}, error: () => {} }),
+        },
+      };
+
+      const reply = {
+        send: sinon.spy(),
+      };
+
+      await controller.getIngredientsByAvailability(request, reply);
+
+      t.ok(
+        mockService.getIngredientsByAvailability.calledOnceWith(
+          "AVAILABLE",
+          request.log,
+        ),
+      );
+      t.same(reply.send.firstCall.args[0], mockIngredients);
+    });
+  },
+);
+
+t.test("Ingredient Controller - POST /ingredients", async (t) => {
+  const sandbox = sinon.createSandbox();
+  const mockService = {
+    addIngredient: sandbox.stub(),
+  };
+  const controller = createIngredientController(mockService);
+
+  t.teardown(() => sandbox.restore());
+
+  t.test("successfully adds ingredient and returns response", async (t) => {
     const mockAddResponse = { ok: true };
     mockService.addIngredient.resolves(mockAddResponse);
 
