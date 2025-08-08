@@ -5,7 +5,7 @@ import { schemas } from "../../../src/schemas/index.js";
 
 // import mocks
 const mockIngredientMandatoryFieldsJSON = fs.readFileSync(
-  "./test/stubs/get-ingredient-by-id/ingredientDTO.json",
+  "./test/stubs/common/ingredientDTO.json",
   "utf8",
 );
 const mockIngredient = JSON.parse(mockIngredientMandatoryFieldsJSON);

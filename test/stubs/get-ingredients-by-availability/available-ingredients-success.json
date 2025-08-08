@@ -1,0 +1,23 @@
+[
+  {
+    "ingredientId": "e60c517b-2f86-4ece-bd1a-83191bb34ba4",
+    "name": "Tomato",
+    "quantity": 1,
+    "category": "CHILLED",
+    "availability": "AVAILABLE"
+  },
+  {
+    "ingredientId": "b1c2d3e4-f5a6-7b8c-9d0e-f1a2b3c4d5e6",
+    "name": "Pasta",
+    "quantity": 20,
+    "category": "DRY_GOOD",
+    "availability": "AVAILABLE"
+  },
+  {
+    "ingredientId": "f7g8h9i0-j1k2-l3m4-n5o6-p7q8r9s0t1u2",
+    "name": "Frozen Peas",
+    "quantity": 3,
+    "category": "FROZEN",
+    "availability": "AVAILABLE"
+  }
+]
